@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+}
+
+.linnaea {
+    display: -webkit-box;
+    display: flex;
+}
+
+select {
+    width: 250px; /* Set the width of the select box */
+    height: 40px; /* Set the height of the select box */
+    padding: 5px; /* Add padding inside the select box */
+    font-size: 16px; /* Change the font size */
+    border: 1px solid #ccc; /* Set a border */
+    border-radius: 8px; /* Optional: add rounded corners */
+    background-color: #f9f9f9; /* Optional: set a background color */
+    cursor: pointer; /* Optional: change the cursor on hover */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+select:focus {
+    outline: 2px solid #0e5c2e;
+    border-color: #0e5c2e;
+}
+
+input {
+    width: 250px; /* Set the width of the select box */
+    height: 40px; /* Set the height of the select box */
+    padding: 5px; /* Add padding inside the select box */
+    font-size: 16px; /* Change the font size */
+    border: 1px solid #ccc; /* Set a border */
+    border-radius: 8px; /* Optional: add rounded corners */
+    background-color: #f9f9f9; /* Optional: set a background color */
+    cursor: pointer; /* Optional: change the cursor on hover */
+}
+
+.communityDropdown {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.confirmSpecies {
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    color: white;
+    margin-top: 28px;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.confirmSpecies:hover:not(:disabled) {
+    background-color: white;
+    color: black;
+    border: 2px solid #0e5c2e;
+}
+
+.confirmSpecies:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.ecosystemMenu {
+    padding: 16px;
+    margin: 16px;
+    background-color: #e6e6e6;
+    border-radius: 8px;
+}
+
+.crosshairLine {
+    background-color: red;
+}
+
+.crosshairBox:hover .crosshairLine {
+    background-color: cyan;
+}
