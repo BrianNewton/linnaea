@@ -2,7 +2,7 @@ import React from "react";
 import Dropdown from "./Dropdown";
 import Search from "./Search";
 
-class Menu extends React.Component {
+class EcosystemMenu extends React.Component {
     render() {
         return (
             <div>
@@ -37,4 +37,4 @@ class Menu extends React.Component {
     }
 }
 
-export default Menu;
+export default EcosystemMenu;

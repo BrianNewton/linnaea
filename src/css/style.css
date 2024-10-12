@@ -17,6 +17,81 @@ code {
     display: flex;
 }
 
+.menuButton {
+    height: 40px;
+    width: 282px;
+    margin: 20px;
+    margin-left: 16px;
+    margin-right: 16px;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.pointNavigator {
+    display: -webkit-box;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.pointNavigator > * {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    display: flex;
+}
+
+.pointInput {
+    height: 28px;
+    width: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.prevPoint {
+    height: 40px;
+    width: 40px;
+    margin-right: 50px;
+    border-radius: 100%;
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    background-image: url("left-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.nextPoint {
+    height: 40px;
+    width: 40px;
+    margin-left: 50px;
+    border-radius: 100%;
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    background-image: url("right-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.prevPoint:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #0e5c2e;
+    background-image: url("left-arrow-green.svg");
+}
+
+.nextPoint:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #0e5c2e;
+    background-image: url("right-arrow-green.svg");
+}
+
 select {
     width: 250px; /* Set the width of the select box */
     height: 40px; /* Set the height of the select box */
@@ -44,6 +119,11 @@ input {
     border-radius: 8px; /* Optional: add rounded corners */
     background-color: #f9f9f9; /* Optional: set a background color */
     cursor: pointer; /* Optional: change the cursor on hover */
+}
+
+input:focus {
+    outline: 2px solid #0e5c2e;
+    border-color: #0e5c2e;
 }
 
 .communityDropdown {
@@ -79,7 +159,8 @@ input {
 
 .ecosystemMenu {
     padding: 16px;
-    margin: 16px;
+    margin-left: 16px;
+    margin-right: 16px;
     background-color: #e6e6e6;
     border-radius: 8px;
 }

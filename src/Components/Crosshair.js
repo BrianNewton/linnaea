@@ -1,6 +1,14 @@
 import React from "react";
 
 class Crosshair extends React.Component {
+    handleClick = (event) => {
+        this.props.clickedPoint(
+            this.props.x + this.props.boxWidth / 2,
+            this.props.y + this.props.boxHeight / 2
+        );
+        console.log("Clicked!");
+    };
+
     render() {
         const crosshairSize = 10;
         return (
@@ -14,6 +22,7 @@ class Crosshair extends React.Component {
                     left: `${this.props.x}px`,
                     backgroundColor: "transparent",
                 }}
+                onClick={this.handleClick}
             >
                 <div
                     className="crosshairLine"
@@ -22,9 +31,9 @@ class Crosshair extends React.Component {
                         width: "2px",
                         height: `${crosshairSize}px`,
                         top: `${
-                            this.props.boxHeight / 2 - (crosshairSize + 2)
+                            this.props.boxHeight / 2 - (crosshairSize + 3)
                         }px`,
-                        left: "50%",
+                        left: `${this.props.boxWidth / 2}px`,
                         transform: "translateX(-50%)",
                     }}
                 ></div>
@@ -34,7 +43,7 @@ class Crosshair extends React.Component {
                         position: "absolute",
                         width: "2px",
                         height: `${crosshairSize}px`,
-                        top: `${this.props.boxHeight / 2 + 2}px`,
+                        top: `${this.props.boxHeight / 2 + 3}px`,
                         left: "50%",
                         transform: "translateX(-50%)",
                     }}
@@ -46,7 +55,7 @@ class Crosshair extends React.Component {
                         width: `${crosshairSize}px`,
                         height: "2px",
                         top: "50%",
-                        left: `${this.props.boxWidth / 2 + 2}px`,
+                        left: `${this.props.boxWidth / 2 + 3}px`,
                         transform: "translateY(-50%)",
                     }}
                 ></div>
@@ -58,7 +67,7 @@ class Crosshair extends React.Component {
                         height: "2px",
                         top: "50%",
                         left: `${
-                            this.props.boxWidth / 2 - (crosshairSize + 2)
+                            this.props.boxWidth / 2 - (crosshairSize + 3)
                         }px`,
                         transform: "translateY(-50%)",
                     }}
