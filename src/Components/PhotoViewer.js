@@ -25,9 +25,6 @@ class PhotoViewer extends Component {
             // Calculate the x and y offsets (center the clicked point in the viewport)
             const scale = 10;
 
-            console.log(x);
-            console.log(y);
-
             // Set new transform with the calculated x and y position, zooming to a level of 2 (or any desired zoom level)
             this.transformWrapperRef.current.setTransform(
                 imageWidth / 2 - x * scale,

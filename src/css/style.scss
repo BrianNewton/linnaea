@@ -1,0 +1,326 @@
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+}
+
+.linnaea {
+    display: -webkit-box;
+    display: flex;
+}
+
+.menuButton {
+    height: 40px;
+    width: 282px;
+    margin: 20px;
+    margin-left: 16px;
+    margin-right: 16px;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.pointNavigator {
+    display: -webkit-box;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.pointNavigator > * {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    display: flex;
+}
+
+.pointInput {
+    height: 28px;
+    width: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.prevPoint {
+    height: 40px;
+    width: 40px;
+    margin-right: 50px;
+    border-radius: 100%;
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    background-image: url("left-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.nextPoint {
+    height: 40px;
+    width: 40px;
+    margin-left: 50px;
+    border-radius: 100%;
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    background-image: url("right-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.prevPoint:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #0e5c2e;
+    background-image: url("left-arrow-green.svg");
+}
+
+.nextPoint:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #0e5c2e;
+    background-image: url("right-arrow-green.svg");
+}
+
+select {
+    width: 250px; /* Set the width of the select box */
+    height: 40px; /* Set the height of the select box */
+    padding: 5px; /* Add padding inside the select box */
+    font-size: 16px; /* Change the font size */
+    border: 1px solid #ccc; /* Set a border */
+    border-radius: 8px; /* Optional: add rounded corners */
+    background-color: #f9f9f9; /* Optional: set a background color */
+    cursor: pointer; /* Optional: change the cursor on hover */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+select:focus {
+    outline: 2px solid #0e5c2e;
+    border-color: #0e5c2e;
+}
+
+input {
+    width: 250px; /* Set the width of the select box */
+    height: 40px; /* Set the height of the select box */
+    padding: 5px; /* Add padding inside the select box */
+    padding-left: 10px;
+    font-size: 16px; /* Change the font size */
+    border: 1px solid #ccc; /* Set a border */
+    border-radius: 30px; /* Optional: add rounded corners */
+    background-color: #f9f9f9; /* Optional: set a background color */
+    cursor: pointer; /* Optional: change the cursor on hover */
+}
+
+input:focus {
+    outline: 2px solid #0e5c2e;
+    border-color: #0e5c2e;
+}
+
+.communityDropdown {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.comments {
+    margin-top: 16px;
+    width: 234px;
+    height: 50px;
+    padding: 7px;
+    border: 1px solid #0e5c2e;
+    border-radius: 8px;
+    resize: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.comments:focus {
+    outline: 2px solid #0e5c2e;
+    border-color: #0e5c2e;
+}
+
+.confirmSpecies {
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    color: white;
+    margin-top: 28px;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.confirmSpecies:hover:not(:disabled) {
+    background-color: white;
+    color: black;
+    border: 2px solid #0e5c2e;
+}
+
+.confirmSpecies:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.ecosystemMenu {
+    padding: 16px;
+    margin-left: 16px;
+    margin-right: 16px;
+    background-color: #e6e6e6;
+    border-radius: 8px;
+}
+
+.crosshairLine {
+    background-color: red;
+}
+
+.crosshairBox:hover .crosshairLine {
+    background-color: cyan;
+}
+
+.gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Hide overflow for gallery container */
+}
+
+.gallery-item {
+    display: flex;
+    cursor: pointer;
+    margin: 2px;
+    border: 2px solid transparent;
+    padding: 0px;
+    transition: border 0.3s;
+    align-items: center;
+    opacity: 50%;
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+
+    &.new-photo-button {
+        opacity: 100%;
+    }
+
+    &.current {
+        border: 2px solid #0e5c2e;
+        opacity: 100%;
+    }
+}
+
+.gallery-item.selected {
+    border: 2px solid blue;
+}
+
+.newPhotoButton {
+    width: 100px;
+    height: 75px;
+    border: 2px solid #0e5c2e;
+    background-color: white;
+    background-image: url("plus.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    cursor: pointer;
+}
+
+.newPhotoButton {
+    &.uploading {
+        transform: translateX(10px);
+    }
+}
+
+.prevGalleryButton {
+    height: 40px;
+    width: 40px;
+    margin: auto;
+    flex: none;
+    padding: 0px;
+    border-radius: 100%;
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    background-image: url("left-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.nextGalleryButton {
+    margin: auto;
+    flex: none;
+    height: 40px;
+    width: 40px;
+    padding: 0px;
+    border-radius: 100%;
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    background-image: url("right-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.prevGalleryButton:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #0e5c2e;
+    background-image: url("left-arrow-green.svg");
+}
+
+.nextGalleryButton:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid #0e5c2e;
+    background-image: url("right-arrow-green.svg");
+}
+
+.galleryContainer {
+    display: flex;
+    flex-grow: 1;
+    width: 740px;
+    height: 100%;
+    align-items: center;
+    justify-content: left;
+    position: relative;
+    overflow: hidden; /* Hide overflow for gallery container */
+}
+
+.galleryScroll {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    // justify-content: flex-end;
+    width: fit-content;
+    padding: 0px;
+}
+
+.scroller {
+    max-width: 740px;
+    overflow: scroll;
+    padding: 0px;
+}

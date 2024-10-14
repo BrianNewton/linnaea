@@ -43,6 +43,7 @@
         "css-loader": "^7.1.2",
         "electron": "^32.2.0",
         "react-zoom-pan-pinch": "^3.6.1",
+        "sass": "^1.79.5",
         "wait-on": "^8.0.1"
     }
 }

@@ -3,6 +3,7 @@ import EcosystemMenu from "./Components/EcosystemMenu";
 import defaultEcosystem from "./defaultEcosystem.json";
 import PhotoViewer from "./Components/PhotoViewer";
 import PointNavigator from "./Components/PointNavigator";
+import Gallery from "./Components/Gallery";
 
 class App extends React.Component {
     /*
@@ -35,6 +36,7 @@ class App extends React.Component {
         selectedSpecies: "",
         searchSpecies: "",
         site: {},
+        currentPhoto: 0,
     };
 
     componentDidMount() {
@@ -62,12 +64,32 @@ class App extends React.Component {
         this.setState({ searchSpecies: searchSpecies });
     };
 
+    newPhoto = (imageURL) => {
+        const site = { ...this.state.site };
+        site[imageURL] = {};
+        for (let i = 1; i <= 100; i++) {
+            site[imageURL][i] = [];
+        }
+        const currentPhoto = Object.keys(site).length;
+
+        this.setState({ site, currentPhoto });
+    };
+
+    changePhoto = (newPhoto) => {
+        this.setState({ currentPhoto: newPhoto });
+    };
+
     render() {
+        const images = {
+            "/SampleSite/DSCF0323.JPG": {},
+            "/SampleSite/DSCF0324.JPG": {},
+        };
+
         return (
             <div className="linnaea">
                 <div>
                     <div>
-                        <button className="menuButton">Menu</button>
+                        <button className="menuButton"></button>
                     </div>
                     <EcosystemMenu
                         ecosystem={this.state.ecosystem}
@@ -78,13 +100,19 @@ class App extends React.Component {
                         selected={this.state.selected}
                     ></EcosystemMenu>
                 </div>
-                <div>
+                <div className="photoInterface">
                     <PointNavigator></PointNavigator>
                     <PhotoViewer
                         imageUrl="sample.jpg"
                         imageWidth={840}
                         imageHeight={630}
                     ></PhotoViewer>
+                    <Gallery
+                        site={this.state.site}
+                        newPhoto={this.newPhoto}
+                        currentPhoto={this.state.currentPhoto}
+                        changePhoto={this.changePhoto}
+                    ></Gallery>
                 </div>
             </div>
         );

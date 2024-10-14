@@ -24,6 +24,12 @@ class EcosystemMenu extends React.Component {
                             changeSelection={this.props.changeSelection}
                         ></Dropdown>
                     ))}
+                    <div>
+                        <textarea
+                            className="comments"
+                            placeholder="Comments..."
+                        ></textarea>
+                    </div>
                     <button
                         className="confirmSpecies"
                         type="submit"
