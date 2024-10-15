@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import ImageThumbnail from "./ImageThumbnail";
 
-/* TODO
-    - Remove an image
-    - Thumbnail loading animation
-    - Load multiple files at once
-    - Duplicate files not allowed
-    - Change site object to local file ref
-*/
-
 class Gallery extends Component {
     constructor(props) {
         super(props);
@@ -22,49 +14,47 @@ class Gallery extends Component {
     }
 
     handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        const image = URL.createObjectURL(file);
-        this.imageSource = image; // Update the image source
-        this.props.newPhoto(image);
+        const files = event.target.files;
 
-        if (Object.keys(this.props.site).length >= this.state.scrollPosition) {
-            const scrollPosition = this.state.scrollPosition + 1;
-            console.log(scrollPosition);
-            this.setState({ scrollPosition });
+        this.props.newPhoto(files);
 
-            requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            if (
+                Object.keys(this.props.site).length >= this.state.scrollPosition
+            ) {
+                const scrollPosition = this.state.scrollPosition + 1;
+                this.setState({ scrollPosition });
+
                 //ITS BECAUSE OF THE THUMBNAIL
                 this.scrollerRef.current.scrollTo({
                     left: this.scrollerRef.current.scrollWidth,
                     behavior: "smooth", // Smooth scrolling
                 });
-            });
-        }
+            }
+        });
 
+        event.target.value = null;
         // Simulate a delay for the upload animation (if needed)
     };
 
     handleClick = (event) => {
         const index = event.currentTarget.getAttribute("data-index");
-        console.log(index);
         if (index) {
             this.props.changePhoto(Number(index) + 1);
-            console.log(this.scrollerRef.current.scrollLeft);
-            console.log(index * 108);
-            if (index * 108 < this.scrollerRef.current.scrollLeft + 108) {
+            if (index * 116 < this.scrollerRef.current.scrollLeft + 50) {
                 this.scrollerRef.current.scrollTo({
                     left:
-                        Math.floor(this.scrollerRef.current.scrollLeft / 108) *
-                            108 -
-                        108,
+                        Math.floor(this.scrollerRef.current.scrollLeft / 116) *
+                            116 -
+                        116,
                     behavior: "smooth",
                 });
             } else if (
-                index * 108 - this.scrollerRef.current.scrollLeft >
+                index * 116 - this.scrollerRef.current.scrollLeft >
                 432
             ) {
                 this.scrollerRef.current.scrollTo({
-                    left: (index - 4) * 108,
+                    left: (index - 4) * 116,
                     behavior: "smooth",
                 });
             }
@@ -73,34 +63,31 @@ class Gallery extends Component {
         }
     };
 
+    handleRemovePhoto = (event) => {
+        const image = event.currentTarget.getAttribute("data-image");
+        const index = event.currentTarget.getAttribute("data-index");
+
+        console.log(index);
+        console.log(this.props.currentPhoto);
+
+        if (window.confirm(`Remove ${image}?`)) {
+            this.props.removePhoto(image);
+            if (this.props.currentPhoto - 1 > index) {
+                this.props.changePhoto(this.props.currentPhoto - 1);
+            }
+        }
+    };
+
     nextPhoto = (event) => {
         if (this.props.currentPhoto < Object.keys(this.props.site).length) {
             this.props.changePhoto(this.props.currentPhoto + 1);
             const index = this.props.currentPhoto + 1;
-            if (index) {
-                console.log(this.scrollerRef.current.scrollLeft);
-                console.log(index * 108);
-                if (index * 108 < this.scrollerRef.current.scrollLeft + 108) {
-                    this.scrollerRef.current.scrollTo({
-                        left:
-                            Math.floor(
-                                this.scrollerRef.current.scrollLeft / 108
-                            ) *
-                                108 -
-                            108,
-                        behavior: "smooth",
-                    });
-                } else if (
-                    index * 108 - this.scrollerRef.current.scrollLeft >
-                    432
-                ) {
-                    this.scrollerRef.current.scrollTo({
-                        left: (index - 4) * 108,
-                        behavior: "smooth",
-                    });
-                }
-            } else {
-                alert("How have you arrived here?");
+
+            if (index * 116 - this.scrollerRef.current.scrollLeft > 580) {
+                this.scrollerRef.current.scrollTo({
+                    left: (index - 5) * 116,
+                    behavior: "smooth",
+                });
             }
         } else {
             this.props.changePhoto(this.props.currentPhoto);
@@ -110,31 +97,16 @@ class Gallery extends Component {
     prevPhoto = (event) => {
         if (this.props.currentPhoto > 1) {
             this.props.changePhoto(this.props.currentPhoto - 1);
-            const index = this.props.currentPhoto - 1;
-            if (index) {
-                console.log(this.scrollerRef.current.scrollLeft);
-                console.log(index * 108);
-                if (index * 108 < this.scrollerRef.current.scrollLeft + 108) {
-                    this.scrollerRef.current.scrollTo({
-                        left:
-                            Math.floor(
-                                this.scrollerRef.current.scrollLeft / 108
-                            ) *
-                                108 -
-                            108,
-                        behavior: "smooth",
-                    });
-                } else if (
-                    index * 108 - this.scrollerRef.current.scrollLeft >
-                    432
-                ) {
-                    this.scrollerRef.current.scrollTo({
-                        left: (index - 4) * 108,
-                        behavior: "smooth",
-                    });
-                }
-            } else {
-                alert("How have you arrived here?");
+            const index = this.props.currentPhoto - 2;
+
+            if (index * 116 < this.scrollerRef.current.scrollLeft + 50) {
+                this.scrollerRef.current.scrollTo({
+                    left:
+                        Math.floor(this.scrollerRef.current.scrollLeft / 116) *
+                            116 -
+                        116,
+                    behavior: "smooth",
+                });
             }
         } else {
             this.props.changePhoto(this.props.currentPhoto);
@@ -155,21 +127,43 @@ class Gallery extends Component {
                                 Object.keys(this.props.site).map(
                                     (image, index) => (
                                         <div
-                                            key={index}
-                                            data-index={index}
-                                            className={`gallery-item ${
+                                            className={`imageContainer ${
                                                 index + 1 ===
                                                 this.props.currentPhoto
                                                     ? "current"
                                                     : ""
                                             }`}
-                                            onClick={this.handleClick}
+                                            key={`imageContainer_${index}`}
+                                            title={`${image}`}
                                         >
-                                            <ImageThumbnail
-                                                imageSrc={image}
-                                                maxWidth={100}
-                                                maxHeight={75}
-                                            ></ImageThumbnail>
+                                            <button
+                                                className="removePhoto"
+                                                key={`removePhoto_${index}`}
+                                                data-image={image}
+                                                data-index={index}
+                                                onClick={this.handleRemovePhoto}
+                                            ></button>
+                                            <div
+                                                key={`galleryItem-${index}`}
+                                                data-index={index}
+                                                className={`gallery-item ${
+                                                    index + 1 ===
+                                                    this.props.currentPhoto
+                                                        ? "current"
+                                                        : ""
+                                                }`}
+                                                onClick={this.handleClick}
+                                            >
+                                                <ImageThumbnail
+                                                    imageSrc={
+                                                        this.props.site[image][
+                                                            "file"
+                                                        ]
+                                                    }
+                                                    maxWidth={80}
+                                                    maxHeight={60}
+                                                ></ImageThumbnail>
+                                            </div>
                                         </div>
                                     )
                                 )}
@@ -193,6 +187,7 @@ class Gallery extends Component {
                     style={{ display: "none" }}
                     accept="image/*"
                     ref={this.fileInputRef}
+                    multiple
                     onChange={this.handleImageUpload}
                 ></input>
             </div>

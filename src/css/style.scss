@@ -196,30 +196,34 @@ input:focus {
 
 .gallery {
     display: flex;
-    gap: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
     align-items: center;
     justify-content: space-between;
     position: relative;
-    width: 100%;
-    overflow: hidden; /* Hide overflow for gallery container */
+    width: 800px;
+    // overflow: hidden; /* Hide overflow for gallery container */
 }
 
 .gallery-item {
     display: flex;
+    position: relative;
     cursor: pointer;
     margin: 2px;
     border: 2px solid transparent;
+    border-radius: 6px;
+    overflow: hidden;
     padding: 0px;
     transition: border 0.3s;
     align-items: center;
+    justify-content: center;
     opacity: 50%;
-    width: 100px;
-    height: 75px;
+    width: 80px;
+    height: 60px;
     object-fit: cover;
 
     &.new-photo-button {
+        margin-left: 14px;
         opacity: 100%;
     }
 
@@ -229,14 +233,20 @@ input:focus {
     }
 }
 
+.gallery-item.removePhoto {
+    overflow: visible;
+}
+
 .gallery-item.selected {
     border: 2px solid blue;
 }
 
 .newPhotoButton {
-    width: 100px;
-    height: 75px;
-    border: 2px solid #0e5c2e;
+    flex: none;
+    width: 80px;
+    height: 60px;
+    border: 2px dashed #0e5c2e;
+    border-radius: 8px;
     background-color: white;
     background-image: url("plus.svg");
     background-repeat: no-repeat;
@@ -255,6 +265,8 @@ input:focus {
     height: 40px;
     width: 40px;
     margin: auto;
+    margin-left: 10px;
+    margin-right: 10px;
     flex: none;
     padding: 0px;
     border-radius: 100%;
@@ -270,6 +282,8 @@ input:focus {
 
 .nextGalleryButton {
     margin: auto;
+    margin-left: 10px;
+    margin-right: 10px;
     flex: none;
     height: 40px;
     width: 40px;
@@ -302,25 +316,115 @@ input:focus {
 .galleryContainer {
     display: flex;
     flex-grow: 1;
-    width: 740px;
-    height: 100%;
+    width: 710px;
+    height: 75px;
     align-items: center;
     justify-content: left;
     position: relative;
-    overflow: hidden; /* Hide overflow for gallery container */
+    // overflow: hidden; /* Hide overflow for gallery container */
 }
 
 .galleryScroll {
     display: flex;
     flex-direction: row;
+    gap: 8px;
     height: 100%;
     // justify-content: flex-end;
     width: fit-content;
     padding: 0px;
+    position: relative;
 }
 
 .scroller {
-    max-width: 740px;
+    max-width: 580px;
     overflow: scroll;
     padding: 0px;
+    gap: 8px;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 25px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #0e5c2e;
+    --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+.imageContainer {
+    position: relative; /* So the button can be positioned relative to this div */
+    width: fit-content; /* Adjust width based on image content */
+    height: 75px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.removePhoto {
+    position: absolute;
+    top: 0px; /* Slightly offset from the top */
+    right: 0px; /* Slightly offset from the right */
+    width: 20px; /* Small circle button */
+    height: 20px;
+    border-radius: 50%; /* Makes the button a circle */
+    background-color: rgba(0, 0, 0, 0); /* Semi-transparent background */
+    color: white; /* Text color inside the button */
+    border: none; /* Remove default button border */
+    cursor: pointer;
+    display: none; /* Initially hidden */
+    align-items: center;
+    z-index: 10; /* Ensure the button is visible on top of other elements */
+    justify-content: center;
+}
+
+.imageContainer .removePhoto {
+    display: flex; /* Show the button when hovering */
+}
+
+.imageContainer:hover .removePhoto {
+    background-color: rgb(233, 233, 233);
+    background-image: url("remove.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 10px;
+    border: solid 2px #949494;
+}
+
+.imageContainer::after {
+    content: attr(title); /* Use the title attribute content */
+    position: absolute;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%);
+    bottom: 0%; /* Adjust to position above the div */
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background */
+    font-size: 10px;
+    color: #fff; /* White text */
+    padding: 5px 10px; /* Padding for the tooltip */
+    border-radius: 5px; /* Rounded corners */
+    white-space: nowrap; /* Prevent the text from wrapping */
+    opacity: 0; /* Hide the tooltip by default */
+    pointer-events: none; /* Ensure it doesn’t interfere with hover */
+    transition: opacity 0.2s ease-in-out; /* Fade-in effect */
+}
+
+.imageContainer.current::after {
+    opacity: 1;
+}
+
+.imageContainer:hover::after {
+    opacity: 1; /* Show the tooltip on hover */
 }

@@ -2,6 +2,12 @@ import React, { Component } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Crosshair from "./Crosshair";
 
+/* TODO 
+Sync state with gallery
+color code crosshairs
+sync state with menu
+blank site upload
+*/
 class PhotoViewer extends Component {
     constructor(props) {
         super(props);

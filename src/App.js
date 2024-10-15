@@ -64,15 +64,29 @@ class App extends React.Component {
         this.setState({ searchSpecies: searchSpecies });
     };
 
-    newPhoto = (imageURL) => {
+    newPhoto = (files) => {
         const site = { ...this.state.site };
-        site[imageURL] = {};
-        for (let i = 1; i <= 100; i++) {
-            site[imageURL][i] = [];
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (site && file.name in site) {
+                alert(`${file.name} is already uploaded!`);
+            } else {
+                const imageURL = URL.createObjectURL(file);
+                site[file.name] = { file: imageURL, points: [] };
+                for (let i = 1; i <= 100; i++) {
+                    site[file.name]["points"][i] = [];
+                }
+            }
         }
         const currentPhoto = Object.keys(site).length;
-
         this.setState({ site, currentPhoto });
+    };
+
+    removePhoto = (image) => {
+        const site = { ...this.state.site };
+        delete site[image];
+        this.setState({ site });
     };
 
     changePhoto = (newPhoto) => {
@@ -104,14 +118,15 @@ class App extends React.Component {
                     <PointNavigator></PointNavigator>
                     <PhotoViewer
                         imageUrl="sample.jpg"
-                        imageWidth={840}
-                        imageHeight={630}
+                        imageWidth={800}
+                        imageHeight={600}
                     ></PhotoViewer>
                     <Gallery
                         site={this.state.site}
                         newPhoto={this.newPhoto}
                         currentPhoto={this.state.currentPhoto}
                         changePhoto={this.changePhoto}
+                        removePhoto={this.removePhoto}
                     ></Gallery>
                 </div>
             </div>

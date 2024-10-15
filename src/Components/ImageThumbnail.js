@@ -36,12 +36,21 @@ const ImageThumbnail = ({ imageSrc, maxWidth, maxHeight }) => {
     }, [imageSrc, maxWidth, maxHeight]);
 
     return (
-        <div style={{ height: "75px" }}>
+        <div
+            style={{
+                height: "60px",
+                alignContent: "center",
+            }}
+        >
             {/* Canvas to generate the thumbnail, it won't be shown to the user */}
             <canvas ref={canvasRef} style={{ display: "none" }} />
 
             {/* Display the thumbnail */}
-            {thumbnail ? <img src={thumbnail} alt="Thumbnail" /> : "Loading..."}
+            {thumbnail ? (
+                <img src={thumbnail} alt="Thumbnail" />
+            ) : (
+                <div className="loader"></div>
+            )}
         </div>
     );
 };
