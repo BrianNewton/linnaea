@@ -1,9 +1,9 @@
 import React from "react";
-import EcosystemMenu from "./Components/EcosystemMenu";
+import EcosystemMenu from "./Components/EcosystemMenu/EcosystemMenu";
 import defaultEcosystem from "./defaultEcosystem.json";
-import PhotoViewer from "./Components/PhotoViewer";
-import PointNavigator from "./Components/PointNavigator";
-import Gallery from "./Components/Gallery";
+import PhotoViewer from "./Components/PhotoViewer/PhotoViewer";
+import PointNavigator from "./Components/PointNavigator/PointNavigator";
+import Gallery from "./Components/Gallery/Gallery";
 
 class App extends React.Component {
     /*
@@ -32,11 +32,12 @@ class App extends React.Component {
 
     state = {
         ecosystem: {},
+        site: {},
         selected: {},
         selectedSpecies: "",
         searchSpecies: "",
-        site: {},
         currentPhoto: 0,
+        currentPoint: 1,
     };
 
     componentDidMount() {
@@ -66,6 +67,7 @@ class App extends React.Component {
 
     newPhoto = (files) => {
         const site = { ...this.state.site };
+
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
 
@@ -85,8 +87,17 @@ class App extends React.Component {
 
     removePhoto = (image) => {
         const site = { ...this.state.site };
+        const images = Object.keys(this.state.site);
+        const deletedPhoto = images.indexOf(image);
+        if (this.state.currentPhoto - 1 === deletedPhoto) {
+            this.setState({ currentPhoto: deletedPhoto });
+        }
         delete site[image];
         this.setState({ site });
+    };
+
+    setCurrentPoint = (point) => {
+        this.setState({ currentPoint: point });
     };
 
     changePhoto = (newPhoto) => {
@@ -102,9 +113,6 @@ class App extends React.Component {
         return (
             <div className="linnaea">
                 <div>
-                    <div>
-                        <button className="menuButton"></button>
-                    </div>
                     <EcosystemMenu
                         ecosystem={this.state.ecosystem}
                         changeSelection={this.changeSelection}
@@ -115,11 +123,16 @@ class App extends React.Component {
                     ></EcosystemMenu>
                 </div>
                 <div className="photoInterface">
-                    <PointNavigator></PointNavigator>
+                    {/* <PointNavigator></PointNavigator> */}
                     <PhotoViewer
                         imageUrl="sample.jpg"
                         imageWidth={800}
                         imageHeight={600}
+                        site={this.state.site}
+                        currentPhoto={this.state.currentPhoto}
+                        currentPoint={this.state.currentPoint}
+                        setCurrentPoint={this.setCurrentPoint}
+                        newPhoto={this.newPhoto}
                     ></PhotoViewer>
                     <Gallery
                         site={this.state.site}

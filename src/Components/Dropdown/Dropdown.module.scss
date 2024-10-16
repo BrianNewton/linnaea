@@ -1,0 +1,12 @@
+.communityDropdown {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.dropdown {
+    color: black; // Default color for all options
+
+    &.placeholderSelected {
+        color: grey; // Grey color when the placeholder is selected
+    }
+}

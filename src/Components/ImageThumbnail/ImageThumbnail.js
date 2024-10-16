@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import styles from "./ImageThumbnail.module.scss";
 
 const ImageThumbnail = ({ imageSrc, maxWidth, maxHeight }) => {
     const [thumbnail, setThumbnail] = useState(null);

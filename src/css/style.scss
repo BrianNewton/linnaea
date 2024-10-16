@@ -15,6 +15,16 @@ code {
 .linnaea {
     display: -webkit-box;
     display: flex;
+    background-color: #f6f6f6;
+    padding: 16px;
+    max-height: 749px;
+}
+
+.photoInterface {
+    background-color: #e6e6e6;
+    height: 100%;
+    padding: 14px;
+    border-radius: 8px;
 }
 
 .menuButton {
@@ -25,71 +35,6 @@ code {
     margin-right: 16px;
     border-radius: 8px;
     background-color: white;
-}
-
-.pointNavigator {
-    display: -webkit-box;
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
-
-.pointNavigator > * {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    align-items: center;
-    display: flex;
-}
-
-.pointInput {
-    height: 28px;
-    width: 40px;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.prevPoint {
-    height: 40px;
-    width: 40px;
-    margin-right: 50px;
-    border-radius: 100%;
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
-    background-image: url("left-arrow.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 24px 24px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
-
-.nextPoint {
-    height: 40px;
-    width: 40px;
-    margin-left: 50px;
-    border-radius: 100%;
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
-    background-image: url("right-arrow.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 24px 24px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
-
-.prevPoint:hover {
-    background-color: white;
-    color: black;
-    border: 2px solid #0e5c2e;
-    background-image: url("left-arrow-green.svg");
-}
-
-.nextPoint:hover {
-    background-color: white;
-    color: black;
-    border: 2px solid #0e5c2e;
-    background-image: url("right-arrow-green.svg");
 }
 
 select {
@@ -103,6 +48,16 @@ select {
     cursor: pointer; /* Optional: change the cursor on hover */
     overflow: hidden;
     text-overflow: ellipsis;
+    appearance: none;
+    background-image: url("./down-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
+    background-size: 20px;
+    color: black;
+
+    option:first-child {
+        color: orange;
+    }
 }
 
 select:focus {
@@ -127,221 +82,6 @@ input:focus {
     border-color: #0e5c2e;
 }
 
-.communityDropdown {
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
-
-.comments {
-    margin-top: 16px;
-    width: 234px;
-    height: 50px;
-    padding: 7px;
-    border: 1px solid #0e5c2e;
-    border-radius: 8px;
-    resize: none;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-        "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.comments:focus {
-    outline: 2px solid #0e5c2e;
-    border-color: #0e5c2e;
-}
-
-.confirmSpecies {
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
-    color: white;
-    margin-top: 28px;
-    padding: 5px;
-    padding-left: 15px;
-    padding-right: 15px;
-    height: 40px;
-    border-radius: 8px;
-    font-size: 16px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
-
-.confirmSpecies:hover:not(:disabled) {
-    background-color: white;
-    color: black;
-    border: 2px solid #0e5c2e;
-}
-
-.confirmSpecies:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.ecosystemMenu {
-    padding: 16px;
-    margin-left: 16px;
-    margin-right: 16px;
-    background-color: #e6e6e6;
-    border-radius: 8px;
-}
-
-.crosshairLine {
-    background-color: red;
-}
-
-.crosshairBox:hover .crosshairLine {
-    background-color: cyan;
-}
-
-.gallery {
-    display: flex;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    width: 800px;
-    // overflow: hidden; /* Hide overflow for gallery container */
-}
-
-.gallery-item {
-    display: flex;
-    position: relative;
-    cursor: pointer;
-    margin: 2px;
-    border: 2px solid transparent;
-    border-radius: 6px;
-    overflow: hidden;
-    padding: 0px;
-    transition: border 0.3s;
-    align-items: center;
-    justify-content: center;
-    opacity: 50%;
-    width: 80px;
-    height: 60px;
-    object-fit: cover;
-
-    &.new-photo-button {
-        margin-left: 14px;
-        opacity: 100%;
-    }
-
-    &.current {
-        border: 2px solid #0e5c2e;
-        opacity: 100%;
-    }
-}
-
-.gallery-item.removePhoto {
-    overflow: visible;
-}
-
-.gallery-item.selected {
-    border: 2px solid blue;
-}
-
-.newPhotoButton {
-    flex: none;
-    width: 80px;
-    height: 60px;
-    border: 2px dashed #0e5c2e;
-    border-radius: 8px;
-    background-color: white;
-    background-image: url("plus.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 24px 24px;
-    cursor: pointer;
-}
-
-.newPhotoButton {
-    &.uploading {
-        transform: translateX(10px);
-    }
-}
-
-.prevGalleryButton {
-    height: 40px;
-    width: 40px;
-    margin: auto;
-    margin-left: 10px;
-    margin-right: 10px;
-    flex: none;
-    padding: 0px;
-    border-radius: 100%;
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
-    background-image: url("left-arrow.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 24px 24px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
-
-.nextGalleryButton {
-    margin: auto;
-    margin-left: 10px;
-    margin-right: 10px;
-    flex: none;
-    height: 40px;
-    width: 40px;
-    padding: 0px;
-    border-radius: 100%;
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
-    background-image: url("right-arrow.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 24px 24px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-}
-
-.prevGalleryButton:hover {
-    background-color: white;
-    color: black;
-    border: 2px solid #0e5c2e;
-    background-image: url("left-arrow-green.svg");
-}
-
-.nextGalleryButton:hover {
-    background-color: white;
-    color: black;
-    border: 2px solid #0e5c2e;
-    background-image: url("right-arrow-green.svg");
-}
-
-.galleryContainer {
-    display: flex;
-    flex-grow: 1;
-    width: 710px;
-    height: 75px;
-    align-items: center;
-    justify-content: left;
-    position: relative;
-    // overflow: hidden; /* Hide overflow for gallery container */
-}
-
-.galleryScroll {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    height: 100%;
-    // justify-content: flex-end;
-    width: fit-content;
-    padding: 0px;
-    position: relative;
-}
-
-.scroller {
-    max-width: 580px;
-    overflow: scroll;
-    padding: 0px;
-    gap: 8px;
-}
-
 /* HTML: <div class="loader"></div> */
 .loader {
     width: 25px;
@@ -362,69 +102,4 @@ input:focus {
     to {
         transform: rotate(1turn);
     }
-}
-
-.imageContainer {
-    position: relative; /* So the button can be positioned relative to this div */
-    width: fit-content; /* Adjust width based on image content */
-    height: 75px;
-    width: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.removePhoto {
-    position: absolute;
-    top: 0px; /* Slightly offset from the top */
-    right: 0px; /* Slightly offset from the right */
-    width: 20px; /* Small circle button */
-    height: 20px;
-    border-radius: 50%; /* Makes the button a circle */
-    background-color: rgba(0, 0, 0, 0); /* Semi-transparent background */
-    color: white; /* Text color inside the button */
-    border: none; /* Remove default button border */
-    cursor: pointer;
-    display: none; /* Initially hidden */
-    align-items: center;
-    z-index: 10; /* Ensure the button is visible on top of other elements */
-    justify-content: center;
-}
-
-.imageContainer .removePhoto {
-    display: flex; /* Show the button when hovering */
-}
-
-.imageContainer:hover .removePhoto {
-    background-color: rgb(233, 233, 233);
-    background-image: url("remove.svg");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 10px 10px;
-    border: solid 2px #949494;
-}
-
-.imageContainer::after {
-    content: attr(title); /* Use the title attribute content */
-    position: absolute;
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%);
-    bottom: 0%; /* Adjust to position above the div */
-    background-color: rgba(0, 0, 0, 0.7); /* Dark background */
-    font-size: 10px;
-    color: #fff; /* White text */
-    padding: 5px 10px; /* Padding for the tooltip */
-    border-radius: 5px; /* Rounded corners */
-    white-space: nowrap; /* Prevent the text from wrapping */
-    opacity: 0; /* Hide the tooltip by default */
-    pointer-events: none; /* Ensure it doesn’t interfere with hover */
-    transition: opacity 0.2s ease-in-out; /* Fade-in effect */
-}
-
-.imageContainer.current::after {
-    opacity: 1;
-}
-
-.imageContainer:hover::after {
-    opacity: 1; /* Show the tooltip on hover */
 }

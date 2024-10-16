@@ -1,19 +1,22 @@
 import React from "react";
+import styles from "./Crosshair.module.scss";
 
 class Crosshair extends React.Component {
     handleClick = (event) => {
         this.props.clickedPoint(
             this.props.x + this.props.boxWidth / 2,
-            this.props.y + this.props.boxHeight / 2
+            this.props.y + this.props.boxHeight / 2,
+            this.props.point
         );
-        console.log("Clicked!");
     };
 
     render() {
         const crosshairSize = 10;
         return (
             <div
-                className="crosshairBox"
+                className={`${styles.crosshairBox} ${
+                    this.props.current ? styles.selected : ""
+                }`}
                 style={{
                     position: "absolute",
                     width: `${this.props.boxWidth}px`,
@@ -22,10 +25,11 @@ class Crosshair extends React.Component {
                     left: `${this.props.x}px`,
                     backgroundColor: "transparent",
                 }}
+                data-point={this.props.point}
                 onClick={this.handleClick}
             >
                 <div
-                    className="crosshairLine"
+                    className={styles.crosshairLine}
                     style={{
                         position: "absolute",
                         width: "2px",
@@ -38,7 +42,7 @@ class Crosshair extends React.Component {
                     }}
                 ></div>
                 <div
-                    className="crosshairLine"
+                    className={styles.crosshairLine}
                     style={{
                         position: "absolute",
                         width: "2px",
@@ -49,7 +53,7 @@ class Crosshair extends React.Component {
                     }}
                 ></div>
                 <div
-                    className="crosshairLine"
+                    className={styles.crosshairLine}
                     style={{
                         position: "absolute",
                         width: `${crosshairSize}px`,
@@ -60,7 +64,7 @@ class Crosshair extends React.Component {
                     }}
                 ></div>
                 <div
-                    className="crosshairLine"
+                    className={styles.crosshairLine}
                     style={{
                         position: "absolute",
                         width: `${crosshairSize}px`,

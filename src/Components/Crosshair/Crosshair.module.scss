@@ -1,0 +1,11 @@
+.crosshairLine {
+    background-color: red;
+}
+
+.crosshairBox.selected .crosshairLine {
+    background-color: yellow;
+}
+
+.crosshairBox:hover .crosshairLine {
+    background-color: cyan;
+}

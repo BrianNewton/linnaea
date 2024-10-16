@@ -1,12 +1,13 @@
 import React from "react";
-import Dropdown from "./Dropdown";
-import Search from "./Search";
+import Dropdown from "../Dropdown/Dropdown";
+import Search from "../Search/Search";
+import styles from "./EcosystemMenu.module.scss";
 
 class EcosystemMenu extends React.Component {
     render() {
         return (
             <div>
-                <form className="ecosystemMenu">
+                <form className={styles.ecosystemMenu}>
                     <Search
                         ecosystem={this.props.ecosystem}
                         searchSpecies={this.props.searchSpecies}
@@ -26,12 +27,12 @@ class EcosystemMenu extends React.Component {
                     ))}
                     <div>
                         <textarea
-                            className="comments"
+                            className={styles.comments}
                             placeholder="Comments..."
                         ></textarea>
                     </div>
                     <button
-                        className="confirmSpecies"
+                        className={styles.confirmSpecies}
                         type="submit"
                         disabled={!this.props.selectedSpecies}
                     >
