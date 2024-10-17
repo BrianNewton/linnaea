@@ -5,8 +5,34 @@
 
 .dropdown {
     color: black; // Default color for all options
+    background-color: white;
+    padding-right: 35px;
+    padding-left: 5px;
+
+    width: 250px; /* Set the width of the select box */
+    height: 40px; /* Set the height of the select box */
+    // padding: 5px; /* Add padding inside the select box */
+    font-size: 16px; /* Change the font size */
+    border: 1px solid #ccc; /* Set a border */
+    border-radius: 8px; /* Optional: add rounded corners */
+    background-color: #f9f9f9; /* Optional: set a background color */
+    cursor: pointer; /* Optional: change the cursor on hover */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    appearance: none;
+    background-image: url("../../css/down-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
+    background-size: 20px;
+    color: black;
 
     &.placeholderSelected {
         color: grey; // Grey color when the placeholder is selected
+        background-color: #f9f9f9;
+    }
+
+    &.focus {
+        outline: 2px solid #0e5c2e;
+        border-color: #0e5c2e;
     }
 }

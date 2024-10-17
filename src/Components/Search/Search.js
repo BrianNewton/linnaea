@@ -10,7 +10,7 @@ class Search extends React.Component {
         ).find((option) => option.value === inputValue);
 
         if (matchingOption) {
-            this.props.changeSelection(
+            this.props.setSelection(
                 event.currentTarget.value,
                 matchingOption.dataset.community
             );

@@ -1,0 +1,31 @@
+{
+    "name": "135 degrees",
+    "Tall trees (>10m)": [
+        "Black spruce (Picea mariana)",
+        "White spruce (Picea glauca)",
+        "Jack pine (Pinus banksiana)",
+        "Lodgepole pine (Pinus Contorta)",
+        "Northern white cedar (Thuja occidentalis)",
+        "Tamarack (Larix laricina)",
+        "Subalpine fir (Abies lasiocarpa)",
+        "Paper birch (Betula papyrifera",
+        "Alaskan paper birch (Betula neoalaskana)",
+        "Trembling aspen (Populus tremuloides)",
+        "Balsam poplar (Populus balsamifera)",
+        "Other"
+    ],
+    "Low trees (2-10m)": [
+        "Black spruce (Picea mariana)",
+        "White spruce (Picea glauca)",
+        "Jack pine (Pinus banksiana)",
+        "Lodgepole pine (Pinus Contorta)",
+        "Northern white cedar (Thuja occidentalis)",
+        "Tamarack (Larix laricina)",
+        "Subalpine fir (Abies lasiocarpa)",
+        "Paper birch (Betula papyrifera",
+        "Alaskan paper birch (Betula neoalaskana)",
+        "Trembling aspen (Populus tremuloides)",
+        "Balsam poplar (Populus balsamifera)",
+        "Other"
+    ]
+}

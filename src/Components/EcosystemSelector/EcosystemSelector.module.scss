@@ -1,0 +1,97 @@
+// .ecosystemSelector {
+//     width: 250px; /* Set the width of the select box */
+//     height: 40px; /* Set the height of the select box */
+//     padding: 5px; /* Add padding inside the select box */
+//     margin-bottom: 16px;
+//     font-size: 16px; /* Change the font size */
+//     border: 1px solid #ccc; /* Set a border */
+//     border-radius: 8px; /* Optional: add rounded corners */
+//     background-color: #0e5c2e; /* Optional: set a background color */
+//     cursor: pointer; /* Optional: change the cursor on hover */
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     appearance: none;
+//     -webkit-appearance: none;
+//     -moz-appearance: none;
+//     background-image: url("../../css/menu.svg");
+//     background-repeat: no-repeat;
+//     background-position: 5% 50%;
+//     background-size: 20px;
+//     color: white;
+//     padding-left: 40px;
+//     position: relative;
+// }
+
+// .ecosystemSelector select {
+//     display: none;
+// }
+
+// .select-items div {
+//     position: absolute;
+//     width: 250px; /* Set the width of the select box */
+//     height: 40px; /* Set the height of the select box */
+//     background-color: #0e5c2e;
+//     top: 100%;
+//     left: 0%;
+//     right: 0%;
+//     z-index: 99;
+// }
+
+.ecosystemSelect {
+    position: relative;
+    display: inline-block;
+    width: 250px;
+    margin-bottom: 24px;
+}
+
+.selectBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #0e5c2e;
+    background-image: url("../../css/menu.svg");
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
+    background-size: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+/* Show options when clicked */
+.ecosystemSelect.open .optionsContainer {
+    display: block;
+}
+
+.ecosystemSelect.open .selectBox {
+    background-image: url("../../css/menu.svg");
+    background-color: #0e5c2e;
+    border-radius: 8px 8px 0 0;
+    // color: black;
+}
+
+.optionsContainer {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #0e5c2e;
+    border-radius: 0 0 8px 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+    z-index: 10;
+}
+
+.ecosystemSelect.open .option {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #0e5c2e;
+    color: white;
+
+    &:hover {
+        background-color: #093b1e;
+        border-radius: 8px;
+    }
+}

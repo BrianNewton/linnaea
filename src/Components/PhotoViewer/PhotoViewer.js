@@ -3,10 +3,6 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Crosshair from "../Crosshair/Crosshair";
 import styles from "./PhotoViewer.module.scss";
 
-/* TODO 
-color code crosshairs
-sync state with menu
-*/
 class PhotoViewer extends Component {
     constructor(props) {
         super(props);
@@ -16,6 +12,7 @@ class PhotoViewer extends Component {
         this.image = "";
         this.currentPhoto = this.props.currentPhoto;
         this.focusPoint = 0;
+        this.scale = 1;
     }
 
     state = {
@@ -23,21 +20,25 @@ class PhotoViewer extends Component {
     };
 
     // Zoom into clicked point, unless already focused, then reset view
-    clickedPoint = (x, y, point) => {
+    clickedPoint = (x, y, point, click) => {
         const { imageWidth, imageHeight } = this.props;
 
         if (this.transformWrapperRef.current) {
-            const scale = 10;
-            if (point === this.focusPoint) {
-                this.transformWrapperRef.current.setTransform(0, 0, 1);
-                this.focusPoint = 0;
+            if (click === "double") {
+                const scale = 10;
+                if (point === this.focusPoint) {
+                    this.transformWrapperRef.current.setTransform(0, 0, 1);
+                    this.focusPoint = 0;
+                } else {
+                    this.transformWrapperRef.current.setTransform(
+                        imageWidth / 2 - x * scale,
+                        imageHeight / 2 - y * scale,
+                        scale
+                    );
+                    this.focusPoint = point;
+                    this.props.setCurrentPoint(point);
+                }
             } else {
-                this.transformWrapperRef.current.setTransform(
-                    imageWidth / 2 - x * scale,
-                    imageHeight / 2 - y * scale,
-                    scale
-                );
-                this.focusPoint = point;
                 this.props.setCurrentPoint(point);
             }
         }
@@ -85,14 +86,27 @@ class PhotoViewer extends Component {
             this.currentPhoto = this.props.currentPhoto;
             this.image = image;
         }
+
+        if (this.focusPoint && this.focusPoint != this.props.currentPoint) {
+            const { imageWidth, imageHeight } = this.props;
+            const { x, y } = this.getPointPosition(this.props.currentPoint);
+            this.focusPoint = this.props.currentPoint;
+            this.transformWrapperRef.current.setTransform(
+                imageWidth / 2 - (x - imageWidth / (this.gridSize * 2)) * 10,
+                imageHeight / 2 - y - (imageHeight / (this.gridSize * 2)) * 10,
+                10
+            );
+        }
     }
 
     componentDidMount() {
         window.addEventListener("keydown", this.handleKey);
     }
     handleKey = (event) => {
-        if (event.key === "r") {
-            this.transformWrapperRef.current.setTransform(0, 0, 1);
+        if (this.transformWrapperRef.current) {
+            if (event.key === "r") {
+                this.transformWrapperRef.current.setTransform(0, 0, 1);
+            }
         }
     };
 
@@ -132,6 +146,10 @@ class PhotoViewer extends Component {
                                         return (
                                             <Crosshair
                                                 key={index}
+                                                site={this.props.site}
+                                                currentPhoto={
+                                                    this.props.currentPhoto
+                                                }
                                                 x={x}
                                                 y={y}
                                                 boxHeight={
@@ -170,7 +188,8 @@ class PhotoViewer extends Component {
                                 left: "50%",
                                 transform: "translateX(-50%)",
                                 fontStyle: "italic",
-                                color: "#439e69",
+                                color: "#0e5c2e",
+                                opacity: "50%",
                             }}
                         >
                             Upload an image

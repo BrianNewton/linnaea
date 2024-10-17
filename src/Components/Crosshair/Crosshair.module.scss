@@ -1,11 +1,14 @@
 .crosshairLine {
-    background-color: red;
+    background-color: #fe0000;
 }
 
-.crosshairBox.selected .crosshairLine {
-    background-color: yellow;
+.crosshairBox.confirmed .crosshairLine {
+    background-color: #0bff01;
 }
 
 .crosshairBox:hover .crosshairLine {
     background-color: cyan;
+}
+.crosshairBox.selected .crosshairLine {
+    background-color: #fdfe02;
 }

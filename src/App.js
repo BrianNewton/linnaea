@@ -1,17 +1,22 @@
 import React from "react";
 import EcosystemMenu from "./Components/EcosystemMenu/EcosystemMenu";
-import defaultEcosystem from "./defaultEcosystem.json";
+import defaultEcosystem from "./biome/defaultEcosystem.json";
 import PhotoViewer from "./Components/PhotoViewer/PhotoViewer";
 import PointNavigator from "./Components/PointNavigator/PointNavigator";
 import Gallery from "./Components/Gallery/Gallery";
 
 class App extends React.Component {
+    // make current point a per photo attribute
+
     /*
 	state = {
-		ecosystem: {
+		biome: { "ecosystem1": {
 			community1: [species1, species2, ...],
 			community2: [species1, species2,...]
-		},
+		    }, { "ecosystem2": {
+			community1: [species1, species2, ...],
+			community2: [species1, species2,...]
+		    },...}
 		site: {
 			"photo1.jpg": {
 				1: [community, species],
@@ -25,6 +30,7 @@ class App extends React.Component {
 			},
 			...
 		},
+        currentSelection: [community, species, comments]
 		currentPhoto: "photo.jpg"
 		currentPoint: 1
 	}
@@ -33,11 +39,9 @@ class App extends React.Component {
     state = {
         ecosystem: {},
         site: {},
-        selected: {},
-        selectedSpecies: "",
-        searchSpecies: "",
+        currentSelection: { community: "", species: "", comments: "" },
         currentPhoto: 0,
-        currentPoint: 1,
+        currentPoint: 0,
     };
 
     componentDidMount() {
@@ -53,12 +57,8 @@ class App extends React.Component {
 
     openEcosystem() {}
 
-    changeSelection = (species, communityName) => {
-        const selected = Object.fromEntries(
-            Object.keys(this.state.ecosystem).map((key) => [key, ""]) // or null, '', or any default value
-        );
-        selected[communityName] = species;
-        this.setState({ selected: selected, selectedSpecies: species });
+    changeSelection = (currentSelection) => {
+        this.setState({ currentSelection });
     };
 
     changeSearchSpecies = (searchSpecies) => {
@@ -77,12 +77,17 @@ class App extends React.Component {
                 const imageURL = URL.createObjectURL(file);
                 site[file.name] = { file: imageURL, points: [] };
                 for (let i = 1; i <= 100; i++) {
-                    site[file.name]["points"][i] = [];
+                    site[file.name]["points"][i] = {
+                        community: "",
+                        species: "",
+                        comments: "",
+                    };
                 }
             }
         }
         const currentPhoto = Object.keys(site).length;
-        this.setState({ site, currentPhoto });
+        const currentPoint = 1;
+        this.setState({ site, currentPhoto, currentPoint });
     };
 
     removePhoto = (image) => {
@@ -97,7 +102,36 @@ class App extends React.Component {
     };
 
     setCurrentPoint = (point) => {
+        const currentPhoto = Object.keys(this.state.site)[
+            this.state.currentPhoto - 1
+        ];
+        if (this.state.site[currentPhoto]["points"][point]["species"]) {
+            this.setState({
+                currentSelection:
+                    this.state.site[currentPhoto]["points"][point],
+            });
+        } else {
+            this.setState({
+                currentSelection: { community: "", species: "", comments: "" },
+            });
+        }
         this.setState({ currentPoint: point });
+    };
+
+    confirmSelection = () => {
+        const site = { ...this.state.site };
+        const currentPhoto = Object.keys(site)[this.state.currentPhoto - 1];
+        Object.assign(
+            site[currentPhoto]["points"][this.state.currentPoint],
+            this.state.currentSelection
+        );
+        console.log("1");
+        const currentSelection = { community: "", species: "", comments: "" };
+        console.log("2");
+        const currentPoint = this.state.currentPoint + 1;
+        console.log("3");
+
+        this.setState({ site, currentSelection, currentPoint });
     };
 
     changePhoto = (newPhoto) => {
@@ -105,11 +139,6 @@ class App extends React.Component {
     };
 
     render() {
-        const images = {
-            "/SampleSite/DSCF0323.JPG": {},
-            "/SampleSite/DSCF0324.JPG": {},
-        };
-
         return (
             <div className="linnaea">
                 <div>
@@ -118,12 +147,13 @@ class App extends React.Component {
                         changeSelection={this.changeSelection}
                         changeSearchSpecies={this.changeSearchSpecies}
                         searchSpecies={this.state.searchSpecies}
-                        selectedSpecies={this.state.selectedSpecies}
-                        selected={this.state.selected}
+                        currentSelection={this.state.currentSelection}
+                        currentPoint={this.state.currentPoint}
+                        confirmSelection={this.confirmSelection}
                     ></EcosystemMenu>
                 </div>
                 <div className="photoInterface">
-                    {/* <PointNavigator></PointNavigator> */}
+                    <PointNavigator></PointNavigator>
                     <PhotoViewer
                         imageUrl="sample.jpg"
                         imageWidth={800}

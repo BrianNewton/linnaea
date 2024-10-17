@@ -1,40 +1,20 @@
 {
-    "Trees": [
-        "[Tall] Black spruce (Picea mariana)",
-        "[Tall] White spruce (Picea glauca)",
-        "[Tall] Jack pine (Pinus banksiana)",
-        "[Tall] Lodgepole pine (Pinus Contorta)",
-        "[Tall] Northern white cedar (Thuja occidentalis)",
-        "[Tall] Tamarack (Larix laricina)",
-        "[Tall] Subalpine fir (Abies lasiocarpa)",
-        "[Tall] Paper birch (Betula papyrifera",
-        "[Tall] Alaskan paper birch (Betula neoalaskana)",
-        "[Tall] Trembling aspen (Populus tremuloides)",
-        "[Tall] Balsam poplar (Populus balsamifera)",
-        "[Low] Black spruce (Picea mariana)",
-        "[Low] White spruce (Picea glauca)",
-        "[Low] Jack pine (Pinus banksiana)",
-        "[Low] Lodgepole pine (Pinus Contorta)",
-        "[Low] Northern white cedar (Thuja occidentalis)",
-        "[Low] Tamarack (Larix laricina)",
-        "[Low] Subalpine fir (Abies lasiocarpa)",
-        "[Low] Paper birch (Betula papyrifera",
-        "[Low] Alaskan paper birch (Betula neoalaskana)",
-        "[Low] Trembling aspen (Populus tremuloides)",
-        "[Low] Balsam poplar (Populus balsamifera)",
-        "[Short] Black spruce (Picea mariana)",
-        "[Short] White spruce (Picea glauca)",
-        "[Short] Jack pine (Pinus banksiana)",
-        "[Short] Lodgepole pine (Pinus Contorta)",
-        "[Short] Northern white cedar (Thuja occidentalis)",
-        "[Short] Tamarack (Larix laricina)",
-        "[Short] Subalpine fir (Abies lasiocarpa)",
-        "[Short] Paper birch (Betula papyrifera",
-        "[Short] Alaskan paper birch (Betula neoalaskana)",
-        "[Short] Trembling aspen (Populus tremuloides)",
-        "[Short] Balsam poplar (Populus balsamifera)"
+    "name": "45 degrees",
+    "Small trees (<2m)": [
+        "Black spruce (Picea mariana)",
+        "White spruce (Picea glauca)",
+        "Jack pine (Pinus banksiana)",
+        "Lodgepole pine (Pinus Contorta)",
+        "Northern white cedar (Thuja occidentalis)",
+        "Tamarack (Larix laricina)",
+        "Subalpine fir (Abies lasiocarpa)",
+        "Paper birch (Betula papyrifera",
+        "Alaskan paper birch (Betula neoalaskana)",
+        "Trembling aspen (Populus tremuloides)",
+        "Balsam poplar (Populus balsamifera)",
+        "Other"
     ],
-    "Shrubs": [
+    "Low shrubs (<2m)": [
         "Bog birch (Betula pumila)",
         "Leatherleaf (Chameadaphne calyculata)",
         "Labrador tea (Ledum spp.)",
@@ -57,7 +37,8 @@
         "Creeping snowberry (Gaultheria hispidula)",
         "Bush honeysuckle (Diervilla lonicera)",
         "Lingonberry (Vaccinium vitis-idaea)",
-        "Sheep laurel (Kalmia angustifolia)"
+        "Sheep laurel (Kalmia angustifolia)",
+        "Other"
     ],
     "Herbs": [
         "Common cotton grass (Eriophorum angustifolium)",
@@ -75,12 +56,15 @@
         "Fireweed (Epilobium angustifolium)",
         "Cloudberry (Rubus chamaemorus)",
         "Common yarrow (Achillea millefolium)",
-        "Daisy (Asteraceae)"
+        "Daisy (Asteraceae)",
+        "Other"
     ],
     "Ground cover": [
         "Organic soil",
         "Mineral soil",
         "Litter",
+        "Open water",
+        "Rock",
         "Coarse wood (thicker than a pencil)",
         "Charcoal",
         "Pelt lichen (Peltigera spp.)",
@@ -100,14 +84,7 @@
         "Sphagnum spp.",
         "Liverworts",
         "Marchantia spp.",
-        "Fungi"
-    ],
-    "Other": [
-        "Open water (Water)",
-        "Rock (Earth)",
-        "Fire (Fire)",
-        "Sky (Air)",
-        "Litter",
-        "Unknown"
+        "Fungi",
+        "Other"
     ]
 }

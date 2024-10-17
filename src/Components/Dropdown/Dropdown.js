@@ -2,45 +2,47 @@ import React from "react";
 import styles from "./Dropdown.module.scss";
 
 class Dropdown extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedValue: "", // Initial value is empty
-        };
-    }
-
     handleChange = (event) => {
-        console.log("changed");
-        this.props.changeSelection(
+        this.props.setSelection(
             event.currentTarget.value,
             this.props.communityName
         );
-        this.setState({ selectedValue: event.target.value });
 
         this.props.changeSearchSpecies("");
     };
 
     render() {
-        const { selectedValue } = this.state;
-
         return (
             <div className={styles.communityDropdown}>
                 <div>{this.props.communityName}</div>
                 <select
                     name="species"
-                    value={this.props.selected[this.props.communityName]}
-                    title={this.props.selected[this.props.communityName]}
+                    value={
+                        this.props.currentSelection["community"] ===
+                        this.props.communityName
+                            ? this.props.currentSelection["species"]
+                            : ""
+                    }
+                    title={
+                        this.props.currentSelection["community"] ===
+                        this.props.communityName
+                            ? this.props.currentSelection["species"]
+                            : ""
+                    }
                     onChange={this.handleChange}
                     className={`${styles.dropdown} ${
-                        selectedValue === "" ? styles.placeholderSelected : ""
+                        this.props.currentSelection["community"] ===
+                        this.props.communityName
+                            ? ""
+                            : styles.placeholderSelected
                     }`}
                 >
-                    <option value="" disabled className={styles.placeholder}>
+                    <option value="" disabled>
                         Select one...
                     </option>
                     {this.props.community.map((species) => (
                         <option
-                            key={species}
+                            key={`${this.props.communityName} ${species}`}
                             value={species}
                             title={species}
                             className={styles.option}

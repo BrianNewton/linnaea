@@ -2,11 +2,14 @@ import React, { Component } from "react";
 import ImageThumbnail from "../ImageThumbnail/ImageThumbnail";
 import styles from "./Gallery.module.scss";
 
+// Fix bulk upload scroll
+
 class Gallery extends Component {
     constructor(props) {
         super(props);
         this.fileInputRef = React.createRef();
         this.scrollerRef = React.createRef();
+        this.numImages = 0;
     }
 
     // Handles upload of one or more images
@@ -23,8 +26,21 @@ class Gallery extends Component {
             });
         });
 
+        this.numImages += event.target.files.length;
         event.target.value = null;
     };
+
+    componentDidUpdate() {
+        if (this.numImages < Object.keys(this.props.site).length) {
+            requestAnimationFrame(() => {
+                this.scrollerRef.current.scrollTo({
+                    left: this.scrollerRef.current.scrollWidth,
+                    behavior: "smooth",
+                });
+            });
+            this.numImages = Object.keys(this.props.site).length;
+        }
+    }
 
     // Selecting a image in the gallery
     handleClick = (event) => {
@@ -64,6 +80,7 @@ class Gallery extends Component {
                 this.props.changePhoto(this.props.currentPhoto - 1);
             }
         }
+        this.numImages--;
     };
 
     // next photo button press

@@ -2,20 +2,38 @@ import React from "react";
 import styles from "./Crosshair.module.scss";
 
 class Crosshair extends React.Component {
+    handleDoubleClick = (event) => {
+        this.props.clickedPoint(
+            this.props.x + this.props.boxWidth / 2,
+            this.props.y + this.props.boxHeight / 2,
+            this.props.point,
+            "double"
+        );
+    };
+
     handleClick = (event) => {
         this.props.clickedPoint(
             this.props.x + this.props.boxWidth / 2,
             this.props.y + this.props.boxHeight / 2,
-            this.props.point
+            this.props.point,
+            "single"
         );
     };
 
     render() {
         const crosshairSize = 10;
+        const sitePoints =
+            this.props.site[
+                Object.keys(this.props.site)[this.props.currentPhoto - 1]
+            ]["points"];
         return (
             <div
                 className={`${styles.crosshairBox} ${
                     this.props.current ? styles.selected : ""
+                } ${
+                    sitePoints[this.props.point]["species"]
+                        ? styles.confirmed
+                        : ""
                 }`}
                 style={{
                     position: "absolute",
@@ -26,6 +44,7 @@ class Crosshair extends React.Component {
                     backgroundColor: "transparent",
                 }}
                 data-point={this.props.point}
+                onDoubleClick={this.handleDoubleClick}
                 onClick={this.handleClick}
             >
                 <div

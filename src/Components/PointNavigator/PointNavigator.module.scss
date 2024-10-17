@@ -1,64 +1,119 @@
-.pointNavigator {
+.imageTools {
     display: -webkit-box;
     display: flex;
     justify-content: center;
+    align-items: center;
     position: relative;
 }
 
-.pointNavigator > * {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    align-items: center;
+.imageTools > * {
     display: flex;
 }
 
+.home {
+    position: absolute;
+    left: 0;
+}
+
+.zooms {
+    position: absolute;
+    right: 0;
+}
+
+.homeButton {
+    height: 24px;
+    width: 24px;
+    border: none;
+    background-color: transparent;
+    background-image: url("../../css/home.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    cursor: pointer;
+}
+
+.zoomIn {
+    height: 24px;
+    width: 24px;
+    border: none;
+    background-color: transparent;
+    background-image: url("../../css/zoom-in.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    cursor: pointer;
+}
+
+.zoomOut {
+    margin-left: 8px;
+    height: 24px;
+    width: 24px;
+    border: none;
+    background-color: transparent;
+    background-image: url("../../css/zoom-out.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 24px 24px;
+    cursor: pointer;
+}
+
 .pointInput {
-    height: 28px;
-    width: 40px;
+    height: 12px;
+    width: 24px;
     margin-left: 10px;
     margin-right: 10px;
+    border-radius: 5px;
+}
+
+.subNavigator {
+    margin-left: 32px;
+    margin-right: 32px;
+}
+
+.pointNavigator {
+    align-items: center;
 }
 
 .prevPoint {
-    height: 40px;
+    height: 20px;
     width: 40px;
-    margin-right: 50px;
-    border-radius: 100%;
+    margin-right: 16px;
+    border-radius: 8px;
     background-color: #0e5c2e;
     border: 2px solid #0e5c2e;
     background-image: url("../../css/left-arrow.svg");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 24px 24px;
+    background-size: 16px 16px;
     transition-duration: 0.4s;
     cursor: pointer;
+
+    &:hover {
+        background-color: white;
+        color: black;
+        border: 2px solid #0e5c2e;
+        background-image: url("../../css/left-arrow-green.svg");
+    }
 }
 
 .nextPoint {
-    height: 40px;
+    height: 20px;
     width: 40px;
-    margin-left: 50px;
-    border-radius: 100%;
+    margin-left: 16px;
+    border-radius: 8px;
     background-color: #0e5c2e;
     border: 2px solid #0e5c2e;
     background-image: url("../../css/right-arrow.svg");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 24px 24px;
+    background-size: 16px 16px;
     transition-duration: 0.4s;
     cursor: pointer;
-}
 
-.prevPoint:hover {
-    background-color: white;
-    color: black;
-    border: 2px solid #0e5c2e;
-    background-image: url("../../css/left-arrow-green.svg");
-}
-
-.nextPoint:hover {
-    background-color: white;
-    color: black;
-    border: 2px solid #0e5c2e;
-    background-image: url("../../css/right-arrow-green.svg");
+    &:hover {
+        background-color: white;
+        color: black;
+        border: 2px solid #0e5c2e;
+        background-image: url("../../css/right-arrow-green.svg");
+    }
 }
