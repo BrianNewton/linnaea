@@ -1,6 +1,9 @@
 import React from "react";
 import EcosystemMenu from "./Components/EcosystemMenu/EcosystemMenu";
 import defaultEcosystem from "./biome/defaultEcosystem.json";
+import high from "./biome/high.json";
+import medium from "./biome/medium.json";
+import low from "./biome/low.json";
 import PhotoViewer from "./Components/PhotoViewer/PhotoViewer";
 import PointNavigator from "./Components/PointNavigator/PointNavigator";
 import Gallery from "./Components/Gallery/Gallery";
@@ -42,13 +45,15 @@ class App extends React.Component {
         currentSelection: { community: "", species: "", comments: "" },
         currentPhoto: 0,
         currentPoint: 0,
+        imageLoaded: 0,
+    };
+
+    setImageLoaded = (imageLoaded) => {
+        this.setState({ imageLoaded });
     };
 
     componentDidMount() {
-        const selected = Object.fromEntries(
-            Object.keys(defaultEcosystem).map((key) => [key, ""]) // or null, '', or any default value
-        );
-        this.setState({ ecosystem: defaultEcosystem, selected: selected });
+        this.setState({ ecosystem: defaultEcosystem });
     }
 
     newSite() {}
@@ -59,10 +64,6 @@ class App extends React.Component {
 
     changeSelection = (currentSelection) => {
         this.setState({ currentSelection });
-    };
-
-    changeSearchSpecies = (searchSpecies) => {
-        this.setState({ searchSpecies: searchSpecies });
     };
 
     newPhoto = (files) => {
@@ -76,6 +77,7 @@ class App extends React.Component {
             } else {
                 const imageURL = URL.createObjectURL(file);
                 site[file.name] = { file: imageURL, points: [] };
+                site[file.name]["ecosystem"] = "";
                 for (let i = 1; i <= 100; i++) {
                     site[file.name]["points"][i] = {
                         community: "",
@@ -88,6 +90,15 @@ class App extends React.Component {
         const currentPhoto = Object.keys(site).length;
         const currentPoint = 1;
         this.setState({ site, currentPhoto, currentPoint });
+    };
+
+    changeEcosystem = (ecosystem) => {
+        const currentPhoto = Object.keys(this.state.site)[
+            this.state.currentPhoto - 1
+        ];
+        const site = { ...this.state.site };
+        site[currentPhoto]["ecosystem"] = ecosystem;
+        this.setState({ site });
     };
 
     removePhoto = (image) => {
@@ -125,11 +136,20 @@ class App extends React.Component {
             site[currentPhoto]["points"][this.state.currentPoint],
             this.state.currentSelection
         );
-        console.log("1");
+
+        if (!site[currentPhoto]["points"][this.state.currentPoint]["species"]) {
+            site[currentPhoto]["points"][this.state.currentPoint]["species"] =
+                "None";
+        }
+        if (
+            !site[currentPhoto]["points"][this.state.currentPoint]["community"]
+        ) {
+            site[currentPhoto]["points"][this.state.currentPoint]["community"] =
+                "None";
+        }
+
         const currentSelection = { community: "", species: "", comments: "" };
-        console.log("2");
         const currentPoint = this.state.currentPoint + 1;
-        console.log("3");
 
         this.setState({ site, currentSelection, currentPoint });
     };
@@ -143,19 +163,22 @@ class App extends React.Component {
             <div className="linnaea">
                 <div>
                     <EcosystemMenu
-                        ecosystem={this.state.ecosystem}
                         changeSelection={this.changeSelection}
-                        changeSearchSpecies={this.changeSearchSpecies}
-                        searchSpecies={this.state.searchSpecies}
                         currentSelection={this.state.currentSelection}
                         currentPoint={this.state.currentPoint}
+                        currentPhoto={this.state.currentPhoto}
                         confirmSelection={this.confirmSelection}
+                        changeEcosystem={this.changeEcosystem}
+                        site={this.state.site}
+                        imageLoaded={this.state.imageLoaded}
                     ></EcosystemMenu>
                 </div>
                 <div className="photoInterface">
                     <PointNavigator></PointNavigator>
                     <PhotoViewer
                         imageUrl="sample.jpg"
+                        imageLoaded={this.state.imageLoaded}
+                        setImageLoaded={this.setImageLoaded}
                         imageWidth={800}
                         imageHeight={600}
                         site={this.state.site}

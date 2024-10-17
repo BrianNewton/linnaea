@@ -37,15 +37,17 @@ class Search extends React.Component {
                 <datalist id="all">
                     {Object.keys(this.props.ecosystem)
                         .map((key) =>
-                            this.props.ecosystem[key].map((species) => (
-                                <option
-                                    key={species}
-                                    value={species}
-                                    data-community={key}
-                                >
-                                    {key}
-                                </option>
-                            ))
+                            Array.isArray(this.props.ecosystem[key])
+                                ? this.props.ecosystem[key].map((species) => (
+                                      <option
+                                          key={`${key}-${species}-search`}
+                                          value={species}
+                                          data-community={key}
+                                      >
+                                          {key}
+                                      </option>
+                                  ))
+                                : ""
                         )
                         .flat()}
                 </datalist>

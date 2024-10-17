@@ -15,10 +15,6 @@ class PhotoViewer extends Component {
         this.scale = 1;
     }
 
-    state = {
-        imageLoaded: 0,
-    };
-
     // Zoom into clicked point, unless already focused, then reset view
     clickedPoint = (x, y, point, click) => {
         const { imageWidth, imageHeight } = this.props;
@@ -75,14 +71,14 @@ class PhotoViewer extends Component {
             this.props.currentPhoto > 0 &&
             this.props.currentPhoto != this.currentPhoto
         ) {
-            this.setState({ imageLoaded: 0 });
+            this.props.setImageLoaded(0);
             const image =
                 this.props.site[
                     Object.keys(this.props.site)[this.props.currentPhoto - 1]
                 ]["file"];
             const img = new Image();
             img.src = image;
-            img.onload = () => this.setState({ imageLoaded: 1 });
+            img.onload = () => this.props.setImageLoaded(1);
             this.currentPhoto = this.props.currentPhoto;
             this.image = image;
         }
@@ -93,22 +89,11 @@ class PhotoViewer extends Component {
             this.focusPoint = this.props.currentPoint;
             this.transformWrapperRef.current.setTransform(
                 imageWidth / 2 - (x - imageWidth / (this.gridSize * 2)) * 10,
-                imageHeight / 2 - y - (imageHeight / (this.gridSize * 2)) * 10,
+                imageHeight / 2 - (y + imageHeight / (this.gridSize * 2)) * 10,
                 10
             );
         }
     }
-
-    componentDidMount() {
-        window.addEventListener("keydown", this.handleKey);
-    }
-    handleKey = (event) => {
-        if (this.transformWrapperRef.current) {
-            if (event.key === "r") {
-                this.transformWrapperRef.current.setTransform(0, 0, 1);
-            }
-        }
-    };
 
     render() {
         const { imageUrl, imageWidth, imageHeight } = this.props;
@@ -124,7 +109,7 @@ class PhotoViewer extends Component {
                     // If there's a photo loaded, display in the viewport
                     <TransformWrapper ref={this.transformWrapperRef}>
                         <TransformComponent>
-                            {this.state.imageLoaded ? (
+                            {this.props.imageLoaded ? (
                                 <div className={styles.photoViewer}>
                                     {/* The Image */}
                                     <img

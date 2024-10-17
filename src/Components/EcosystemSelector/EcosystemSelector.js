@@ -2,34 +2,42 @@ import React from "react";
 import styles from "./EcosystemSelector.module.scss";
 
 class EcosystemSelector extends React.Component {
-    state = {
-        open: 0,
+    handleSelectBoxClick = () => {
+        this.props.toggleEcosystemSelector();
     };
 
-    handleSelectBoxClick = () => {
-        const open = this.state.open;
-        this.setState({ open: 1 - open });
+    //add click listener to close menu
+
+    handleClick = (event) => {
+        this.props.changeEcosystem(
+            event.currentTarget.getAttribute("data-ecosystem")
+        );
     };
 
     render() {
         return (
-            // <select className={styles.ecosystemSelector}>
-            //     <option>test1</option>
-            //     <option>test2</option>
-            //     <option>test3</option>
-            // </select>
             <div
                 className={`${styles.ecosystemSelect} ${
-                    this.state.open ? styles.open : ""
+                    this.props.ecosystemSelectorOpen ? styles.open : ""
                 }`}
                 onClick={this.handleSelectBoxClick}
             >
-                <div className={styles.selectBox}>
-                    <span className={styles.selected}>Choose an option</span>
+                <div className={styles.selectBox} id="ecosystemSelector">
+                    {this.props.selectedEcosystem
+                        ? this.props.biome[this.props.selectedEcosystem]["name"]
+                        : "Choose an Ecosystem"}
+
                     <div className={styles.optionsContainer}>
-                        <div className={styles.option}>option 1</div>
-                        <div className={styles.option}>option 2</div>
-                        <div className={styles.option}>option 3</div>
+                        {Object.keys(this.props.biome).map((key) => (
+                            <div
+                                key={key}
+                                data-ecosystem={key}
+                                className={styles.option}
+                                onClick={this.handleClick}
+                            >
+                                {this.props.biome[key]["name"]}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

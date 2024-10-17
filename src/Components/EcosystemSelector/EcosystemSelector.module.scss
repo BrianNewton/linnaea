@@ -37,11 +37,17 @@
 //     z-index: 99;
 // }
 
+$linnaea-green: #0e5c2e;
+$gray1: #f9f9f9;
+$gray2: #f6f6f6;
+$gray3: #e6e6e6;
+
 .ecosystemSelect {
     position: relative;
     display: inline-block;
     width: 250px;
     margin-bottom: 24px;
+    z-index: 10;
 }
 
 .selectBox {
@@ -49,26 +55,40 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    padding-left: 40px;
     border-radius: 8px;
-    background-color: #0e5c2e;
-    background-image: url("../../css/menu.svg");
+    background-color: $gray1;
+    background-image: url("../../css/menu-green.svg");
     background-repeat: no-repeat;
-    background-position: 95% 50%;
+    background-position: 5% 50%;
     background-size: 20px;
     cursor: pointer;
-    color: white;
+    color: black;
+    filter: none;
+    position: relative;
+    transition: border-radius 0.3s 0.3s, background-color 0.3s 0s,
+        background-image 0.3s 0s, color 0.3s 0s;
+
+    &:hover {
+        background-color: $linnaea-green;
+        background-image: url("../../css/menu.svg");
+        color: white;
+    }
 }
 
 /* Show options when clicked */
 .ecosystemSelect.open .optionsContainer {
-    display: block;
+    max-height: 210px;
+    transition: max-height 0.3s ease;
 }
 
 .ecosystemSelect.open .selectBox {
     background-image: url("../../css/menu.svg");
     background-color: #0e5c2e;
+    color: white;
+    transition: border-radius 0s;
     border-radius: 8px 8px 0 0;
-    // color: black;
+    filter: drop-shadow(0px 3px 5px rgb(42, 42, 42));
 }
 
 .optionsContainer {
@@ -78,13 +98,13 @@
     right: 0;
     background-color: #0e5c2e;
     border-radius: 0 0 8px 8px;
-    max-height: 150px;
+    max-height: 0px;
+    transition: max-height 0.3s ease;
     overflow-y: auto;
-    display: none;
-    z-index: 10;
+    // display: none;
 }
 
-.ecosystemSelect.open .option {
+.option {
     padding: 10px;
     cursor: pointer;
     background-color: #0e5c2e;
