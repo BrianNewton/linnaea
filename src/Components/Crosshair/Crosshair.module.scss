@@ -6,9 +6,10 @@
     background-color: #0bff01;
 }
 
-.crosshairBox:hover .crosshairLine {
-    background-color: cyan;
-}
 .crosshairBox.selected .crosshairLine {
     background-color: #fdfe02;
+}
+
+.crosshairBox:hover .crosshairLine {
+    background-color: cyan;
 }

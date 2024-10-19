@@ -11,8 +11,39 @@ class PhotoViewer extends Component {
         this.fileInputRef = React.createRef();
         this.image = "";
         this.currentPhoto = this.props.currentPhoto;
-        this.focusPoint = 0;
-        this.scale = 1;
+    }
+
+    state = {
+        scale: 1,
+        focusPoint: 1,
+    };
+
+    // Transform to point with specified scale
+    transformToPoint(x, y, scale) {
+        const { imageWidth, imageHeight } = this.props;
+        let xTransform =
+            imageWidth / 2 - (x + imageWidth / (this.gridSize * 2)) * scale;
+        let yTransform =
+            imageHeight / 2 - (y + imageHeight / (this.gridSize * 2)) * scale;
+
+        if (xTransform > 0) {
+            xTransform = 0;
+        } else if (xTransform < -1 * imageWidth * (scale - 1)) {
+            xTransform = -1 * imageWidth * (scale - 1);
+        }
+
+        if (yTransform > 0) {
+            yTransform = 0;
+        } else if (yTransform < -1 * imageHeight * (scale - 1)) {
+            yTransform = -1 * imageHeight * (scale - 1);
+        }
+        if (this.transformWrapperRef.current) {
+            this.transformWrapperRef.current.setTransform(
+                xTransform,
+                yTransform,
+                scale
+            );
+        }
     }
 
     // Zoom into clicked point, unless already focused, then reset view
@@ -25,6 +56,8 @@ class PhotoViewer extends Component {
                 if (point === this.focusPoint) {
                     this.transformWrapperRef.current.setTransform(0, 0, 1);
                     this.focusPoint = 0;
+                    this.setState({ scale: 1 });
+                    this.props.setScale(1);
                 } else {
                     this.transformWrapperRef.current.setTransform(
                         imageWidth / 2 - x * scale,
@@ -33,6 +66,8 @@ class PhotoViewer extends Component {
                     );
                     this.focusPoint = point;
                     this.props.setCurrentPoint(point);
+                    this.setState({ scale: 9 });
+                    this.props.setScale(9);
                 }
             } else {
                 this.props.setCurrentPoint(point);
@@ -62,11 +97,11 @@ class PhotoViewer extends Component {
         this.props.newPhoto(files);
 
         event.target.value = null;
-        // Simulate a delay for the upload animation (if needed)
     };
 
     // Buffer image and show loading animation until finished
     componentDidUpdate() {
+        // load new photo with buffer animation
         if (
             this.props.currentPhoto > 0 &&
             this.props.currentPhoto != this.currentPhoto
@@ -83,17 +118,27 @@ class PhotoViewer extends Component {
             this.image = image;
         }
 
-        if (this.focusPoint && this.focusPoint != this.props.currentPoint) {
-            const { imageWidth, imageHeight } = this.props;
-            const { x, y } = this.getPointPosition(this.props.currentPoint);
-            this.focusPoint = this.props.currentPoint;
-            this.transformWrapperRef.current.setTransform(
-                imageWidth / 2 - (x - imageWidth / (this.gridSize * 2)) * 10,
-                imageHeight / 2 - (y + imageHeight / (this.gridSize * 2)) * 10,
-                10
-            );
+        // new current point
+        if (this.state.focusPoint != this.props.currentPoint) {
+            const { x, y } = this.getPointPosition(this.props.currentPoint - 1);
+            this.transformToPoint(x, y, this.state.scale);
+            this.setState({ focusPoint: this.props.currentPoint });
+        }
+
+        // change zoom
+        if (this.state.scale !== this.props.scale) {
+            const { x, y } = this.getPointPosition(this.props.currentPoint - 1);
+            this.transformToPoint(x, y, this.props.scale);
+            this.setState({ scale: this.props.scale });
         }
     }
+
+    zoomChange = (event) => {
+        setTimeout(() => {
+            this.props.setScale(event.state.scale);
+            this.setState({ scale: event.state.scale });
+        }, 150);
+    };
 
     render() {
         const { imageUrl, imageWidth, imageHeight } = this.props;
@@ -107,7 +152,10 @@ class PhotoViewer extends Component {
             <div className={styles.viewPort}>
                 {this.props.currentPhoto ? (
                     // If there's a photo loaded, display in the viewport
-                    <TransformWrapper ref={this.transformWrapperRef}>
+                    <TransformWrapper
+                        ref={this.transformWrapperRef}
+                        onZoomStop={this.zoomChange}
+                    >
                         <TransformComponent>
                             {this.props.imageLoaded ? (
                                 <div className={styles.photoViewer}>

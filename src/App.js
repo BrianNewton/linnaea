@@ -7,6 +7,7 @@ import low from "./biome/low.json";
 import PhotoViewer from "./Components/PhotoViewer/PhotoViewer";
 import PointNavigator from "./Components/PointNavigator/PointNavigator";
 import Gallery from "./Components/Gallery/Gallery";
+import PhotoInterface from "./Components/PhotoInterface/PhotoInterface";
 
 class App extends React.Component {
     // make current point a per photo attribute
@@ -161,40 +162,29 @@ class App extends React.Component {
     render() {
         return (
             <div className="linnaea">
-                <div>
-                    <EcosystemMenu
-                        changeSelection={this.changeSelection}
-                        currentSelection={this.state.currentSelection}
-                        currentPoint={this.state.currentPoint}
-                        currentPhoto={this.state.currentPhoto}
-                        confirmSelection={this.confirmSelection}
-                        changeEcosystem={this.changeEcosystem}
-                        site={this.state.site}
-                        imageLoaded={this.state.imageLoaded}
-                    ></EcosystemMenu>
-                </div>
-                <div className="photoInterface">
-                    <PointNavigator></PointNavigator>
-                    <PhotoViewer
-                        imageUrl="sample.jpg"
-                        imageLoaded={this.state.imageLoaded}
-                        setImageLoaded={this.setImageLoaded}
-                        imageWidth={800}
-                        imageHeight={600}
-                        site={this.state.site}
-                        currentPhoto={this.state.currentPhoto}
-                        currentPoint={this.state.currentPoint}
-                        setCurrentPoint={this.setCurrentPoint}
-                        newPhoto={this.newPhoto}
-                    ></PhotoViewer>
-                    <Gallery
-                        site={this.state.site}
-                        newPhoto={this.newPhoto}
-                        currentPhoto={this.state.currentPhoto}
-                        changePhoto={this.changePhoto}
-                        removePhoto={this.removePhoto}
-                    ></Gallery>
-                </div>
+                <EcosystemMenu
+                    changeSelection={this.changeSelection}
+                    currentSelection={this.state.currentSelection}
+                    currentPoint={this.state.currentPoint}
+                    currentPhoto={this.state.currentPhoto}
+                    confirmSelection={this.confirmSelection}
+                    changeEcosystem={this.changeEcosystem}
+                    site={this.state.site}
+                    imageLoaded={this.state.imageLoaded}
+                ></EcosystemMenu>
+                <PhotoInterface
+                    imageLoaded={this.state.imageLoaded}
+                    setImageLoaded={this.setImageLoaded}
+                    imageWidth={800}
+                    imageHeight={600}
+                    site={this.state.site}
+                    currentPhoto={this.state.currentPhoto}
+                    currentPoint={this.state.currentPoint}
+                    setCurrentPoint={this.setCurrentPoint}
+                    newPhoto={this.newPhoto}
+                    changePhoto={this.changePhoto}
+                    removePhoto={this.removePhoto}
+                ></PhotoInterface>
             </div>
         );
     }
