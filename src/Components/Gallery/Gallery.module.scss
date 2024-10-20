@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: space-between;
     position: relative;
-    width: 800px;
+    width: calc((100vh - 176px) / 0.75);
 }
 
 // FIX GALLERY SIZING
@@ -118,7 +118,7 @@
 }
 
 .scroller {
-    max-width: 580px;
+    max-width: calc((100vh - 176px) / 0.75 - 216px);
     overflow: scroll;
     padding: 0px;
     gap: 8px;

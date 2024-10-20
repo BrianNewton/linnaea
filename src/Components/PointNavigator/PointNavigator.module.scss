@@ -60,14 +60,12 @@
 .pointInput {
     height: 12px;
     width: 24px;
-    margin-left: 10px;
-    margin-right: 10px;
     border-radius: 5px;
 }
 
 .subNavigator {
-    margin-left: 32px;
-    margin-right: 32px;
+    margin-left: 16px;
+    margin-right: 16px;
     display: flex;
     align-items: center;
 }
@@ -77,10 +75,10 @@
 }
 
 .prevPoint {
-    height: 20px;
-    width: 40px;
+    height: 25px;
+    width: 25px;
     margin-right: 16px;
-    border-radius: 8px;
+    border-radius: 50%;
     background-color: #0e5c2e;
     border: 2px solid #0e5c2e;
     background-image: url("../../css/left-arrow.svg");
@@ -98,16 +96,62 @@
     }
 }
 
+.upPoint {
+    height: 25px;
+    width: 25px;
+    margin-right: 16px;
+    border-radius: 50%;
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    background-image: url("../../css/left-arrow.svg");
+    transform: rotate(-90deg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 16px 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+
+    &:hover {
+        background-color: white;
+        color: black;
+        border: 2px solid #0e5c2e;
+        background-image: url("../../css/left-arrow-green.svg");
+    }
+}
+
 .nextPoint {
-    height: 20px;
-    width: 40px;
+    height: 25px;
+    width: 25px;
     margin-left: 16px;
-    border-radius: 8px;
+    border-radius: 50%;
     background-color: #0e5c2e;
     border: 2px solid #0e5c2e;
     background-image: url("../../css/right-arrow.svg");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 16px 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+
+    &:hover {
+        background-color: white;
+        color: black;
+        border: 2px solid #0e5c2e;
+        background-image: url("../../css/right-arrow-green.svg");
+    }
+}
+
+.downPoint {
+    height: 25px;
+    width: 25px;
+    margin-left: 16px;
+    border-radius: 50%;
+    background-color: #0e5c2e;
+    border: 2px solid #0e5c2e;
+    background-image: url("../../css/right-arrow.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(-90deg);
     background-size: 16px 16px;
     transition-duration: 0.4s;
     cursor: pointer;

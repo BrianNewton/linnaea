@@ -7,23 +7,30 @@ import PointNavigator from "../PointNavigator/PointNavigator";
 class PhotoInterface extends React.Component {
     state = {
         scale: 1,
-        imageWidth: 800,
-        imageHeight: 600,
+        imageWidth: (window.innerHeight - 178) / 0.75,
+        imageHeight: window.innerHeight - 178,
+
+        // calc(100vh - 64px);
     };
 
     setScale = (scale) => {
         this.setState({ scale });
     };
 
-    getPointXY = (point) => {};
+    handleResize = () => {
+        this.setState({
+            imageWidth: (window.innerHeight - 178) / 0.75,
+            imageHeight: window.innerHeight - 178,
+        });
+    };
 
-    zoomToPoint = (point, scale) => {};
+    componentDidMount() {
+        window.addEventListener("resize", this.handleResize);
+    }
 
-    zoomIn = (point, scale) => {};
-
-    zoomOut = (point, scale) => {};
-
-    resetZoom = (point, scale) => {};
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.handleResize);
+    }
 
     render() {
         return (
@@ -37,8 +44,8 @@ class PhotoInterface extends React.Component {
                 <PhotoViewer
                     imageLoaded={this.props.imageLoaded}
                     setImageLoaded={this.props.setImageLoaded}
-                    imageWidth={800}
-                    imageHeight={600}
+                    imageWidth={this.state.imageWidth}
+                    imageHeight={this.state.imageHeight}
                     site={this.props.site}
                     currentPhoto={this.props.currentPhoto}
                     currentPoint={this.props.currentPoint}

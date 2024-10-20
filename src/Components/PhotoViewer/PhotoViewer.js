@@ -106,6 +106,10 @@ class PhotoViewer extends Component {
             this.props.currentPhoto > 0 &&
             this.props.currentPhoto != this.currentPhoto
         ) {
+            this.setState({ scale: 1 });
+            this.props.setScale(1);
+            const { x, y } = this.getPointPosition(this.props.currentPoint - 1);
+            this.transformToPoint(x, y, 1);
             this.props.setImageLoaded(0);
             const image =
                 this.props.site[

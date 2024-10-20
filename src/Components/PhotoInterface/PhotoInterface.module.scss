@@ -1,8 +1,10 @@
 .photoInterface {
     background-color: #e6e6e6;
-    height: 100%;
-    padding: 10px;
-    padding-left: 16px;
-    padding-right: 16px;
+    height: calc(100vh - 64px);
+    width: calc((100vh - 176px) / 0.75);
+    position: relative;
+    padding: 16px;
+    // padding-left: 16px;
+    // padding-right: 16px;
     border-radius: 8px;
 }

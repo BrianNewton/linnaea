@@ -5,8 +5,10 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 990,
+        height: 680,
+        minHeight: 680,
+        minWidth: 990,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -19,6 +21,16 @@ function createWindow() {
         //     `file://${path.join(__dirname, "../build/index.html")}`
         "http://localhost:3000"
     );
+
+    mainWindow.on("resize", () => {
+        let [width, height] = mainWindow.getSize();
+
+        const minWidth = Math.round((height - 178) / 0.75 + 330);
+
+        if (width < minWidth) {
+            mainWindow.setSize(minWidth, height);
+        }
+    });
 
     mainWindow.on("closed", () => (mainWindow = null));
 }

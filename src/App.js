@@ -1,45 +1,10 @@
 import React from "react";
 import EcosystemMenu from "./Components/EcosystemMenu/EcosystemMenu";
 import defaultEcosystem from "./biome/defaultEcosystem.json";
-import high from "./biome/high.json";
-import medium from "./biome/medium.json";
-import low from "./biome/low.json";
-import PhotoViewer from "./Components/PhotoViewer/PhotoViewer";
-import PointNavigator from "./Components/PointNavigator/PointNavigator";
-import Gallery from "./Components/Gallery/Gallery";
 import PhotoInterface from "./Components/PhotoInterface/PhotoInterface";
 
 class App extends React.Component {
     // make current point a per photo attribute
-
-    /*
-	state = {
-		biome: { "ecosystem1": {
-			community1: [species1, species2, ...],
-			community2: [species1, species2,...]
-		    }, { "ecosystem2": {
-			community1: [species1, species2, ...],
-			community2: [species1, species2,...]
-		    },...}
-		site: {
-			"photo1.jpg": {
-				1: [community, species],
-				2: [community, species],
-				...
-			},
-			"photo2.jpg" : {
-				1: [community, species],
-				2: [community, species],
-				...
-			},
-			...
-		},
-        currentSelection: [community, species, comments]
-		currentPhoto: "photo.jpg"
-		currentPoint: 1
-	}
-	*/
-
     state = {
         ecosystem: {},
         site: {},

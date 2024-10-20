@@ -89,7 +89,7 @@ class PointNavigator extends React.Component {
                             className={styles.prevPoint}
                             onClick={this.downX}
                         ></button>
-                        <span>X:</span>
+                        <span style={{ marginRight: "6px" }}>X:</span>
                         <input
                             className={styles.pointInput}
                             value={`${
@@ -103,10 +103,10 @@ class PointNavigator extends React.Component {
                     </div>
                     <div className={styles.subNavigator}>
                         <button
-                            className={styles.prevPoint}
+                            className={styles.upPoint}
                             onClick={this.upY}
                         ></button>
-                        <span>Y:</span>
+                        <span style={{ marginRight: "6px" }}>Y:</span>
                         <input
                             className={styles.pointInput}
                             value={`${
@@ -114,7 +114,7 @@ class PointNavigator extends React.Component {
                             }`}
                         ></input>
                         <button
-                            className={styles.nextPoint}
+                            className={styles.downPoint}
                             onClick={this.downY}
                         ></button>
                     </div>

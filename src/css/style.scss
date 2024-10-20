@@ -18,7 +18,9 @@ code {
     justify-content: center;
     background-color: #f6f6f6;
     padding: 16px;
-    max-height: 749px;
+    position: relative;
+    // max-height: 749px;
+    height: calc(100vh - 32px);
 }
 
 .menuButton {
