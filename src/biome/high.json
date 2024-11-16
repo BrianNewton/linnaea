@@ -27,5 +27,6 @@
         "Trembling aspen (Populus tremuloides)",
         "Balsam poplar (Populus balsamifera)",
         "Other"
-    ]
+    ],
+    "Other": ["Other", "Water", "Rock", "Fire", "Sky"]
 }

@@ -36,22 +36,13 @@ class EcosystemMenu extends React.Component {
 
     // This should clear the current selection and warn the user
     changeEcosystem = (ecosystem) => {
-        if (
-            this.props.currentPhoto &&
-            ecosystem !== this.state.selectedEcosystem
-        ) {
+        if (this.props.currentPhoto && ecosystem !== this.state.selectedEcosystem) {
             if (
                 !this.state.selectedEcosystem ||
-                window.confirm(
-                    "Changing ecosystems will clear all point classifications. Are you sure?"
-                )
+                window.confirm("Changing ecosystems will clear all point classifications. Are you sure?")
             ) {
-                const currentPhoto = Object.keys(this.props.site)[
-                    this.props.currentPhoto - 1
-                ];
-
                 for (let i = 1; i <= 100; i++) {
-                    this.props.site[currentPhoto]["points"][i] = {
+                    this.props.site[this.props.currentPhoto]["points"][i] = {
                         comments: "",
                         community: "",
                         species: "",
@@ -85,10 +76,7 @@ class EcosystemMenu extends React.Component {
 
     componentDidMount() {
         window.addEventListener("click", (event) => {
-            if (
-                this.state.ecosystemSelectorOpen &&
-                event.target.id !== "ecosystemSelector"
-            ) {
+            if (this.state.ecosystemSelectorOpen && event.target.id !== "ecosystemSelector") {
                 this.setState({ ecosystemSelectorOpen: 0 });
             }
         });
@@ -96,16 +84,10 @@ class EcosystemMenu extends React.Component {
 
     // new image selected
     componentDidUpdate() {
-        const currentPhoto = Object.keys(this.props.site)[
-            this.props.currentPhoto - 1
-        ];
         // new image loaded
-        if (currentPhoto && this.props.imageLoaded) {
+        if (this.props.currentPhoto && this.props.imageLoaded) {
             // if new image doesn't have an ecosystem selected
-            if (
-                !this.props.site[currentPhoto]["ecosystem"] &&
-                !this.state.ecosystemSelectorOpen
-            ) {
+            if (!this.props.site[this.props.currentPhoto]["ecosystem"] && !this.state.ecosystemSelectorOpen) {
                 this.setState({
                     ecosystemSelectorOpen: 1,
                     selectedEcosystem: "",
@@ -113,26 +95,25 @@ class EcosystemMenu extends React.Component {
 
                 // new image does have an ecosystem selected and it's not curent
             } else if (
-                this.props.site[currentPhoto]["ecosystem"] &&
-                this.state.selectedEcosystem !==
-                    this.props.site[currentPhoto]["ecosystem"]
+                this.props.site[this.props.currentPhoto]["ecosystem"] &&
+                this.state.selectedEcosystem !== this.props.site[this.props.currentPhoto]["ecosystem"]
             ) {
                 this.setState({
-                    selectedEcosystem:
-                        this.props.site[currentPhoto]["ecosystem"],
+                    selectedEcosystem: this.props.site[this.props.currentPhoto]["ecosystem"],
                     ecosystemSelectorOpen: 0,
                 });
             }
-        } else if (!currentPhoto && this.state.selectedEcosystem) {
+        } else if (!this.props.currentPhoto && this.state.selectedEcosystem) {
             this.setState({ selectedEcosystem: "" });
         }
     }
 
     handleCommentKeyPress = (event) => {
         if (
+            this.props.currentPhoto &&
             event.key === "Enter" &&
             !event.shiftKey &&
-            this.props.currentPoint
+            this.props.site[this.props.currentPhoto]["currentPoint"]
         ) {
             event.preventDefault();
             this.setState({ searchSpecies: "" });
@@ -149,11 +130,7 @@ class EcosystemMenu extends React.Component {
 
     render() {
         return (
-            <div
-                className={`${styles.ecosystemContainer} ${
-                    this.state.ecosystemSelectorOpen ? styles.open : ""
-                }`}
-            >
+            <div className={`${styles.ecosystemContainer} ${this.state.ecosystemSelectorOpen ? styles.open : ""}`}>
                 <EcosystemSelector
                     ecosystemSelectorOpen={this.state.ecosystemSelectorOpen}
                     toggleEcosystemSelector={this.toggleEcosystemSelector}
@@ -163,54 +140,29 @@ class EcosystemMenu extends React.Component {
                     id="ecosystemSelector"
                 ></EcosystemSelector>
 
-                <form
-                    onSubmit={this.confirmSelection}
-                    className={styles.ecosystemForm}
-                >
+                <form onSubmit={this.confirmSelection} className={styles.ecosystemForm}>
                     <div>
                         {this.state.selectedEcosystem ? (
                             <div>
-                                {this.biome[this.state.selectedEcosystem][
-                                    "name"
-                                ] !== "Other" ? (
+                                {this.biome[this.state.selectedEcosystem]["name"] !== "Other" ? (
                                     <Search
-                                        ecosystem={
-                                            this.biome[
-                                                this.state.selectedEcosystem
-                                            ]
-                                        }
+                                        ecosystem={this.biome[this.state.selectedEcosystem]}
                                         setSelection={this.setSelection}
                                         searchSpecies={this.state.searchSpecies}
-                                        changeSearchSpecies={
-                                            this.changeSearchSpecies
-                                        }
+                                        changeSearchSpecies={this.changeSearchSpecies}
                                     ></Search>
                                 ) : (
                                     ""
                                 )}
-                                {Object.keys(
-                                    this.biome[this.state.selectedEcosystem]
-                                ).map((key) =>
-                                    Array.isArray(
-                                        this.biome[
-                                            this.state.selectedEcosystem
-                                        ][key]
-                                    ) ? (
+                                {Object.keys(this.biome[this.state.selectedEcosystem]).map((key) =>
+                                    Array.isArray(this.biome[this.state.selectedEcosystem][key]) ? (
                                         <Dropdown
                                             key={key}
-                                            community={
-                                                this.biome[
-                                                    this.state.selectedEcosystem
-                                                ][key]
-                                            }
+                                            community={this.biome[this.state.selectedEcosystem][key]}
                                             communityName={key}
                                             setSelection={this.setSelection}
-                                            currentSelection={
-                                                this.props.currentSelection
-                                            }
-                                            changeSearchSpecies={
-                                                this.changeSearchSpecies
-                                            }
+                                            currentSelection={this.props.currentSelection}
+                                            changeSearchSpecies={this.changeSearchSpecies}
                                         ></Dropdown>
                                     ) : (
                                         ""
@@ -234,9 +186,9 @@ class EcosystemMenu extends React.Component {
                         type="submit"
                         disabled={
                             !(
-                                (this.props.currentSelection["comments"] ||
-                                    this.props.currentSelection["species"]) &&
-                                this.props.currentPoint
+                                this.props.currentPhoto &&
+                                (this.props.currentSelection["comments"] || this.props.currentSelection["species"]) &&
+                                this.props.site[this.props.currentPhoto]["currentPoint"]
                             )
                         }
                     >

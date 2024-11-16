@@ -21,10 +21,8 @@ class PhotoViewer extends Component {
     // Transform to point with specified scale
     transformToPoint(x, y, scale) {
         const { imageWidth, imageHeight } = this.props;
-        let xTransform =
-            imageWidth / 2 - (x + imageWidth / (this.gridSize * 2)) * scale;
-        let yTransform =
-            imageHeight / 2 - (y + imageHeight / (this.gridSize * 2)) * scale;
+        let xTransform = imageWidth / 2 - (x + imageWidth / (this.gridSize * 2)) * scale;
+        let yTransform = imageHeight / 2 - (y + imageHeight / (this.gridSize * 2)) * scale;
 
         if (xTransform > 0) {
             xTransform = 0;
@@ -38,11 +36,7 @@ class PhotoViewer extends Component {
             yTransform = -1 * imageHeight * (scale - 1);
         }
         if (this.transformWrapperRef.current) {
-            this.transformWrapperRef.current.setTransform(
-                xTransform,
-                yTransform,
-                scale
-            );
+            this.transformWrapperRef.current.setTransform(xTransform, yTransform, scale);
         }
     }
 
@@ -52,18 +46,14 @@ class PhotoViewer extends Component {
 
         if (this.transformWrapperRef.current) {
             if (click === "double") {
-                const scale = 10;
+                const scale = 15;
                 if (point === this.focusPoint) {
                     this.transformWrapperRef.current.setTransform(0, 0, 1);
                     this.focusPoint = 0;
                     this.setState({ scale: 1 });
                     this.props.setScale(1);
                 } else {
-                    this.transformWrapperRef.current.setTransform(
-                        imageWidth / 2 - x * scale,
-                        imageHeight / 2 - y * scale,
-                        scale
-                    );
+                    this.transformWrapperRef.current.setTransform(imageWidth / 2 - x * scale, imageHeight / 2 - y * scale, scale);
                     this.focusPoint = point;
                     this.props.setCurrentPoint(point);
                     this.setState({ scale: 9 });
@@ -91,47 +81,40 @@ class PhotoViewer extends Component {
     }
 
     // Upload image when clicking on empty canvas
-    handleImageUpload = (event) => {
-        const files = event.target.files;
-
-        this.props.newPhoto(files);
-
-        event.target.value = null;
+    handleNewImage = () => {
+        window.api.imageUpload(Object.keys(this.props.site)).then((response) => {
+            this.props.newPhoto(response);
+        });
     };
 
     // Buffer image and show loading animation until finished
     componentDidUpdate() {
         // load new photo with buffer animation
-        if (
-            this.props.currentPhoto > 0 &&
-            this.props.currentPhoto != this.currentPhoto
-        ) {
+        if (this.props.currentPhoto && this.props.currentPhoto !== this.currentPhoto) {
             this.setState({ scale: 1 });
             this.props.setScale(1);
-            const { x, y } = this.getPointPosition(this.props.currentPoint - 1);
+            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
             this.transformToPoint(x, y, 1);
             this.props.setImageLoaded(0);
-            const image =
-                this.props.site[
-                    Object.keys(this.props.site)[this.props.currentPhoto - 1]
-                ]["file"];
+            // const image = Object.keys(this.props.site)[this.props.currentPhoto - 1];
+
             const img = new Image();
-            img.src = image;
+            img.src = this.props.images[this.props.currentPhoto];
             img.onload = () => this.props.setImageLoaded(1);
             this.currentPhoto = this.props.currentPhoto;
-            this.image = image;
+            this.image = img.src;
         }
 
         // new current point
-        if (this.state.focusPoint != this.props.currentPoint) {
-            const { x, y } = this.getPointPosition(this.props.currentPoint - 1);
+        if (this.props.currentPhoto && this.state.focusPoint != this.props.site[this.props.currentPhoto]["currentPoint"]) {
+            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
             this.transformToPoint(x, y, this.state.scale);
-            this.setState({ focusPoint: this.props.currentPoint });
+            this.setState({ focusPoint: this.props.site[this.props.currentPhoto]["currentPoint"] });
         }
 
         // change zoom
-        if (this.state.scale !== this.props.scale) {
-            const { x, y } = this.getPointPosition(this.props.currentPoint - 1);
+        if (this.props.currentPhoto && this.state.scale !== this.props.scale) {
+            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
             this.transformToPoint(x, y, this.props.scale);
             this.setState({ scale: this.props.scale });
         }
@@ -146,29 +129,20 @@ class PhotoViewer extends Component {
 
     render() {
         const { imageUrl, imageWidth, imageHeight } = this.props;
-        const points = Array.from(
-            { length: this.gridSize * this.gridSize },
-            (_, i) => i
-        ); // 100 points
+        const points = Array.from({ length: this.gridSize * this.gridSize }, (_, i) => i); // 100 points
 
         return (
             // Overall viewport
             <div className={styles.viewPort}>
                 {this.props.currentPhoto ? (
                     // If there's a photo loaded, display in the viewport
-                    <TransformWrapper
-                        ref={this.transformWrapperRef}
-                        onZoomStop={this.zoomChange}
-                    >
+                    <TransformWrapper ref={this.transformWrapperRef} onZoomStop={this.zoomChange}>
                         <TransformComponent>
                             {this.props.imageLoaded ? (
                                 <div className={styles.photoViewer}>
                                     {/* The Image */}
                                     <img
-                                        src={
-                                            this.props.currentPhoto &&
-                                            this.image
-                                        }
+                                        src={this.props.currentPhoto && this.image}
                                         alt="Zoomable"
                                         style={{
                                             width: "100%",
@@ -178,30 +152,18 @@ class PhotoViewer extends Component {
                                     />
                                     {/* Overlay Points */}
                                     {points.map((point, index) => {
-                                        const { x, y } =
-                                            this.getPointPosition(index);
+                                        const { x, y } = this.getPointPosition(index);
                                         return (
                                             <Crosshair
                                                 key={index}
                                                 site={this.props.site}
-                                                currentPhoto={
-                                                    this.props.currentPhoto
-                                                }
+                                                currentPhoto={this.props.currentPhoto}
                                                 x={x}
                                                 y={y}
-                                                boxHeight={
-                                                    imageHeight / this.gridSize
-                                                }
-                                                boxWidth={
-                                                    imageWidth / this.gridSize
-                                                }
+                                                boxHeight={imageHeight / this.gridSize}
+                                                boxWidth={imageWidth / this.gridSize}
                                                 point={index + 1}
-                                                current={
-                                                    index + 1 ===
-                                                    this.props.currentPoint
-                                                        ? 1
-                                                        : 0
-                                                }
+                                                current={index + 1 === this.props.site[this.props.currentPhoto]["currentPoint"] ? 1 : 0}
                                                 clickedPoint={this.clickedPoint}
                                             ></Crosshair>
                                         );
@@ -214,10 +176,7 @@ class PhotoViewer extends Component {
                     </TransformWrapper>
                 ) : (
                     // If there's no image loaded, show upload button
-                    <div
-                        className={styles.emptyPhoto}
-                        onClick={() => this.fileInputRef.current.click()}
-                    >
+                    <div className={styles.emptyPhoto} onClick={this.handleNewImage}>
                         <div
                             style={{
                                 position: "absolute",
@@ -232,14 +191,6 @@ class PhotoViewer extends Component {
                             Upload an image
                         </div>
                         {""}
-                        <input
-                            type="file"
-                            style={{ display: "none" }}
-                            accept="image/*"
-                            ref={this.fileInputRef}
-                            multiple
-                            onChange={this.handleImageUpload}
-                        ></input>
                     </div>
                 )}
             </div>

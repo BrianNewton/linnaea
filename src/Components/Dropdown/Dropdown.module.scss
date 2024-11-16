@@ -1,6 +1,8 @@
+@use "../../css/variables" as *;
+
 .communityDropdown {
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin-bottom: 16px;
+    margin-top: 16px;
 }
 
 .dropdown {
@@ -32,7 +34,7 @@
     }
 
     &.focus {
-        outline: 2px solid #0e5c2e;
-        border-color: #0e5c2e;
+        outline: 2px solid $linnaea-green;
+        border-color: $linnaea-green;
     }
 }

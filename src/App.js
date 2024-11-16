@@ -3,14 +3,18 @@ import EcosystemMenu from "./Components/EcosystemMenu/EcosystemMenu";
 import defaultEcosystem from "./biome/defaultEcosystem.json";
 import PhotoInterface from "./Components/PhotoInterface/PhotoInterface";
 
+// Don't save images, save image paths and save site info
+
 class App extends React.Component {
     // make current point a per photo attribute
+
     state = {
-        ecosystem: {},
         site: {},
+        files: {},
+        images: {},
+        saveFile: "",
         currentSelection: { community: "", species: "", comments: "" },
         currentPhoto: 0,
-        currentPoint: 0,
         imageLoaded: 0,
     };
 
@@ -20,7 +24,25 @@ class App extends React.Component {
 
     componentDidMount() {
         this.setState({ ecosystem: defaultEcosystem });
+        window.menuAPI.saveAs((event) => {
+            const site_data = {
+                site: this.state.site,
+                files: this.state.files,
+            };
+            window.api.saveAs(site_data);
+        });
+
+        window.menuAPI.open((event, siteData) => {});
     }
+
+    componentWillUnmount() {
+        // ipcRenderer.removeListener("Save", alert("Uhhh"));
+        // window.electronAPI.removeListner("do-something", this.handleAction);
+    }
+
+    handleAction = () => {
+        alert("Is this on?");
+    };
 
     newSite() {}
 
@@ -32,92 +54,103 @@ class App extends React.Component {
         this.setState({ currentSelection });
     };
 
-    newPhoto = (files) => {
+    // Handles new photo upload
+    newPhoto = (newImages) => {
         const site = { ...this.state.site };
+        const files = { ...this.state.files };
+        const images = { ...this.state.images };
 
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-
-            if (site && file.name in site) {
-                alert(`${file.name} is already uploaded!`);
-            } else {
-                const imageURL = URL.createObjectURL(file);
-                site[file.name] = { file: imageURL, points: [] };
-                site[file.name]["ecosystem"] = "";
-                for (let i = 1; i <= 100; i++) {
-                    site[file.name]["points"][i] = {
-                        community: "",
-                        species: "",
-                        comments: "",
-                    };
-                }
+        Object.keys(newImages).map((image) => {
+            files[image] = newImages[image]["path"];
+            images[image] = newImages[image]["data"];
+            site[image] = { points: [] };
+            site[image]["currentPoint"] = 1;
+            site[image]["ecosystem"] = "";
+            for (let i = 1; i <= 100; i++) {
+                site[image]["points"][i] = {
+                    community: "",
+                    species: "",
+                    comments: "",
+                };
             }
-        }
-        const currentPhoto = Object.keys(site).length;
-        const currentPoint = 1;
-        this.setState({ site, currentPhoto, currentPoint });
+        });
+
+        const currentPhoto = Object.keys(site)[Object.keys(site).length - 1];
+        this.setState({ site, currentPhoto, files, images });
     };
 
     changeEcosystem = (ecosystem) => {
-        const currentPhoto = Object.keys(this.state.site)[
-            this.state.currentPhoto - 1
-        ];
         const site = { ...this.state.site };
-        site[currentPhoto]["ecosystem"] = ecosystem;
+        site[this.state.currentPhoto]["ecosystem"] = ecosystem;
         this.setState({ site });
     };
 
     removePhoto = (image) => {
         const site = { ...this.state.site };
-        const images = Object.keys(this.state.site);
-        const deletedPhoto = images.indexOf(image);
-        if (this.state.currentPhoto - 1 === deletedPhoto) {
-            this.setState({ currentPhoto: deletedPhoto });
+        const files = { ...this.state.files };
+        const images = { ...this.state.images };
+
+        if (this.state.currentPhoto === image) {
+            const index = Object.keys(site).indexOf(image);
+            const size = Object.keys(site).length;
+            let currentPhoto = "";
+            if (index === 0 && size === 1) {
+                currentPhoto = "";
+                console.log("here");
+            } else if (index === 0 && size != 1) {
+                currentPhoto = Object.keys(site)[index + 1];
+            } else {
+                currentPhoto = Object.keys(site)[index - 1];
+            }
+            this.setState({ currentPhoto });
         }
+
         delete site[image];
-        this.setState({ site });
+        delete files[image];
+        delete images[image];
+
+        this.setState({ site, files, images });
     };
 
     setCurrentPoint = (point) => {
-        const currentPhoto = Object.keys(this.state.site)[
-            this.state.currentPhoto - 1
-        ];
-        if (this.state.site[currentPhoto]["points"][point]["species"]) {
-            this.setState({
-                currentSelection:
-                    this.state.site[currentPhoto]["points"][point],
-            });
-        } else {
-            this.setState({
-                currentSelection: { community: "", species: "", comments: "" },
-            });
+        if (this.state.currentPhoto) {
+            if (this.state.site[this.state.currentPhoto]["points"][point]["species"]) {
+                this.setState({
+                    currentSelection: this.state.site[this.state.currentPhoto]["points"][point],
+                });
+            } else {
+                this.setState({
+                    currentSelection: {
+                        community: "",
+                        species: "",
+                        comments: "",
+                    },
+                });
+            }
+            const site = { ...this.state.site };
+            site[this.state.currentPhoto]["currentPoint"] = point;
+            this.setState({ site });
         }
-        this.setState({ currentPoint: point });
     };
 
     confirmSelection = () => {
         const site = { ...this.state.site };
-        const currentPhoto = Object.keys(site)[this.state.currentPhoto - 1];
-        Object.assign(
-            site[currentPhoto]["points"][this.state.currentPoint],
-            this.state.currentSelection
-        );
+        const currentPoint = site[this.state.currentPhoto]["currentPoint"];
+        Object.assign(site[this.state.currentPhoto]["points"][currentPoint], this.state.currentSelection);
 
-        if (!site[currentPhoto]["points"][this.state.currentPoint]["species"]) {
-            site[currentPhoto]["points"][this.state.currentPoint]["species"] =
-                "None";
+        if (!site[this.state.currentPhoto]["points"][currentPoint]["species"]) {
+            site[this.state.currentPhoto]["points"][currentPoint]["species"] = "None";
         }
-        if (
-            !site[currentPhoto]["points"][this.state.currentPoint]["community"]
-        ) {
-            site[currentPhoto]["points"][this.state.currentPoint]["community"] =
-                "None";
+        if (!site[this.state.currentPhoto]["points"][currentPoint]["community"]) {
+            site[this.state.currentPhoto]["points"][currentPoint]["community"] = "None";
         }
 
         const currentSelection = { community: "", species: "", comments: "" };
-        const currentPoint = this.state.currentPoint + 1;
+        if (currentPoint < 100) {
+            site[this.state.currentPhoto]["currentPoint"]++;
+        }
 
-        this.setState({ site, currentSelection, currentPoint });
+        this.setState({ site, currentSelection });
     };
 
     changePhoto = (newPhoto) => {
@@ -130,7 +163,6 @@ class App extends React.Component {
                 <EcosystemMenu
                     changeSelection={this.changeSelection}
                     currentSelection={this.state.currentSelection}
-                    currentPoint={this.state.currentPoint}
                     currentPhoto={this.state.currentPhoto}
                     confirmSelection={this.confirmSelection}
                     changeEcosystem={this.changeEcosystem}
@@ -143,8 +175,8 @@ class App extends React.Component {
                     imageWidth={800}
                     imageHeight={600}
                     site={this.state.site}
+                    images={this.state.images}
                     currentPhoto={this.state.currentPhoto}
-                    currentPoint={this.state.currentPoint}
                     setCurrentPoint={this.setCurrentPoint}
                     newPhoto={this.newPhoto}
                     changePhoto={this.changePhoto}

@@ -61,5 +61,6 @@
         "Lingonberry (Vaccinium vitis-idaea)",
         "Sheep laurel (Kalmia angustifolia)",
         "Other"
-    ]
+    ],
+    "Other": ["Other", "Water", "Rock", "Fire", "Sky"]
 }

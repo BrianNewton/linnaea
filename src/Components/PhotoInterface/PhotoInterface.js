@@ -38,7 +38,8 @@ class PhotoInterface extends React.Component {
                 <PointNavigator
                     setScale={this.setScale}
                     scale={this.state.scale}
-                    currentPoint={this.props.currentPoint}
+                    site={this.props.site}
+                    currentPhoto={this.props.currentPhoto}
                     setCurrentPoint={this.props.setCurrentPoint}
                 ></PointNavigator>
                 <PhotoViewer
@@ -48,14 +49,15 @@ class PhotoInterface extends React.Component {
                     imageHeight={this.state.imageHeight}
                     site={this.props.site}
                     currentPhoto={this.props.currentPhoto}
-                    currentPoint={this.props.currentPoint}
                     setCurrentPoint={this.props.setCurrentPoint}
                     newPhoto={this.props.newPhoto}
                     setScale={this.setScale}
+                    images={this.props.images}
                     scale={this.state.scale}
                 ></PhotoViewer>
                 <Gallery
                     site={this.props.site}
+                    images={this.props.images}
                     newPhoto={this.props.newPhoto}
                     currentPhoto={this.props.currentPhoto}
                     changePhoto={this.props.changePhoto}

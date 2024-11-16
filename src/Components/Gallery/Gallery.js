@@ -12,24 +12,6 @@ class Gallery extends Component {
         this.numImages = 0;
     }
 
-    // Handles upload of one or more images
-    handleImageUpload = (event) => {
-        const files = event.target.files;
-
-        this.props.newPhoto(files);
-
-        // Sroll to end of gallery
-        requestAnimationFrame(() => {
-            this.scrollerRef.current.scrollTo({
-                left: this.scrollerRef.current.scrollWidth,
-                behavior: "smooth",
-            });
-        });
-
-        this.numImages += event.target.files.length;
-        event.target.value = null;
-    };
-
     componentDidUpdate() {
         if (this.numImages < Object.keys(this.props.site).length) {
             requestAnimationFrame(() => {
@@ -45,16 +27,14 @@ class Gallery extends Component {
     // Selecting a image in the gallery
     handleClick = (event) => {
         const index = event.currentTarget.getAttribute("data-index"); // index of selected photo
+        const image = event.currentTarget.getAttribute("data-image");
 
-        this.props.changePhoto(Number(index) + 1); // change selected photo
+        this.props.changePhoto(image); // change selected photo
 
         //if selected photo is cut off by the right side of the gallery, scroll right
         if (index * 116 < this.scrollerRef.current.scrollLeft + 50) {
             this.scrollerRef.current.scrollTo({
-                left:
-                    Math.floor(this.scrollerRef.current.scrollLeft / 116) *
-                        116 -
-                    116,
+                left: Math.floor(this.scrollerRef.current.scrollLeft / 116) * 116 - 116,
                 behavior: "smooth",
             });
         } else if (
@@ -76,9 +56,9 @@ class Gallery extends Component {
 
         if (window.confirm(`Remove ${image}?`)) {
             this.props.removePhoto(image);
-            if (this.props.currentPhoto - 1 > index) {
-                this.props.changePhoto(this.props.currentPhoto - 1);
-            }
+            // if (Object.keys(this.props.site).indexOf(this.props.currentPhoto) > index) {
+            //     this.props.changePhoto(this.props.currentPhoto - 1);
+            // }
         }
         this.numImages--;
     };
@@ -108,10 +88,7 @@ class Gallery extends Component {
 
             if (index * 116 < this.scrollerRef.current.scrollLeft + 50) {
                 this.scrollerRef.current.scrollTo({
-                    left:
-                        Math.floor(this.scrollerRef.current.scrollLeft / 116) *
-                            116 -
-                        116,
+                    left: Math.floor(this.scrollerRef.current.scrollLeft / 116) * 116 - 116,
                     behavior: "smooth",
                 });
             }
@@ -120,14 +97,27 @@ class Gallery extends Component {
         }
     };
 
+    handleNewImage = () => {
+        window.api.imageUpload(Object.keys(this.props.site)).then((response) => {
+            this.props.newPhoto(response);
+
+            // Sroll to end of gallery
+            requestAnimationFrame(() => {
+                this.scrollerRef.current.scrollTo({
+                    left: this.scrollerRef.current.scrollWidth,
+                    behavior: "smooth",
+                });
+            });
+
+            this.numImages += response.length;
+        });
+    };
+
     render() {
         return (
             // entire gallery
             <div className={styles.gallery}>
-                <button
-                    className={styles.prevGalleryButton}
-                    onClick={this.prevPhoto}
-                ></button>
+                <button className={styles.prevGalleryButton} onClick={this.prevPhoto}></button>
                 {/* Gallery container including images and upload button */}
                 <div className={styles.galleryContainer}>
                     {/* Scroll window includes images */}
@@ -135,75 +125,45 @@ class Gallery extends Component {
                         {/* Scrolling image content */}
                         <div className={styles.galleryScroll}>
                             {this.props.site &&
-                                Object.keys(this.props.site).map(
-                                    (image, index) => (
-                                        // Contains image and remove button
+                                Object.keys(this.props.site).map((image, index) => (
+                                    // Contains image and remove button
+                                    <div
+                                        className={`${styles.galleryItem} ${index + 1 === this.props.currentPhoto ? styles.current : ""}`}
+                                        key={`imageContainer_${index}`}
+                                        title={`${image}`}
+                                    >
+                                        {/* Remove image button, only visible on hover */}
+                                        <button
+                                            className={styles.removePhoto}
+                                            key={`removePhoto_${index}`}
+                                            data-image={image}
+                                            data-index={index}
+                                            onClick={this.handleRemovePhoto}
+                                        ></button>
+                                        {/* Contains the image */}
                                         <div
-                                            className={`${styles.galleryItem} ${
-                                                index + 1 ===
-                                                this.props.currentPhoto
-                                                    ? styles.current
-                                                    : ""
+                                            key={`galleryItem-${index}`}
+                                            data-index={index}
+                                            data-image={image}
+                                            className={`${styles.imageContainer} ${
+                                                image === this.props.currentPhoto ? styles.current : ""
                                             }`}
-                                            key={`imageContainer_${index}`}
-                                            title={`${image}`}
+                                            onClick={this.handleClick}
                                         >
-                                            {/* Remove image button, only visible on hover */}
-                                            <button
-                                                className={styles.removePhoto}
-                                                key={`removePhoto_${index}`}
-                                                data-image={image}
-                                                data-index={index}
-                                                onClick={this.handleRemovePhoto}
-                                            ></button>
-                                            {/* Contains the image */}
-                                            <div
-                                                key={`galleryItem-${index}`}
-                                                data-index={index}
-                                                className={`${
-                                                    styles.imageContainer
-                                                } ${
-                                                    index + 1 ===
-                                                    this.props.currentPhoto
-                                                        ? styles.current
-                                                        : ""
-                                                }`}
-                                                onClick={this.handleClick}
-                                            >
-                                                <ImageThumbnail
-                                                    imageSrc={
-                                                        this.props.site[image][
-                                                            "file"
-                                                        ]
-                                                    }
-                                                    maxWidth={80}
-                                                    maxHeight={60}
-                                                ></ImageThumbnail>
-                                            </div>
+                                            <ImageThumbnail
+                                                imageSrc={this.props.images[image]}
+                                                maxWidth={80}
+                                                maxHeight={60}
+                                            ></ImageThumbnail>
                                         </div>
-                                    )
-                                )}
+                                    </div>
+                                ))}
                         </div>
                     </div>
                     {/* Upload button */}
-                    <button
-                        className={styles.newPhotoButton}
-                        onClick={() => this.fileInputRef.current.click()}
-                    ></button>
+                    <button className={styles.newPhotoButton} onClick={this.handleNewImage}></button>
                 </div>
-                <button
-                    className={styles.nextGalleryButton}
-                    onClick={this.nextPhoto}
-                ></button>
-                {/* Hidden file input */}
-                <input
-                    type="file"
-                    style={{ display: "none" }}
-                    accept="image/*"
-                    ref={this.fileInputRef}
-                    multiple
-                    onChange={this.handleImageUpload}
-                ></input>
+                <button className={styles.nextGalleryButton} onClick={this.nextPhoto}></button>
             </div>
         );
     }

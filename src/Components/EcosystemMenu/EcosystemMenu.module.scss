@@ -1,7 +1,9 @@
+@use "../../css/variables" as *;
+
 .ecosystemContainer {
     padding: 16px;
     margin-right: 16px;
-    background-color: #e6e6e6;
+    background-color: $panel;
     border-radius: 8px;
     position: relative;
     display: flex;
@@ -56,7 +58,7 @@
     width: 234px;
     height: 50px;
     padding: 7px;
-    border: 1px solid #0e5c2e;
+    border: 1px solid $linnaea-green;
     border-radius: 8px;
     resize: none;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
@@ -67,15 +69,15 @@
 }
 
 .comments:focus {
-    outline: 2px solid #0e5c2e;
-    border-color: #0e5c2e;
+    outline: 2px solid $linnaea-green;
+    border-color: $linnaea-green;
 }
 
 .confirmSpecies {
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
+    background-color: $linnaea-green;
+    border: 2px solid $linnaea-green;
     color: white;
-    margin-top: 28px;
+    margin-top: 24px;
     padding: 5px;
     padding-left: 15px;
     padding-right: 15px;
@@ -89,7 +91,7 @@
 .confirmSpecies:hover:not(:disabled) {
     background-color: white;
     color: black;
-    border: 2px solid #0e5c2e;
+    border: 2px solid $linnaea-green;
 }
 
 .confirmSpecies:disabled {

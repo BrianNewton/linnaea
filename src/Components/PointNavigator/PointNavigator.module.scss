@@ -1,3 +1,5 @@
+@use "../../css/variables" as *;
+
 .imageTools {
     display: -webkit-box;
     display: flex;
@@ -79,8 +81,8 @@
     width: 25px;
     margin-right: 16px;
     border-radius: 50%;
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
+    background-color: $linnaea-green;
+    border: 2px solid $linnaea-green;
     background-image: url("../../css/left-arrow.svg");
     background-repeat: no-repeat;
     background-position: center;
@@ -91,7 +93,7 @@
     &:hover {
         background-color: white;
         color: black;
-        border: 2px solid #0e5c2e;
+        border: 2px solid $linnaea-green;
         background-image: url("../../css/left-arrow-green.svg");
     }
 }
@@ -101,8 +103,8 @@
     width: 25px;
     margin-right: 16px;
     border-radius: 50%;
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
+    background-color: $linnaea-green;
+    border: 2px solid $linnaea-green;
     background-image: url("../../css/left-arrow.svg");
     transform: rotate(-90deg);
     background-repeat: no-repeat;
@@ -114,7 +116,7 @@
     &:hover {
         background-color: white;
         color: black;
-        border: 2px solid #0e5c2e;
+        border: 2px solid $linnaea-green;
         background-image: url("../../css/left-arrow-green.svg");
     }
 }
@@ -124,8 +126,8 @@
     width: 25px;
     margin-left: 16px;
     border-radius: 50%;
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
+    background-color: $linnaea-green;
+    border: 2px solid $linnaea-green;
     background-image: url("../../css/right-arrow.svg");
     background-repeat: no-repeat;
     background-position: center;
@@ -136,7 +138,7 @@
     &:hover {
         background-color: white;
         color: black;
-        border: 2px solid #0e5c2e;
+        border: 2px solid $linnaea-green;
         background-image: url("../../css/right-arrow-green.svg");
     }
 }
@@ -146,8 +148,8 @@
     width: 25px;
     margin-left: 16px;
     border-radius: 50%;
-    background-color: #0e5c2e;
-    border: 2px solid #0e5c2e;
+    background-color: $linnaea-green;
+    border: 2px solid $linnaea-green;
     background-image: url("../../css/right-arrow.svg");
     background-repeat: no-repeat;
     background-position: center;
@@ -159,7 +161,7 @@
     &:hover {
         background-color: white;
         color: black;
-        border: 2px solid #0e5c2e;
+        border: 2px solid $linnaea-green;
         background-image: url("../../css/right-arrow-green.svg");
     }
 }

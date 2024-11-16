@@ -2,7 +2,7 @@
     "name": "linnaea",
     "version": "0.1.0",
     "private": true,
-    "main": "src/electron.js",
+    "main": "electron/electron.js",
     "dependencies": {
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
@@ -42,6 +42,8 @@
         "concurrently": "^9.0.1",
         "css-loader": "^7.1.2",
         "electron": "^32.2.0",
+        "electron-devtools-installer": "^3.2.0",
+        "electron-react-devtools": "^0.5.3",
         "react-zoom-pan-pinch": "^3.6.1",
         "sass": "^1.79.5",
         "wait-on": "^8.0.1"

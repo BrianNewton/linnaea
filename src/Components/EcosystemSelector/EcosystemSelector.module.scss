@@ -1,43 +1,6 @@
-// .ecosystemSelector {
-//     width: 250px; /* Set the width of the select box */
-//     height: 40px; /* Set the height of the select box */
-//     padding: 5px; /* Add padding inside the select box */
-//     margin-bottom: 16px;
-//     font-size: 16px; /* Change the font size */
-//     border: 1px solid #ccc; /* Set a border */
-//     border-radius: 8px; /* Optional: add rounded corners */
-//     background-color: #0e5c2e; /* Optional: set a background color */
-//     cursor: pointer; /* Optional: change the cursor on hover */
-//     overflow: hidden;
-//     text-overflow: ellipsis;
-//     appearance: none;
-//     -webkit-appearance: none;
-//     -moz-appearance: none;
-//     background-image: url("../../css/menu.svg");
-//     background-repeat: no-repeat;
-//     background-position: 5% 50%;
-//     background-size: 20px;
-//     color: white;
-//     padding-left: 40px;
-//     position: relative;
-// }
+@use "../../css/variables" as *;
 
-// .ecosystemSelector select {
-//     display: none;
-// }
-
-// .select-items div {
-//     position: absolute;
-//     width: 250px; /* Set the width of the select box */
-//     height: 40px; /* Set the height of the select box */
-//     background-color: #0e5c2e;
-//     top: 100%;
-//     left: 0%;
-//     right: 0%;
-//     z-index: 99;
-// }
-
-$linnaea-green: #0e5c2e;
+$linnaea-green: $linnaea-green;
 $gray1: #f9f9f9;
 $gray2: #f6f6f6;
 $gray3: #e6e6e6;
@@ -84,7 +47,7 @@ $gray3: #e6e6e6;
 
 .ecosystemSelect.open .selectBox {
     background-image: url("../../css/menu.svg");
-    background-color: #0e5c2e;
+    background-color: $linnaea-green;
     color: white;
     transition: border-radius 0s;
     border-radius: 8px 8px 0 0;
@@ -96,7 +59,7 @@ $gray3: #e6e6e6;
     top: 100%;
     left: 0;
     right: 0;
-    background-color: #0e5c2e;
+    background-color: $linnaea-green;
     border-radius: 0 0 8px 8px;
     max-height: 0px;
     transition: max-height 0.3s ease;
@@ -107,7 +70,7 @@ $gray3: #e6e6e6;
 .option {
     padding: 10px;
     cursor: pointer;
-    background-color: #0e5c2e;
+    background-color: $linnaea-green;
     color: white;
 
     &:hover {

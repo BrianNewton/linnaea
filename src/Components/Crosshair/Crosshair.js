@@ -22,18 +22,11 @@ class Crosshair extends React.Component {
 
     render() {
         const crosshairSize = 10;
-        const sitePoints =
-            this.props.site[
-                Object.keys(this.props.site)[this.props.currentPhoto - 1]
-            ]["points"];
+        const sitePoints = this.props.site[this.props.currentPhoto]["points"];
         return (
             <div
-                className={`${styles.crosshairBox} ${
-                    this.props.current ? styles.selected : ""
-                } ${
-                    sitePoints[this.props.point]["species"]
-                        ? styles.confirmed
-                        : ""
+                className={`${styles.crosshairBox} ${this.props.current ? styles.selected : ""} ${
+                    sitePoints[this.props.point]["species"] ? styles.confirmed : ""
                 }`}
                 style={{
                     position: "absolute",
@@ -51,11 +44,9 @@ class Crosshair extends React.Component {
                     className={styles.crosshairLine}
                     style={{
                         position: "absolute",
-                        width: "2px",
+                        width: "1px",
                         height: `${crosshairSize}px`,
-                        top: `${
-                            this.props.boxHeight / 2 - (crosshairSize + 3)
-                        }px`,
+                        top: `${this.props.boxHeight / 2 - (crosshairSize + 1)}px`,
                         left: `${this.props.boxWidth / 2}px`,
                         transform: "translateX(-50%)",
                     }}
@@ -64,9 +55,9 @@ class Crosshair extends React.Component {
                     className={styles.crosshairLine}
                     style={{
                         position: "absolute",
-                        width: "2px",
+                        width: "1px",
                         height: `${crosshairSize}px`,
-                        top: `${this.props.boxHeight / 2 + 3}px`,
+                        top: `${this.props.boxHeight / 2 + 1}px`,
                         left: "50%",
                         transform: "translateX(-50%)",
                     }}
@@ -76,9 +67,9 @@ class Crosshair extends React.Component {
                     style={{
                         position: "absolute",
                         width: `${crosshairSize}px`,
-                        height: "2px",
+                        height: "1px",
                         top: "50%",
-                        left: `${this.props.boxWidth / 2 + 3}px`,
+                        left: `${this.props.boxWidth / 2 + 1}px`,
                         transform: "translateY(-50%)",
                     }}
                 ></div>
@@ -87,11 +78,9 @@ class Crosshair extends React.Component {
                     style={{
                         position: "absolute",
                         width: `${crosshairSize}px`,
-                        height: "2px",
+                        height: "1px",
                         top: "50%",
-                        left: `${
-                            this.props.boxWidth / 2 - (crosshairSize + 3)
-                        }px`,
+                        left: `${this.props.boxWidth / 2 - (crosshairSize + 1)}px`,
                         transform: "translateY(-50%)",
                     }}
                 ></div>
