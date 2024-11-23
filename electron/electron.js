@@ -8,6 +8,7 @@ const reactDevToolsPath =
     "/Users/briannewton/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/6.0.1_0";
 
 let mainWindow;
+let hasUnsavedWork = false;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -24,6 +25,8 @@ function createWindow() {
         icon: path.join(__dirname, "public/Linnaea.png"),
     });
 
+    mainWindow.setTitle("New site");
+
     mainWindow.loadURL(
         // process.env.ELECTRON_START_URL ||
         //     `file://${path.join(__dirname, "../build/index.html")}`
@@ -31,7 +34,8 @@ function createWindow() {
     );
 
     const isMac = process.platform === "darwin";
-    const isSite = 0;
+    let isSite = false;
+    let saveFile = ""; // Site save file, when null 'save' option is disabled
 
     const menuTemplate = [
         ...(isMac
@@ -59,7 +63,20 @@ function createWindow() {
                     label: "New Site",
                     accelerator: "CmdOrCtrl+N",
                     click() {
-                        mainWindow.webContents.send("new");
+                        if (hasUnsavedWork) {
+                            const response = dialog.showMessageBoxSync({
+                                message: "All progress will be lost. Are you sure?",
+                                buttons: ["Confirm", "Cancel"],
+                                defaultId: 1,
+                            });
+                            if (response === 0) {
+                                mainWindow.webContents.send("new");
+                                mainWindow.setTitle("New site");
+                            }
+                        } else {
+                            mainWindow.webContents.send("new");
+                            mainWindow.setTitle("New site");
+                        }
                     },
                 },
                 {
@@ -74,70 +91,83 @@ function createWindow() {
                             })
                             .then(async (result) => {
                                 if (!result.canceled) {
-                                    // clear temp folder
-                                    fs.readdir(path.join(__dirname, "../temp"), (err, files) => {
-                                        if (err) throw err;
-                                        for (const file of files) {
-                                            fs.unlink(path.join(path.join(__dirname, "../temp"), file), (err) => {
-                                                if (err) throw err;
-                                            });
-                                        }
-                                    });
-
                                     // parse new site data
-                                    siteData = JSON.parse(await fs.readFile(result.filePaths[0]));
-
+                                    siteData = JSON.parse(fs.readFileSync(result.filePaths[0]));
+                                    newImages = {};
+                                    let canceled = 0;
                                     try {
-                                        await Promise.all(
-                                            Object.keys(siteData["files"]).map(async (fileName) => {
-                                                try {
-                                                    await fs.copyFile(
-                                                        siteData["files"][fileName],
-                                                        path.join(__dirname, `../temp/${fileName}`)
-                                                    );
-                                                } catch (error) {
-                                                    console.error(`Error copying ${fileName}`, error);
+                                        // need to check if photos exist and have re-upload if they don't
+                                        Object.keys(siteData["files"]).map(async (fileName) => {
+                                            if (!fs.existsSync(siteData["files"][fileName])) {
+                                                // If photo is not found
+                                                const response = dialog.showMessageBoxSync({
+                                                    message: `${fileName} not found!`,
+                                                    buttons: ["Choose image", "Delete image", "Cancel"],
+                                                    defaultId: 0,
+                                                });
+                                                if (response === 0) {
+                                                    // Re-upload photo
+                                                    const result = dialog.showOpenDialogSync({
+                                                        properties: ["openFile"],
+                                                        filters: [{ name: "Images", extensions: ["jpg", "png", "jpeg", "bmp"] }],
+                                                    });
+
+                                                    newImages[result[0].replace(/^.*[\\/]/, "")] = {};
+                                                    newImages[result[0].replace(/^.*[\\/]/, "")]["path"] = result[0];
+                                                    base64Image = fs.readFileSync(result[0], { encoding: "base64" });
+                                                    newImages[result[0].replace(/^.*[\\/]/, "")][
+                                                        "data"
+                                                    ] = `data:image/png;base64,${base64Image}`;
+
+                                                    siteData["files"][result[0].replace(/^.*[\\/]/, "")] = result[0];
+                                                    siteData["site"][result[0].replace(/^.*[\\/]/, "")] = siteData["site"][fileName];
+
+                                                    delete siteData["files"][fileName];
+                                                    delete siteData["site"][fileName];
+                                                } else if (response === 1) {
+                                                    // Delete photo
+                                                    delete siteData["files"][fileName];
+                                                    delete siteData["site"][fileName];
+                                                } else if (response === 2) {
+                                                    // Cancel open
+                                                    canceled = 1;
                                                 }
-                                            })
-                                        );
+                                            } else if (canceled === 0) {
+                                                // open opened site photos
+                                                newImages[fileName] = {};
+                                                newImages[fileName]["path"] = siteData["files"][fileName];
+                                                base64Image = fs.readFileSync(siteData["files"][fileName], { encoding: "base64" });
+                                                newImages[fileName]["data"] = `data:image/png;base64,${base64Image}`;
+                                            }
+                                        });
                                     } catch (error) {
                                         console.error("Error copying files:", error);
                                     }
-                                    // open site photos
-                                    // Object.keys(siteData["files"]).map(
-                                    //     (fileName) => {
-                                    //         if (
-                                    //             fs.existsSync(
-                                    //                 siteData["files"][fileName]
-                                    //             )
-                                    //         ) {
-                                    //             fs.copyFileSync(
-                                    //                 siteData["files"][fileName],
-                                    //                 path.join(
-                                    //                     __dirname,
-                                    //                     `../public/temp/${fileName}`
-                                    //                 )
-                                    //             );
-                                    //         } else {
-                                    //             dialog.showErrorBox(
-                                    //                 "Error",
-                                    //                 `${fileName} not found!`
-                                    //             );
-                                    //         }
-                                    //     }
-                                    // );
+                                    if (canceled === 0) {
+                                        // pass opened site info and new photoos to react renderer process
+                                        saveFile = result.filePaths[0];
 
-                                    mainWindow.webContents.send("open", siteData);
+                                        // enable save option in menu
+                                        const menu = Menu.getApplicationMenu();
+                                        const saveMenuItem = menu.getMenuItemById("save"); // Access by ID
+                                        if (saveMenuItem) {
+                                            saveMenuItem.enabled = true; // Update based on variable
+                                        }
+                                        mainWindow.setTitle(result.filePaths[0].replace(/^.*[\\/]/, "").replace(/\.site$/, ""));
+                                        mainWindow.webContents.send("open", siteData, newImages, result.filePaths[0]);
+                                    }
                                 }
                             });
                     },
                 },
                 {
                     label: "Save",
+                    id: "save",
                     accelerator: "CmdOrCtrl+S", // Optional: Keyboard shortcut
                     click() {
-                        mainWindow.webContents.send("saveAs");
+                        mainWindow.webContents.send("save");
                     },
+                    enabled: isSite,
                 },
                 {
                     label: "Save As",
@@ -190,7 +220,6 @@ function createWindow() {
     // Handles new image uploads by creating a temporary copy under public/temp
     ipcMain.handle("imageUpload", async (event, images) => {
         //open file dialog
-        console.log(images);
         const result = await dialog.showOpenDialog({
             properties: ["openFile", "multiSelections"],
             filters: [{ name: "Images", extensions: ["jpg", "png", "jpeg", "bmp"] }],
@@ -211,26 +240,74 @@ function createWindow() {
         return newImages;
     });
 
+    // Handels saving a new site file
     ipcMain.handle("saveAs", async (event, site_data) => {
-        const siteDataString = JSON.stringify(site_data);
-        dialog
-            .showSaveDialog({
-                title: "Save your site data",
-                filters: [{ name: "Site name", extensions: ["site"] }],
-            })
-            .then((file) => {
-                if (!file.canceled) {
-                    fs.writeFile(file.filePath.toString(), siteDataString, (err) => {
-                        if (err) {
-                            dialog.showErrorBox("Error", "Error saving file");
-                        } else {
-                            dialog.showMessageBox({
-                                message: "Site saved successfully!",
-                            });
-                        }
+        const siteDataString = JSON.stringify(site_data); // convert site data to JSON for easy storage
+        const file = dialog.showSaveDialogSync({
+            // get save file
+            title: "Save your site data",
+            filters: [{ name: "Site name", extensions: ["site"] }],
+        });
+
+        // write site data to JSON file
+        if (file) {
+            fs.writeFile(file, siteDataString, (err) => {
+                if (err) {
+                    dialog.showErrorBox("Error", "Error saving file");
+                } else {
+                    dialog.showMessageBox({
+                        message: "Site saved successfully!",
                     });
                 }
             });
+
+            // set savefile
+            saveFile = file;
+
+            // enable save option in menu
+            const menu = Menu.getApplicationMenu();
+            const saveMenuItem = menu.getMenuItemById("save"); // Access by ID
+            if (saveMenuItem) {
+                saveMenuItem.enabled = true; // Update based on variable
+            }
+            mainWindow.setTitle(saveFile.replace(/^.*[\\/]/, "").replace(/\.site$/, ""));
+            //return savefile to renderer process
+            return file;
+        } else {
+            // if cancleed, no save file for you
+            return 0;
+        }
+    });
+
+    // Handels saving a new site file
+    ipcMain.handle("save", async (event, site_data) => {
+        const siteDataString = JSON.stringify(site_data); // convert site data to JSON for easy storage
+
+        // write site data to JSON file
+        if (saveFile) {
+            fs.writeFile(saveFile, siteDataString, (err) => {
+                if (err) {
+                    dialog.showErrorBox("Error", "Error saving file");
+                } else {
+                    dialog.showMessageBox({
+                        message: "Site saved successfully!",
+                    });
+                }
+            });
+            mainWindow.setTitle(saveFile.replace(/^.*[\\/]/, "").replace(/\.site$/, ""));
+        }
+    });
+
+    // Checks to see if there's unsaved work, renames window and prevents quitting without saving
+    ipcMain.handle("unsavedWork", async (event, unsavedWork) => {
+        hasUnsavedWork = unsavedWork;
+        if (hasUnsavedWork) {
+            if (saveFile) {
+                mainWindow.setTitle(`${saveFile.replace(/^.*[\\/]/, "").replace(/\.site$/, "")} *`);
+            } else {
+                mainWindow.setTitle("New site *");
+            }
+        }
     });
 }
 
@@ -249,5 +326,22 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
     if (mainWindow === null) {
         createWindow();
+    }
+});
+
+// prevents quitting immediately if there's unsaved work
+app.on("before-quit", (event) => {
+    console.log(hasUnsavedWork);
+    if (hasUnsavedWork) {
+        const choice = dialog.showMessageBoxSync({
+            type: "question",
+            buttons: ["Cancel", "Quit"],
+            defaultId: 0,
+            message: "You have unsaved work. Are you sure you want to quit?",
+        });
+
+        if (choice === 0) {
+            event.preventDefault(); // Prevent quitting
+        }
     }
 });

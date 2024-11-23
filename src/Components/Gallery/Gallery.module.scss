@@ -200,6 +200,7 @@
     pointer-events: none; /* Ensure it doesn’t interfere with hover */
     transition: opacity 0.2s ease-in-out; /* Fade-in effect */
     z-index: 10;
+    text-wrap: wrap;
 }
 
 .galleryItem.current::after {

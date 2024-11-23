@@ -16,6 +16,7 @@ class App extends React.Component {
         currentSelection: { community: "", species: "", comments: "" },
         currentPhoto: 0,
         imageLoaded: 0,
+        unsavedWork: 0,
     };
 
     setImageLoaded = (imageLoaded) => {
@@ -24,15 +25,75 @@ class App extends React.Component {
 
     componentDidMount() {
         this.setState({ ecosystem: defaultEcosystem });
+
+        window.menuAPI.new((event) => {
+            const site = {};
+            const files = {};
+            const images = {};
+            const saveFile = "";
+            const currentSelection = { community: "", species: "", comments: "" };
+            const currentPhoto = 0;
+            const imageLoaded = 0;
+
+            this.setState({ site, files, images, saveFile, currentSelection, currentPhoto, imageLoaded });
+        });
+
         window.menuAPI.saveAs((event) => {
             const site_data = {
                 site: this.state.site,
                 files: this.state.files,
             };
-            window.api.saveAs(site_data);
+            window.api.saveAs(site_data).then((saveFile) => {
+                console.log(saveFile);
+                if (saveFile) {
+                    this.setState({ saveFile: saveFile, unsavedWork: 0 });
+                }
+            });
+            window.api.unsavedWork(0);
         });
 
-        window.menuAPI.open((event, siteData) => {});
+        window.menuAPI.save((event) => {
+            const site_data = {
+                site: this.state.site,
+                files: this.state.files,
+            };
+            window.api.save(site_data);
+            this.setState({ unsavedWork: 0 });
+            window.api.unsavedWork(0);
+        });
+
+        window.menuAPI.open((event, siteData, newImages, saveFile) => {
+            console.log(newImages);
+            console.log(siteData);
+
+            const site = siteData["site"];
+            const files = siteData["files"];
+            const images = {};
+            let currentSelection = {};
+
+            Object.keys(newImages).map((image) => (images[image] = newImages[image]["data"]));
+
+            const currentPhoto = Object.keys(site)[Object.keys(site).length - 1];
+            if (
+                site[currentPhoto]["points"][site[currentPhoto]["currentPoint"]]["comments"] ||
+                site[currentPhoto]["points"][site[currentPhoto]["currentPoint"]]["species"]
+            ) {
+                currentSelection = site[currentPhoto]["points"][site[currentPhoto]["currentPoint"]];
+            } else {
+                currentSelection = { community: "", species: "", comments: "" };
+            }
+
+            this.setState({
+                site: site,
+                files: files,
+                images: images,
+                saveFile: saveFile,
+                currentSelection: currentSelection,
+                currentPhoto: currentPhoto,
+                imageLoaded: 0,
+                unsavedWork: 0,
+            });
+        });
     }
 
     componentWillUnmount() {
@@ -60,7 +121,7 @@ class App extends React.Component {
         const files = { ...this.state.files };
         const images = { ...this.state.images };
 
-        Object.keys(newImages).map((image) => {
+        Object.keys(newImages).forEach((image) => {
             files[image] = newImages[image]["path"];
             images[image] = newImages[image]["data"];
             site[image] = { points: [] };
@@ -97,7 +158,7 @@ class App extends React.Component {
             if (index === 0 && size === 1) {
                 currentPhoto = "";
                 console.log("here");
-            } else if (index === 0 && size != 1) {
+            } else if (index === 0 && size !== 1) {
                 currentPhoto = Object.keys(site)[index + 1];
             } else {
                 currentPhoto = Object.keys(site)[index - 1];
@@ -150,11 +211,22 @@ class App extends React.Component {
             site[this.state.currentPhoto]["currentPoint"]++;
         }
 
-        this.setState({ site, currentSelection });
+        this.setState({ site, currentSelection, unsavedWork: 1 });
+        window.api.unsavedWork(1);
     };
 
     changePhoto = (newPhoto) => {
-        this.setState({ currentPhoto: newPhoto });
+        let currentSelection = {};
+        if (
+            this.state.site[newPhoto]["points"][this.state.site[newPhoto]["currentPoint"]]["comments"] ||
+            this.state.site[newPhoto]["points"][this.state.site[newPhoto]["currentPoint"]]["species"]
+        ) {
+            currentSelection = this.state.site[newPhoto]["points"][this.state.site[newPhoto]["currentPoint"]];
+        } else {
+            currentSelection = { community: "", species: "", comments: "" };
+        }
+
+        this.setState({ currentPhoto: newPhoto, currentSelection: currentSelection });
     };
 
     render() {

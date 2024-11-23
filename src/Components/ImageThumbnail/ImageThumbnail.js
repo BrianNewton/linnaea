@@ -15,10 +15,7 @@ const ImageThumbnail = ({ imageSrc, maxWidth, maxHeight }) => {
                 const context = canvas.getContext("2d");
 
                 // Calculate the scaling factor to keep aspect ratio
-                let scale = Math.min(
-                    maxWidth / image.width,
-                    maxHeight / image.height
-                );
+                let scale = Math.min(maxWidth / image.width, maxHeight / image.height);
 
                 // Set canvas dimensions
                 canvas.width = image.width * scale;
@@ -47,11 +44,7 @@ const ImageThumbnail = ({ imageSrc, maxWidth, maxHeight }) => {
             <canvas ref={canvasRef} style={{ display: "none" }} />
 
             {/* Display the thumbnail */}
-            {thumbnail ? (
-                <img src={thumbnail} alt="Thumbnail" />
-            ) : (
-                <div className="loader"></div>
-            )}
+            {thumbnail ? <img src={thumbnail} alt="Thumbnail" /> : <div className="loader"></div>}
         </div>
     );
 };
