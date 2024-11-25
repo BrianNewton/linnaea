@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Crosshair.module.scss";
 
 class Crosshair extends React.Component {
+    // zoom in to point on double click
     handleDoubleClick = (event) => {
         this.props.clickedPoint(
             this.props.x + this.props.boxWidth / 2,
@@ -11,6 +12,7 @@ class Crosshair extends React.Component {
         );
     };
 
+    // select new point on single click
     handleClick = (event) => {
         this.props.clickedPoint(
             this.props.x + this.props.boxWidth / 2,
@@ -24,6 +26,8 @@ class Crosshair extends React.Component {
         const crosshairSize = 10;
         const sitePoints = this.props.site[this.props.currentPhoto]["points"];
         return (
+            // builds the crosshair, style changes depending on whether theres a classification
+            // for that point or whether it's the current point
             <div
                 className={`${styles.crosshairBox} ${this.props.current ? styles.selected : ""} ${
                     sitePoints[this.props.point]["species"] ? styles.confirmed : ""

@@ -82,7 +82,7 @@ class PhotoViewer extends Component {
 
     // Upload image when clicking on empty canvas
     handleNewImage = () => {
-        window.api.imageUpload(Object.keys(this.props.site)).then((response) => {
+        window.rendererAPI.imageUpload(Object.keys(this.props.site)).then((response) => {
             this.props.newPhoto(response);
         });
     };
@@ -106,7 +106,7 @@ class PhotoViewer extends Component {
         }
 
         // new current point
-        if (this.props.currentPhoto && this.state.focusPoint != this.props.site[this.props.currentPhoto]["currentPoint"]) {
+        if (this.props.currentPhoto && this.state.focusPoint !== this.props.site[this.props.currentPhoto]["currentPoint"]) {
             const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
             this.transformToPoint(x, y, this.state.scale);
             this.setState({ focusPoint: this.props.site[this.props.currentPhoto]["currentPoint"] });
@@ -128,7 +128,7 @@ class PhotoViewer extends Component {
     };
 
     render() {
-        const { imageUrl, imageWidth, imageHeight } = this.props;
+        const { imageWidth, imageHeight } = this.props;
         const points = Array.from({ length: this.gridSize * this.gridSize }, (_, i) => i); // 100 points
 
         return (

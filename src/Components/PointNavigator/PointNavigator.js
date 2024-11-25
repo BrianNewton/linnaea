@@ -10,7 +10,7 @@ class PointNavigator extends React.Component {
 
     zoomIn = (event) => {
         if (this.props.currentPhoto) {
-            if (this.props.scale < 60) {
+            if (this.props.scale < 100) {
                 this.props.setScale(this.props.scale + this.props.scale * 0.5);
             }
         }

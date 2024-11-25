@@ -13,13 +13,19 @@ import other from "../../biome/other.json";
 class EcosystemMenu extends React.Component {
     constructor(props) {
         super(props);
-        this.biome = {
-            high: high,
-            medium: medium,
-            low: low,
-            other: other,
-            defaultEcosystem: defaultEcosystem,
-        };
+        // this.biome = {
+        //     high: high,
+        //     medium: medium,
+        //     low: low,
+        //     other: other,
+        //     defaultEcosystem: defaultEcosystem,
+        // };
+        this.biome = {};
+        this.biome[high["name"]] = high;
+        this.biome[medium["name"]] = medium;
+        this.biome[low["name"]] = low;
+        this.biome[other["name"]] = other;
+        this.biome[defaultEcosystem["name"]] = defaultEcosystem;
     }
 
     state = {

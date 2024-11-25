@@ -3,11 +3,7 @@ import styles from "./Dropdown.module.scss";
 
 class Dropdown extends React.Component {
     handleChange = (event) => {
-        this.props.setSelection(
-            event.currentTarget.value,
-            this.props.communityName
-        );
-
+        this.props.setSelection(event.currentTarget.value, this.props.communityName);
         this.props.changeSearchSpecies("");
     };
 
@@ -18,35 +14,21 @@ class Dropdown extends React.Component {
                 <select
                     name="species"
                     value={
-                        this.props.currentSelection["community"] ===
-                        this.props.communityName
-                            ? this.props.currentSelection["species"]
-                            : ""
+                        this.props.currentSelection["community"] === this.props.communityName ? this.props.currentSelection["species"] : ""
                     }
                     title={
-                        this.props.currentSelection["community"] ===
-                        this.props.communityName
-                            ? this.props.currentSelection["species"]
-                            : ""
+                        this.props.currentSelection["community"] === this.props.communityName ? this.props.currentSelection["species"] : ""
                     }
                     onChange={this.handleChange}
                     className={`${styles.dropdown} ${
-                        this.props.currentSelection["community"] ===
-                        this.props.communityName
-                            ? ""
-                            : styles.placeholderSelected
+                        this.props.currentSelection["community"] === this.props.communityName ? "" : styles.placeholderSelected
                     }`}
                 >
                     <option value="" disabled>
                         Select one...
                     </option>
                     {this.props.community.map((species) => (
-                        <option
-                            key={`${this.props.communityName} ${species}`}
-                            value={species}
-                            title={species}
-                            className={styles.option}
-                        >
+                        <option key={`${this.props.communityName} ${species}`} value={species} title={species} className={styles.option}>
                             {species}
                         </option>
                     ))}

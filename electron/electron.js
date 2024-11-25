@@ -3,12 +3,14 @@ const { app, BrowserWindow, Menu, ipcMain, ipcRenderer, dialog, Notification, se
 
 const fs = require("fs");
 const util = require("util");
+const { type } = require("node:os");
 
 const reactDevToolsPath =
     "/Users/briannewton/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/6.0.1_0";
 
 let mainWindow;
 let hasUnsavedWork = false;
+let savedState = null;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -72,10 +74,14 @@ function createWindow() {
                             if (response === 0) {
                                 mainWindow.webContents.send("new");
                                 mainWindow.setTitle("New site");
+                                saveFile = null;
+                                disableSave();
                             }
                         } else {
                             mainWindow.webContents.send("new");
                             mainWindow.setTitle("New site");
+                            saveFile = null;
+                            disableSave();
                         }
                     },
                 },
@@ -177,6 +183,13 @@ function createWindow() {
                     },
                 },
                 { type: "separator" }, // Optional: Add a separator between options
+                {
+                    label: "Export raw data",
+                    click() {
+                        mainWindow.webContents.send("exportData");
+                    },
+                },
+                { type: "separator" },
                 {
                     label: "Quit",
                     accelerator: "CmdOrCtrl+Q",
@@ -309,6 +322,44 @@ function createWindow() {
             }
         }
     });
+
+    // receives state information when the window is closed
+    ipcMain.handle("sendState", async (event, currentState) => {
+        savedState = currentState;
+    });
+
+    // Export data
+    ipcMain.handle("sendExportData", async (event, csvData) => {
+        const file = dialog.showSaveDialogSync({
+            // get save file
+            title: "Save your site data",
+            filters: [{ name: "Report name", extensions: ["csv"] }],
+        });
+
+        if (file) {
+            const csvString = csvData.map((row) => row.join(",")).join("\n");
+            fs.writeFile(file, csvString, (err) => {
+                if (err) {
+                    dialog.showErrorBox("Error", "Error saving file");
+                } else {
+                    dialog.showMessageBox({
+                        message: "Data exported successfully!",
+                    });
+                }
+            });
+        } else {
+            // if cancleed, no save file for you
+            return 0;
+        }
+    });
+}
+
+function disableSave() {
+    const menu = Menu.getApplicationMenu();
+    const saveMenuItem = menu.getMenuItemById("save"); // Access by ID
+    if (saveMenuItem) {
+        saveMenuItem.enabled = false; // Update based on variable
+    }
 }
 
 app.whenReady().then(async () => {
@@ -318,6 +369,12 @@ app.whenReady().then(async () => {
 app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
+    ipcMain.removeHandler("imageUpload");
+    ipcMain.removeHandler("saveAs");
+    ipcMain.removeHandler("save");
+    ipcMain.removeHandler("unsavedWork");
+    ipcMain.removeHandler("sendState");
+
     if (process.platform !== "darwin") {
         app.quit();
     }
@@ -327,11 +384,22 @@ app.on("activate", () => {
     if (mainWindow === null) {
         createWindow();
     }
+
+    // restore saved state if there is one
+    if (savedState) {
+        if (savedState["saveFile"]) {
+            mainWindow.setTitle(savedState["saveFile"].replace(/^.*[\\/]/, "").replace(/\.site$/, ""));
+        } else {
+            mainWindow.setTitle("New site *");
+        }
+        mainWindow.webContents.once("did-finish-load", () => {
+            mainWindow.webContents.send("restoreState", savedState);
+        });
+    }
 });
 
 // prevents quitting immediately if there's unsaved work
 app.on("before-quit", (event) => {
-    console.log(hasUnsavedWork);
     if (hasUnsavedWork) {
         const choice = dialog.showMessageBoxSync({
             type: "question",

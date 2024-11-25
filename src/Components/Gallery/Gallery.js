@@ -52,7 +52,6 @@ class Gallery extends Component {
     // handles removal of a photo
     handleRemovePhoto = (event) => {
         const image = event.currentTarget.getAttribute("data-image");
-        const index = event.currentTarget.getAttribute("data-index");
 
         if (window.confirm(`Remove ${image}?`)) {
             this.props.removePhoto(image);
@@ -65,40 +64,44 @@ class Gallery extends Component {
 
     // next photo button press
     nextPhoto = (event) => {
-        if (this.props.currentPhoto < Object.keys(this.props.site).length) {
-            this.props.changePhoto(this.props.currentPhoto + 1);
-            const index = this.props.currentPhoto + 1;
+        if (this.props.currentPhoto) {
+            if (Object.keys(this.props.site).indexOf(this.props.currentPhoto) < Object.keys(this.props.site).length - 1) {
+                this.props.changePhoto(Object.keys(this.props.site)[Object.keys(this.props.site).indexOf(this.props.currentPhoto) + 1]);
+                const index = Object.keys(this.props.site).indexOf(this.props.currentPhoto) + 3;
 
-            if (index * 116 - this.scrollerRef.current.scrollLeft > 580) {
-                this.scrollerRef.current.scrollTo({
-                    left: (index - 5) * 116,
-                    behavior: "smooth",
-                });
+                if (index * 116 - this.scrollerRef.current.scrollLeft > 580) {
+                    this.scrollerRef.current.scrollTo({
+                        left: (index - 5) * 116,
+                        behavior: "smooth",
+                    });
+                }
+            } else {
+                this.props.changePhoto(Object.keys(this.props.site)[Object.keys(this.props.site).indexOf(this.props.currentPhoto)]);
             }
-        } else {
-            this.props.changePhoto(this.props.currentPhoto);
         }
     };
 
     // previous photo button press
     prevPhoto = (event) => {
-        if (this.props.currentPhoto > 1) {
-            this.props.changePhoto(this.props.currentPhoto - 1);
-            const index = this.props.currentPhoto - 2;
+        if (this.props.currentPhoto) {
+            if (Object.keys(this.props.site).indexOf(this.props.currentPhoto) > 0) {
+                this.props.changePhoto(Object.keys(this.props.site)[Object.keys(this.props.site).indexOf(this.props.currentPhoto) - 1]);
+                const index = Object.keys(this.props.site).indexOf(this.props.currentPhoto) - 1;
 
-            if (index * 116 < this.scrollerRef.current.scrollLeft + 50) {
-                this.scrollerRef.current.scrollTo({
-                    left: Math.floor(this.scrollerRef.current.scrollLeft / 116) * 116 - 116,
-                    behavior: "smooth",
-                });
+                if (index * 116 < this.scrollerRef.current.scrollLeft + 50) {
+                    this.scrollerRef.current.scrollTo({
+                        left: Math.floor(this.scrollerRef.current.scrollLeft / 116) * 116 - 116,
+                        behavior: "smooth",
+                    });
+                }
+            } else {
+                this.props.changePhoto(Object.keys(this.props.site)[Object.keys(this.props.site).indexOf(this.props.currentPhoto)]);
             }
-        } else {
-            this.props.changePhoto(this.props.currentPhoto);
         }
     };
 
     handleNewImage = () => {
-        window.api.imageUpload(Object.keys(this.props.site)).then((response) => {
+        window.rendererAPI.imageUpload(Object.keys(this.props.site)).then((response) => {
             this.props.newPhoto(response);
 
             // Sroll to end of gallery
@@ -128,7 +131,7 @@ class Gallery extends Component {
                                 Object.keys(this.props.site).map((image, index) => (
                                     // Contains image and remove button
                                     <div
-                                        className={`${styles.galleryItem} ${index + 1 === this.props.currentPhoto ? styles.current : ""}`}
+                                        className={`${styles.galleryItem} ${image === this.props.currentPhoto ? styles.current : ""}`}
                                         key={`imageContainer_${index}`}
                                         title={`${image}`}
                                     >
