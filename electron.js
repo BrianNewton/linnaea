@@ -203,7 +203,7 @@ function createWindow() {
                 { role: "minimize" },
                 { role: "togglefullscreen" },
                 // { role: "toggleDevTools" },
-                { role: "reload" },
+                // { role: "reload" },
                 ...(isMac ? [{ type: "separator" }, { role: "front" }, { type: "separator" }, { role: "window" }] : [{ role: "close" }]),
             ],
         },
