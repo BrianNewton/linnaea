@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# Linnaea
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+Linnaea was developed to provide researchers an easy-to-use tool to systematically classify vegetation in high-resolution field photos. This tool is funded by Natural Resources Canada and the Canadian Forestry Service.
 
-In the project directory, you can run:
+## Installation
 
-### `npm start`
+Installers for all supprted operating systems can be found [at the latest release page](https://github.com/BrianNewton/linnaea/releases/latest).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### macOS
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1.  Download the macOS .dmg installer.
+2.  Open the downloaded .dmg file.
+3.  Drag and drop the Linnaea icon into the Applications folder.
+4.  Launch the program from the Applications folder or search for it using Spotlight.
 
-### `npm test`
+### Windows
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Download the Windows .msi installer.
+2. Double-click the downloaded .msi file.
+3. Follow the on-screen instructions in the setup wizard.
+4. Once the installation is complete, launch the program from the Start Menu or desktop shortcut.
 
-### `npm run build`
+## Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+When you first launch Linnaea, you will see a new site window with options to upload an image.
+![Landing page](./Screenshots/landing.png?raw=true)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Photo navigation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+After uploading the photos taken at a site, you can use the gallery at the bottom to navigate between them.
 
-### `npm run eject`
+![Gallery](./Screenshots/Photo_navigation.png?raw=true)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Within each photo, Linnaea generates 100 equidistant points for species classification. The points can be navigated as well as the image can be panned/zoomed using the controls along the top.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Point classification
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Each point can be classified using the menus in the left hand panel. There are different sets of species classifications depending on what angle the site photo was taken from. When you upload a new photo, you will be prompted to choose an angle.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+![Ecosystems](./Screenshots/Ecosystems.png?raw=true)
+_Choosing an angle_
 
-## Learn More
+![Classifications](./Screenshots/Classifications.png?raw=true)
+_Different species categories_
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+![Classifications2](./Screenshots/Classifications_2.png?raw=true)
+_Different species within each category_
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Saving site files
 
-### Code Splitting
+To save your progress for a site to return to later you can save your work as a .site file.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+![Save_site](./Screenshots/Save_site.png?raw=true)
 
-### Analyzing the Bundle Size
+### Generate raw data report
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Once you're finished classifying points, you can generate a raw data report as a .csv file using the _Export raw data_ option in the file menu. Before generating the report you have to choose a site name and then a save location. Then a .csv file will be generated with all your point classifications for each photo.
 
-### Making a Progressive Web App
+![Site_name](./Screenshots/Site_name.png?raw=true)
+_Choose a site name_
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+![Raw_data](./Screenshots/Raw_data.png?raw=true)
+_Generated report_
 
-### Advanced Configuration
+## Support
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+If you encounter any issues please reach out at briannewton2000@gmail.com for support.

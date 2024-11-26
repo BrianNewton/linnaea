@@ -21,7 +21,7 @@
             "icon": "public/Linnaea.icns"
         },
         "win": {
-            "target": "nsis",
+            "target": "msi",
             "icon": "public/Linnaea.ico"
         },
         "linux": {
