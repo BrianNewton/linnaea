@@ -24,15 +24,13 @@ function createWindow() {
             enableRemoteModule: false, // For security, remote should be disabled
             nodeIntegration: false, // Must be false when using contextBridge
         },
-        icon: path.join(__dirname, "public/Linnaea.png"),
     });
 
     mainWindow.setTitle("New site");
 
     mainWindow.loadURL(
-        // process.env.ELECTRON_START_URL ||
-        //     `file://${path.join(__dirname, "../build/index.html")}`
-        "http://localhost:3000"
+        process.env.ELECTRON_START_URL || `file://${path.join(__dirname, "/build/index.html")}`
+        // "http://localhost:3000"
     );
 
     const isMac = process.platform === "darwin";
@@ -204,7 +202,7 @@ function createWindow() {
             submenu: [
                 { role: "minimize" },
                 { role: "togglefullscreen" },
-                { role: "toggleDevTools" },
+                // { role: "toggleDevTools" },
                 { role: "reload" },
                 ...(isMac ? [{ type: "separator" }, { role: "front" }, { type: "separator" }, { role: "window" }] : [{ role: "close" }]),
             ],
@@ -374,6 +372,7 @@ app.on("window-all-closed", () => {
     ipcMain.removeHandler("save");
     ipcMain.removeHandler("unsavedWork");
     ipcMain.removeHandler("sendState");
+    ipcMain.removeHandler("sendExportData");
 
     if (process.platform !== "darwin") {
         app.quit();

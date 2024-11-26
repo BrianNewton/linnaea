@@ -1,24 +1,53 @@
 {
     "name": "linnaea",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "private": true,
-    "main": "electron/electron.js",
+    "main": "./electron.js",
+    "homepage": ".",
+    "build": {
+        "appId": "com.linnaea.id",
+        "productName": "Linnaea",
+        "extends": null,
+        "directories": {
+            "output": "dist"
+        },
+        "files": [
+            "build/**/*",
+            "electron.js",
+            "preload.js"
+        ],
+        "mac": {
+            "target": "dmg",
+            "icon": "public/Linnaea.icns"
+        },
+        "win": {
+            "target": "nsis",
+            "icon": "public/Linnaea.ico"
+        },
+        "linux": {
+            "target": "AppImage",
+            "icon": "public/Linnaea.png"
+        }
+    },
     "dependencies": {
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
+        "electron-squirrel-startup": "^1.0.1",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-scripts": "5.0.1",
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": "react-scripts start",
+        "start": "electron-forge start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "electron-dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
-        "electron-pack": "npm run build && electron-builder"
+        "electron-pack": "npm run build && electron-builder",
+        "package": "electron-forge package",
+        "make": "electron-forge make"
     },
     "eslintConfig": {
         "extends": [
@@ -39,9 +68,18 @@
         ]
     },
     "devDependencies": {
+        "@electron-forge/cli": "^7.5.0",
+        "@electron-forge/maker-deb": "^7.5.0",
+        "@electron-forge/maker-rpm": "^7.5.0",
+        "@electron-forge/maker-squirrel": "^7.5.0",
+        "@electron-forge/maker-zip": "^7.5.0",
+        "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
+        "@electron-forge/plugin-fuses": "^7.5.0",
+        "@electron/fuses": "^1.8.0",
         "concurrently": "^9.0.1",
         "css-loader": "^7.1.2",
         "electron": "^32.2.0",
+        "electron-builder": "^25.1.8",
         "electron-devtools-installer": "^3.2.0",
         "electron-react-devtools": "^0.5.3",
         "react-zoom-pan-pinch": "^3.6.1",
