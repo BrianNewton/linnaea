@@ -45,21 +45,6 @@ class App extends React.Component {
         window.mainAPI.exportData((event) => {
             if (this.state.site) {
                 this.setState({ siteNameBox: 1 });
-                // let csvData = [["Photo", "Angle", "Point", "Species", "Community", "Comments"]];
-                // Object.keys(this.state.site).forEach((image) => {
-                //     for (let i = 1; i <= 100; i++) {
-                //         csvData.push([
-                //             image,
-                //             this.state.site[image]["ecosystem"],
-                //             i,
-                //             this.state.site[image]["points"][i]["species"],
-                //             this.state.site[image]["points"][i]["community"],
-                //             this.state.site[image]["points"][i]["comments"],
-                //         ]);
-                //     }
-                // });
-                // console.log(csvData);
-                // window.rendererAPI.sendExportData(csvData);
             }
         });
 
@@ -134,6 +119,7 @@ class App extends React.Component {
                 imageLoaded: 0,
                 unsavedWork: 0,
             });
+            window.rendererAPI.unsavedWork(0);
         });
     }
 
@@ -330,7 +316,7 @@ class App extends React.Component {
                                 left: 0,
                                 width: "100%",
                                 height: "100%",
-                                backdropFilter: "blur(4px)", // Blur effect
+                                backdropFilter: "blur(3px)", // Blur effect
                                 animation: "fadeIn 0.3s ease", // Fade-in animation
                                 zIndex: 999,
                             }}
@@ -362,7 +348,7 @@ class App extends React.Component {
                     ></PhotoInterface>
                 </div>
                 <div className="metaBox">
-                    <span className="meta">Linnaea v1.0.0</span>
+                    <span className="meta">Linnaea v1.0.1</span>
                 </div>
             </div>
         );
