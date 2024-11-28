@@ -291,11 +291,8 @@ class App extends React.Component {
     changePhoto = (newPhoto) => {
         // update new current selection if there is one
         let currentSelection = {};
-        if (
-            this.state.site[newPhoto]["points"][this.state.site[newPhoto][1]]["comments"] ||
-            this.state.site[newPhoto]["points"][this.state.site[newPhoto][1]]["species"]
-        ) {
-            currentSelection = this.state.site[newPhoto]["points"][this.state.site[newPhoto][1]];
+        if (this.state.site[newPhoto]["points"][1]["comments"] || this.state.site[newPhoto]["points"][1]["species"]) {
+            currentSelection = this.state.site[newPhoto]["points"][1];
         } else {
             currentSelection = { community: "", species: "", comments: "" };
         }

@@ -18,10 +18,11 @@ class PointNavigator extends React.Component {
 
     zoomOut = (event) => {
         if (this.props.currentPhoto) {
-            if (this.props.scale > 1.5) {
-                this.props.setScale(this.props.scale - this.props.scale * 0.5);
-            } else if (this.props.scale > 1) {
+            const newScale = this.props.scale - this.props.scale * 0.5;
+            if (newScale < 1) {
                 this.props.setScale(1);
+            } else {
+                this.props.setScale(newScale);
             }
         }
     };
