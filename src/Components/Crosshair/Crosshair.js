@@ -4,21 +4,27 @@ import styles from "./Crosshair.module.scss";
 class Crosshair extends React.Component {
     // zoom in to point on double click
     handleDoubleClick = (event) => {
+        const shiftKey = event.shiftKey;
         this.props.clickedPoint(
             this.props.x + this.props.boxWidth / 2,
             this.props.y + this.props.boxHeight / 2,
             this.props.point,
-            "double"
+            "double",
+            shiftKey
         );
     };
 
     // select new point on single click
     handleClick = (event) => {
+        const shiftKey = event.shiftKey;
+        const ctrlKey = event.metaKey || event.ctrlKey;
         this.props.clickedPoint(
             this.props.x + this.props.boxWidth / 2,
             this.props.y + this.props.boxHeight / 2,
             this.props.point,
-            "single"
+            "single",
+            shiftKey,
+            ctrlKey
         );
     };
 

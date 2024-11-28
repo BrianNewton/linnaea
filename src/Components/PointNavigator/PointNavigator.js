@@ -38,53 +38,57 @@ class PointNavigator extends React.Component {
 
     downX = (event) => {
         if (this.props.currentPhoto) {
-            let newXY = this.getXYFromPoint(this.props.site[this.props.currentPhoto]["currentPoint"]);
+            let newXY = this.getXYFromPoint(this.props.lastPoint);
             if (newXY.x > 1) {
                 newXY.x--;
             }
             console.log(newXY);
             const newPoint = this.getPointFromXY(newXY.x, newXY.y);
             console.log(newPoint);
-            this.props.setCurrentPoint(newPoint);
+            this.props.setLastPoint(newPoint);
+            this.props.setCurrentPoints([newPoint]);
         }
     };
 
     upX = (event) => {
         if (this.props.currentPhoto) {
-            let newXY = this.getXYFromPoint(this.props.site[this.props.currentPhoto]["currentPoint"]);
+            let newXY = this.getXYFromPoint(this.props.lastPoint);
             if (newXY.x < 10) {
                 newXY.x++;
             }
             console.log(newXY);
             const newPoint = this.getPointFromXY(newXY.x, newXY.y);
             console.log(newPoint);
-            this.props.setCurrentPoint(newPoint);
+            this.props.setLastPoint(newPoint);
+            this.props.setCurrentPoints([newPoint]);
         }
     };
 
     downY = (event) => {
         if (this.props.currentPhoto) {
-            let newXY = this.getXYFromPoint(this.props.site[this.props.currentPhoto]["currentPoint"]);
+            let newXY = this.getXYFromPoint(this.props.lastPoint);
             if (newXY.y > 1) {
                 newXY.y--;
             }
             console.log(newXY);
             const newPoint = this.getPointFromXY(newXY.x, newXY.y);
             console.log(newPoint);
-            this.props.setCurrentPoint(newPoint);
+            this.props.setLastPoint(newPoint);
+            this.props.setCurrentPoints([newPoint]);
         }
     };
 
     upY = (event) => {
         if (this.props.currentPhoto) {
-            let newXY = this.getXYFromPoint(this.props.site[this.props.currentPhoto]["currentPoint"]);
+            let newXY = this.getXYFromPoint(this.props.lastPoint);
             if (newXY.y < 10) {
                 newXY.y++;
             }
             console.log(newXY);
             const newPoint = this.getPointFromXY(newXY.x, newXY.y);
             console.log(newPoint);
-            this.props.setCurrentPoint(newPoint);
+            this.props.setLastPoint(newPoint);
+            this.props.setCurrentPoints([newPoint]);
         }
     };
 
@@ -100,11 +104,7 @@ class PointNavigator extends React.Component {
                         <span style={{ marginRight: "6px" }}>X:</span>
                         <input
                             className={styles.pointInput}
-                            value={`${
-                                this.props.currentPhoto
-                                    ? this.getXYFromPoint(this.props.site[this.props.currentPhoto]["currentPoint"]).x
-                                    : 0
-                            }`}
+                            value={`${this.props.currentPhoto ? this.getXYFromPoint(this.props.lastPoint).x : 0}`}
                         ></input>
                         <button className={styles.nextPoint} onClick={this.upX}></button>
                     </div>
@@ -113,11 +113,7 @@ class PointNavigator extends React.Component {
                         <span style={{ marginRight: "6px" }}>Y:</span>
                         <input
                             className={styles.pointInput}
-                            value={`${
-                                this.props.currentPhoto
-                                    ? this.getXYFromPoint(this.props.site[this.props.currentPhoto]["currentPoint"]).y
-                                    : 0
-                            }`}
+                            value={`${this.props.currentPhoto ? this.getXYFromPoint(this.props.lastPoint).y : 0}`}
                         ></input>
                         <button className={styles.downPoint} onClick={this.downY}></button>
                     </div>

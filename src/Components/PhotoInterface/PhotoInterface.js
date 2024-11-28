@@ -9,8 +9,13 @@ class PhotoInterface extends React.Component {
         scale: 1,
         imageWidth: (window.innerHeight - 178) / 0.75,
         imageHeight: window.innerHeight - 178,
+        lastPoint: 1,
 
         // calc(100vh - 64px);
+    };
+
+    setLastPoint = (point) => {
+        this.setState({ lastPoint: point });
     };
 
     setScale = (scale) => {
@@ -37,18 +42,24 @@ class PhotoInterface extends React.Component {
             <div className={styles.photoInterface}>
                 <PointNavigator
                     setScale={this.setScale}
+                    setLastPoint={this.setLastPoint}
+                    lastPoint={this.state.lastPoint}
                     scale={this.state.scale}
                     site={this.props.site}
                     currentPhoto={this.props.currentPhoto}
-                    setCurrentPoint={this.props.setCurrentPoint}
+                    setCurrentPoints={this.props.setCurrentPoints}
                 ></PointNavigator>
                 <PhotoViewer
                     imageLoaded={this.props.imageLoaded}
                     setImageLoaded={this.props.setImageLoaded}
+                    lastPoint={this.state.lastPoint}
+                    setLastPoint={this.setLastPoint}
                     imageWidth={this.state.imageWidth}
                     imageHeight={this.state.imageHeight}
                     site={this.props.site}
                     currentPhoto={this.props.currentPhoto}
+                    currentPoints={this.props.currentPoints}
+                    setCurrentPoints={this.props.setCurrentPoints}
                     setCurrentPoint={this.props.setCurrentPoint}
                     newPhoto={this.props.newPhoto}
                     setScale={this.setScale}

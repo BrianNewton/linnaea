@@ -41,7 +41,7 @@ class PhotoViewer extends Component {
     }
 
     // Zoom into clicked point, unless already focused, then reset view
-    clickedPoint = (x, y, point, click) => {
+    clickedPoint = (x, y, point, click, shiftKey, ctrlKey) => {
         const { imageWidth, imageHeight } = this.props;
 
         if (this.transformWrapperRef.current) {
@@ -60,7 +60,23 @@ class PhotoViewer extends Component {
                     this.props.setScale(9);
                 }
             } else {
-                this.props.setCurrentPoint(point);
+                const points = [];
+                if (shiftKey) {
+                    const step = this.props.lastPoint < point ? 1 : -1;
+                    for (let i = this.props.lastPoint; step > 0 ? i <= point : i >= point; i += step) {
+                        points.push(i);
+                    }
+                    this.props.setCurrentPoints(points);
+                } else if (ctrlKey) {
+                    console.log("here");
+                    const pointsAppend = this.props.currentPoints;
+                    pointsAppend.push(point);
+                    this.props.setCurrentPoints(pointsAppend);
+                } else {
+                    points.push(point);
+                    this.props.setCurrentPoints(points);
+                }
+                this.props.setLastPoint(point);
             }
         }
     };
@@ -93,7 +109,7 @@ class PhotoViewer extends Component {
         if (this.props.currentPhoto && this.props.currentPhoto !== this.currentPhoto) {
             this.setState({ scale: 1 });
             this.props.setScale(1);
-            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
+            const { x, y } = this.getPointPosition(this.props.lastPoint - 1);
             this.transformToPoint(x, y, 1);
             this.props.setImageLoaded(0);
             // const image = Object.keys(this.props.site)[this.props.currentPhoto - 1];
@@ -106,15 +122,15 @@ class PhotoViewer extends Component {
         }
 
         // new current point
-        if (this.props.currentPhoto && this.state.focusPoint !== this.props.site[this.props.currentPhoto]["currentPoint"]) {
-            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
+        if (this.props.currentPhoto && this.state.focusPoint !== this.props.lastPoint) {
+            const { x, y } = this.getPointPosition(this.props.lastPoint - 1);
             this.transformToPoint(x, y, this.state.scale);
-            this.setState({ focusPoint: this.props.site[this.props.currentPhoto]["currentPoint"] });
+            this.setState({ focusPoint: this.props.lastPoint });
         }
 
         // change zoom
         if (this.props.currentPhoto && this.state.scale !== this.props.scale) {
-            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
+            const { x, y } = this.getPointPosition(this.props.lastPoint - 1);
             this.transformToPoint(x, y, this.props.scale);
             this.setState({ scale: this.props.scale });
         }
@@ -163,7 +179,7 @@ class PhotoViewer extends Component {
                                                 boxHeight={imageHeight / this.gridSize}
                                                 boxWidth={imageWidth / this.gridSize}
                                                 point={index + 1}
-                                                current={index + 1 === this.props.site[this.props.currentPhoto]["currentPoint"] ? 1 : 0}
+                                                current={this.props.currentPoints.includes(index + 1) ? 1 : 0}
                                                 clickedPoint={this.clickedPoint}
                                             ></Crosshair>
                                         );
