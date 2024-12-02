@@ -12,7 +12,7 @@
         "Alaskan paper birch (Betula neoalaskana)",
         "Trembling aspen (Populus tremuloides)",
         "Balsam poplar (Populus balsamifera)",
-        "Other"
+        "Unknown"
     ],
     "Small trees (<2m)": [
         "Black spruce (Picea mariana)",
@@ -26,7 +26,7 @@
         "Alaskan paper birch (Betula neoalaskana)",
         "Trembling aspen (Populus tremuloides)",
         "Balsam poplar (Populus balsamifera)",
-        "Other"
+        "Unknown"
     ],
     "Tall shrubs (2-10m)": [
         "Bog birch (Betula pumila)",
@@ -34,7 +34,7 @@
         "Willow (Salix spp.)",
         "Dogwood (Cornus spp.)",
         "Bush honeysuckle (Diervilla lonicera)",
-        "Other"
+        "Unknown"
     ],
     "Low shrubs (<2m)": [
         "Bog birch (Betula pumila)",
@@ -60,7 +60,6 @@
         "Bush honeysuckle (Diervilla lonicera)",
         "Lingonberry (Vaccinium vitis-idaea)",
         "Sheep laurel (Kalmia angustifolia)",
-        "Other"
-    ],
-    "Other": ["Other", "Water", "Rock", "Fire", "Sky"]
+        "Unknown"
+    ]
 }

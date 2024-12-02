@@ -105,11 +105,5 @@
         "Marchantia spp.",
         "Fungi"
     ],
-    "Other": [
-        "Open water (Water)",
-        "Rock (Earth)",
-        "Fire (Fire)",
-        "Sky (Air)",
-        "Unknown"
-    ]
+    "Other": ["Open water (Water)", "Rock (Earth)", "Fire (Fire)", "Sky (Air)", "Unknown"]
 }

@@ -12,7 +12,7 @@
         "Alaskan paper birch (Betula neoalaskana)",
         "Trembling aspen (Populus tremuloides)",
         "Balsam poplar (Populus balsamifera)",
-        "Other"
+        "Unknown"
     ],
     "Low trees (2-10m)": [
         "Black spruce (Picea mariana)",
@@ -26,7 +26,6 @@
         "Alaskan paper birch (Betula neoalaskana)",
         "Trembling aspen (Populus tremuloides)",
         "Balsam poplar (Populus balsamifera)",
-        "Other"
-    ],
-    "Other": ["Other", "Water", "Rock", "Fire", "Sky"]
+        "Unknown"
+    ]
 }
