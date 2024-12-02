@@ -8,6 +8,7 @@ import defaultEcosystem from "../../biome/defaultEcosystem.json";
 import high from "../../biome/high.json";
 import medium from "../../biome/medium.json";
 import low from "../../biome/low.json";
+import other from "../../biome/other.json";
 
 class EcosystemMenu extends React.Component {
     constructor(props) {
@@ -23,6 +24,7 @@ class EcosystemMenu extends React.Component {
         this.biome[high["name"]] = high;
         this.biome[medium["name"]] = medium;
         this.biome[low["name"]] = low;
+        this.biome[other["name"]] = other;
         this.biome[defaultEcosystem["name"]] = defaultEcosystem;
     }
 
