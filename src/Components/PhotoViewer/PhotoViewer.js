@@ -16,6 +16,11 @@ class PhotoViewer extends Component {
     state = {
         scale: 1,
         focusPoint: 1,
+        isDragging: false,
+        left: 100,
+        top: 100,
+        startX: 0,
+        startY: 0,
     };
 
     // Transform to point with specified scale
@@ -55,7 +60,7 @@ class PhotoViewer extends Component {
                 } else {
                     this.transformWrapperRef.current.setTransform(imageWidth / 2 - x * scale, imageHeight / 2 - y * scale, scale);
                     this.focusPoint = point;
-                    this.props.setCurrentPoint(point);
+                    this.props.setCurrentPoints([point]);
                     this.setState({ scale: 9 });
                     this.props.setScale(9);
                 }
@@ -101,6 +106,61 @@ class PhotoViewer extends Component {
         window.rendererAPI.imageUpload(Object.keys(this.props.site)).then((response) => {
             this.props.newPhoto(response);
         });
+    };
+
+    handleMouseDown = (e) => {
+        e.preventDefault(); // Prevent text selection
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        this.setState({
+            isDragging: true,
+            left: x,
+            top: y,
+            startX: x,
+            startY: y,
+            width: 0,
+            height: 0,
+        });
+
+        document.addEventListener("mousemove", this.handleMouseMove);
+        document.addEventListener("mouseup", this.handleMouseUp);
+    };
+
+    handleMouseMove = (e) => {
+        if (!this.state.isDragging) return;
+
+        const rect = document.getElementById("viewport").getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        let width = x - this.state.startX;
+        let height = y - this.state.startY;
+        let top = this.state.startY;
+        let left = this.state.startX;
+
+        if (width < 0) {
+            left = this.state.startX + width;
+            width = Math.abs(width);
+        }
+
+        if (height < 0) {
+            top = this.state.startY + height;
+            height = Math.abs(height);
+        }
+
+        this.setState({
+            width: width,
+            height: height,
+            top: top,
+            left: left,
+        });
+    };
+
+    handleMouseUp = () => {
+        this.setState({ isDragging: false });
+        document.removeEventListener("mousemove", this.handleMouseMove);
+        document.removeEventListener("mouseup", this.handleMouseUp);
     };
 
     // Buffer image and show loading animation until finished
@@ -152,11 +212,30 @@ class PhotoViewer extends Component {
             <div className={styles.viewPort}>
                 {this.props.currentPhoto ? (
                     // If there's a photo loaded, display in the viewport
-                    <TransformWrapper ref={this.transformWrapperRef} onZoomStop={this.zoomChange}>
+                    <TransformWrapper
+                        ref={this.transformWrapperRef}
+                        onZoomStop={this.zoomChange}
+                        panning={{ allowMiddleClickPan: true, allowLeftClickPan: false }}
+                    >
                         <TransformComponent>
                             {this.props.imageLoaded ? (
-                                <div className={styles.photoViewer}>
+                                <div className={styles.photoViewer} id="viewport" onMouseDown={this.handleMouseDown}>
                                     {/* The Image */}
+                                    {this.state.isDragging ? (
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                backgroundColor: "rgba(0, 0, 0, 0.2)",
+                                                border: "2px solid white",
+                                                left: `${this.state.left}px`,
+                                                top: `${this.state.top}px`,
+                                                width: `${this.state.width}px`,
+                                                height: `${this.state.height}px`,
+                                            }}
+                                        ></div>
+                                    ) : (
+                                        ""
+                                    )}
                                     <img
                                         src={this.props.currentPhoto && this.image}
                                         alt="Zoomable"
