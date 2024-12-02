@@ -61,18 +61,41 @@ class PhotoViewer extends Component {
                 }
             } else {
                 const points = [];
-                if (shiftKey) {
+
+                if (shiftKey && ctrlKey) {
+                    // if shift and control, select all points in the square bound by the two points as vertices
+                    const row1 = Math.floor((point - 1) / 10);
+                    const col1 = (point - 1) % 10;
+
+                    const row2 = Math.floor((this.props.lastPoint - 1) / 10);
+                    const col2 = (this.props.lastPoint - 1) % 10;
+
+                    const minRow = Math.min(row1, row2);
+                    const maxRow = Math.max(row1, row2);
+                    const minCol = Math.min(col1, col2);
+                    const maxCol = Math.max(col1, col2);
+
+                    for (let row = minRow; row <= maxRow; row++) {
+                        for (let col = minCol; col <= maxCol; col++) {
+                            points.push(row * 10 + col + 1);
+                        }
+                    }
+                    this.props.setCurrentPoints(points);
+                } else if (shiftKey) {
+                    // if shift, select all points between teh two points
                     const step = this.props.lastPoint < point ? 1 : -1;
                     for (let i = this.props.lastPoint; step > 0 ? i <= point : i >= point; i += step) {
                         points.push(i);
                     }
                     this.props.setCurrentPoints(points);
                 } else if (ctrlKey) {
+                    // if control, add selected point to selection
                     console.log("here");
                     const pointsAppend = this.props.currentPoints;
                     pointsAppend.push(point);
                     this.props.setCurrentPoints(pointsAppend);
                 } else {
+                    // if nothing just select point
                     points.push(point);
                     this.props.setCurrentPoints(points);
                 }
@@ -152,7 +175,11 @@ class PhotoViewer extends Component {
             <div className={styles.viewPort}>
                 {this.props.currentPhoto ? (
                     // If there's a photo loaded, display in the viewport
-                    <TransformWrapper ref={this.transformWrapperRef} onZoomStop={this.zoomChange}>
+                    <TransformWrapper
+                        ref={this.transformWrapperRef}
+                        onZoomStop={this.zoomChange}
+                        panning={{ allowLeftClickPan: false, wheelPanning: true }}
+                    >
                         <TransformComponent>
                             {this.props.imageLoaded ? (
                                 <div className={styles.photoViewer}>
