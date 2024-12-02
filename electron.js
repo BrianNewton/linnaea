@@ -28,8 +28,8 @@ function createWindow() {
     mainWindow.setTitle("New site");
 
     mainWindow.loadURL(
-        // process.env.ELECTRON_START_URL || `file://${path.join(__dirname, "/build/index.html")}`
-        "http://localhost:3000"
+        process.env.ELECTRON_START_URL || `file://${path.join(__dirname, "/build/index.html")}`
+        // "http://localhost:3000"
     );
 
     const isMac = process.platform === "darwin";
