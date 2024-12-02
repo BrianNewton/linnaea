@@ -115,12 +115,7 @@ class EcosystemMenu extends React.Component {
     }
 
     handleCommentKeyPress = (event) => {
-        if (
-            this.props.currentPhoto &&
-            event.key === "Enter" &&
-            !event.shiftKey &&
-            this.props.site[this.props.currentPhoto]["currentPoint"]
-        ) {
+        if (this.props.currentPhoto && event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
             this.setState({ searchSpecies: "" });
             this.props.confirmSelection();
@@ -193,8 +188,7 @@ class EcosystemMenu extends React.Component {
                         disabled={
                             !(
                                 this.props.currentPhoto &&
-                                (this.props.currentSelection["comments"] || this.props.currentSelection["species"]) &&
-                                this.props.site[this.props.currentPhoto]["currentPoint"]
+                                (this.props.currentSelection["comments"] || this.props.currentSelection["species"])
                             )
                         }
                     >
