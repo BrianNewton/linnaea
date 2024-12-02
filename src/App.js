@@ -22,6 +22,7 @@ class App extends React.Component {
         imageLoaded: 0, // whether the image data has fully loaded for the photo viewer
         unsavedWork: 0, // whether the user has unsaved classifications
         siteNameBox: 0,
+        currentPoints: [1],
     };
 
     setImageLoaded = (imageLoaded) => {
@@ -101,10 +102,10 @@ class App extends React.Component {
             // set last photo to current photo and update current selection (if there is one)
             const currentPhoto = Object.keys(site)[Object.keys(site).length - 1];
             if (
-                site[currentPhoto]["points"][site[currentPhoto]["currentPoint"]]["comments"] ||
-                site[currentPhoto]["points"][site[currentPhoto]["currentPoint"]]["species"]
+                site[currentPhoto]["points"][site[currentPhoto][1]]["comments"] ||
+                site[currentPhoto]["points"][site[currentPhoto][1]]["species"]
             ) {
-                currentSelection = site[currentPhoto]["points"][site[currentPhoto]["currentPoint"]];
+                currentSelection = site[currentPhoto]["points"][site[currentPhoto][1]];
             } else {
                 currentSelection = { community: "", species: "", comments: "" };
             }
@@ -118,6 +119,7 @@ class App extends React.Component {
                 currentPhoto: currentPhoto,
                 imageLoaded: 0,
                 unsavedWork: 0,
+                currentPoints: [1],
             });
             window.rendererAPI.unsavedWork(0);
         });
@@ -166,7 +168,6 @@ class App extends React.Component {
             files[image] = newImages[image]["path"];
             images[image] = newImages[image]["data"];
             site[image] = { points: [] };
-            site[image]["currentPoint"] = 1;
             site[image]["ecosystem"] = "";
             for (let i = 1; i <= 100; i++) {
                 site[image]["points"][i] = {
@@ -219,16 +220,27 @@ class App extends React.Component {
         this.setState({ site, files, images });
     };
 
-    // user selected new point
-    setCurrentPoint = (point) => {
+    // User selected new points
+    setCurrentPoints = (points) => {
         if (this.state.currentPhoto) {
-            if (this.state.site[this.state.currentPhoto]["points"][point]["species"]) {
-                // update current selection if the user picks an already classified point
-                this.setState({
-                    currentSelection: this.state.site[this.state.currentPhoto]["points"][point],
-                });
+            // If user selected only one point, update currentSelection if there is one
+            if (points.length === 1) {
+                if (this.state.site[this.state.currentPhoto]["points"][points[0]]["species"]) {
+                    this.setState({
+                        currentSelection: this.state.site[this.state.currentPhoto]["points"][points[0]],
+                    });
+                } else {
+                    this.setState({
+                        currentSelection: {
+                            community: "",
+                            species: "",
+                            comments: "",
+                        },
+                    });
+                }
+                this.setState({ currentPoints: [points[0]] });
+                // otherwise if the user selected a range of points, don't show a current selection
             } else {
-                // otherwise blank current selection
                 this.setState({
                     currentSelection: {
                         community: "",
@@ -236,35 +248,52 @@ class App extends React.Component {
                         comments: "",
                     },
                 });
+                // update range of points
+                this.setState({ currentPoints: Array.from(new Set([...this.state.currentPoints, ...points])) });
             }
-            // update state
-            const site = { ...this.state.site };
-            site[this.state.currentPhoto]["currentPoint"] = point;
-            this.setState({ site });
         }
     };
 
     // User confirms a selection
-    confirmSelection = () => {
+    confirmSelection = (other = false, comments = null) => {
         const site = { ...this.state.site };
-        const currentPoint = site[this.state.currentPhoto]["currentPoint"];
-        Object.assign(site[this.state.currentPhoto]["points"][currentPoint], this.state.currentSelection);
+        let highestPoint = 0;
 
-        // I forget what this is for but it's probably important
-        if (!site[this.state.currentPhoto]["points"][currentPoint]["species"]) {
-            site[this.state.currentPhoto]["points"][currentPoint]["species"] = "None";
-        }
-        if (!site[this.state.currentPhoto]["points"][currentPoint]["community"]) {
-            site[this.state.currentPhoto]["points"][currentPoint]["community"] = "None";
+        for (let i = 0; i < this.state.currentPoints.length; i++) {
+            if (this.state.currentPoints[i] > highestPoint) {
+                highestPoint = this.state.currentPoints[i];
+            }
+            if (!other) {
+                Object.assign(site[this.state.currentPhoto]["points"][this.state.currentPoints[i]], this.state.currentSelection);
+
+                // Setting empty species and community if the current selection is only comments
+                if (!site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["species"]) {
+                    site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["species"] = "None";
+                }
+                if (!site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["community"]) {
+                    site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["community"] = "None";
+                }
+            } else {
+                Object.assign(site[this.state.currentPhoto]["points"][this.state.currentPoints[i]], {
+                    community: "other",
+                    species: "other",
+                    comments: comments,
+                });
+            }
         }
 
         // clear current selection and move on to the next point
         const currentSelection = { community: "", species: "", comments: "" };
-        if (currentPoint < 100) {
-            site[this.state.currentPhoto]["currentPoint"]++;
+
+        while (site[this.state.currentPhoto]["points"][highestPoint]["species"] !== "" && !(highestPoint === 100)) {
+            highestPoint++;
         }
 
-        this.setState({ site, currentSelection, unsavedWork: 1 });
+        if (site[this.state.currentPhoto]["points"][highestPoint]["species"]) {
+            Object.assign(currentSelection, site[this.state.currentPhoto]["points"][highestPoint]);
+        }
+
+        this.setState({ site, currentSelection, unsavedWork: 1, currentPoints: [highestPoint] });
 
         // now there is unsaved work
         window.rendererAPI.unsavedWork(1);
@@ -275,16 +304,13 @@ class App extends React.Component {
     changePhoto = (newPhoto) => {
         // update new current selection if there is one
         let currentSelection = {};
-        if (
-            this.state.site[newPhoto]["points"][this.state.site[newPhoto]["currentPoint"]]["comments"] ||
-            this.state.site[newPhoto]["points"][this.state.site[newPhoto]["currentPoint"]]["species"]
-        ) {
-            currentSelection = this.state.site[newPhoto]["points"][this.state.site[newPhoto]["currentPoint"]];
+        if (this.state.site[newPhoto]["points"][1]["comments"] || this.state.site[newPhoto]["points"][1]["species"]) {
+            currentSelection = this.state.site[newPhoto]["points"][1];
         } else {
             currentSelection = { community: "", species: "", comments: "" };
         }
 
-        this.setState({ currentPhoto: newPhoto, currentSelection: currentSelection });
+        this.setState({ currentPhoto: newPhoto, currentSelection: currentSelection, currentPoints: [1] });
     };
 
     render() {
@@ -328,6 +354,7 @@ class App extends React.Component {
                         changeSelection={this.changeSelection}
                         currentSelection={this.state.currentSelection}
                         currentPhoto={this.state.currentPhoto}
+                        currentPoints={this.state.currentPoints}
                         confirmSelection={this.confirmSelection}
                         changeEcosystem={this.changeEcosystem}
                         site={this.state.site}
@@ -341,6 +368,8 @@ class App extends React.Component {
                         site={this.state.site}
                         images={this.state.images}
                         currentPhoto={this.state.currentPhoto}
+                        currentPoints={this.state.currentPoints}
+                        setCurrentPoints={this.setCurrentPoints}
                         setCurrentPoint={this.setCurrentPoint}
                         newPhoto={this.newPhoto}
                         changePhoto={this.changePhoto}

@@ -41,7 +41,7 @@ class PhotoViewer extends Component {
     }
 
     // Zoom into clicked point, unless already focused, then reset view
-    clickedPoint = (x, y, point, click) => {
+    clickedPoint = (x, y, point, click, shiftKey, ctrlKey) => {
         const { imageWidth, imageHeight } = this.props;
 
         if (this.transformWrapperRef.current) {
@@ -55,12 +55,51 @@ class PhotoViewer extends Component {
                 } else {
                     this.transformWrapperRef.current.setTransform(imageWidth / 2 - x * scale, imageHeight / 2 - y * scale, scale);
                     this.focusPoint = point;
-                    this.props.setCurrentPoint(point);
+                    this.props.setCurrentPoints([point]);
                     this.setState({ scale: 9 });
                     this.props.setScale(9);
                 }
             } else {
-                this.props.setCurrentPoint(point);
+                const points = [];
+
+                if (shiftKey && ctrlKey) {
+                    // if shift and control, select all points in the square bound by the two points as vertices
+                    const row1 = Math.floor((point - 1) / 10);
+                    const col1 = (point - 1) % 10;
+
+                    const row2 = Math.floor((this.props.lastPoint - 1) / 10);
+                    const col2 = (this.props.lastPoint - 1) % 10;
+
+                    const minRow = Math.min(row1, row2);
+                    const maxRow = Math.max(row1, row2);
+                    const minCol = Math.min(col1, col2);
+                    const maxCol = Math.max(col1, col2);
+
+                    for (let row = minRow; row <= maxRow; row++) {
+                        for (let col = minCol; col <= maxCol; col++) {
+                            points.push(row * 10 + col + 1);
+                        }
+                    }
+                    this.props.setCurrentPoints(points);
+                } else if (shiftKey) {
+                    // if shift, select all points between teh two points
+                    const step = this.props.lastPoint < point ? 1 : -1;
+                    for (let i = this.props.lastPoint; step > 0 ? i <= point : i >= point; i += step) {
+                        points.push(i);
+                    }
+                    this.props.setCurrentPoints(points);
+                } else if (ctrlKey) {
+                    // if control, add selected point to selection
+                    console.log("here");
+                    const pointsAppend = this.props.currentPoints;
+                    pointsAppend.push(point);
+                    this.props.setCurrentPoints(pointsAppend);
+                } else {
+                    // if nothing just select point
+                    points.push(point);
+                    this.props.setCurrentPoints(points);
+                }
+                this.props.setLastPoint(point);
             }
         }
     };
@@ -93,7 +132,7 @@ class PhotoViewer extends Component {
         if (this.props.currentPhoto && this.props.currentPhoto !== this.currentPhoto) {
             this.setState({ scale: 1 });
             this.props.setScale(1);
-            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
+            const { x, y } = this.getPointPosition(this.props.lastPoint - 1);
             this.transformToPoint(x, y, 1);
             this.props.setImageLoaded(0);
             // const image = Object.keys(this.props.site)[this.props.currentPhoto - 1];
@@ -106,15 +145,15 @@ class PhotoViewer extends Component {
         }
 
         // new current point
-        if (this.props.currentPhoto && this.state.focusPoint !== this.props.site[this.props.currentPhoto]["currentPoint"]) {
-            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
+        if (this.props.currentPhoto && this.state.focusPoint !== this.props.lastPoint) {
+            const { x, y } = this.getPointPosition(this.props.lastPoint - 1);
             this.transformToPoint(x, y, this.state.scale);
-            this.setState({ focusPoint: this.props.site[this.props.currentPhoto]["currentPoint"] });
+            this.setState({ focusPoint: this.props.lastPoint });
         }
 
         // change zoom
         if (this.props.currentPhoto && this.state.scale !== this.props.scale) {
-            const { x, y } = this.getPointPosition(this.props.site[this.props.currentPhoto]["currentPoint"] - 1);
+            const { x, y } = this.getPointPosition(this.props.lastPoint - 1);
             this.transformToPoint(x, y, this.props.scale);
             this.setState({ scale: this.props.scale });
         }
@@ -136,7 +175,11 @@ class PhotoViewer extends Component {
             <div className={styles.viewPort}>
                 {this.props.currentPhoto ? (
                     // If there's a photo loaded, display in the viewport
-                    <TransformWrapper ref={this.transformWrapperRef} onZoomStop={this.zoomChange}>
+                    <TransformWrapper
+                        ref={this.transformWrapperRef}
+                        onZoomStop={this.zoomChange}
+                        panning={{ allowLeftClickPan: false, wheelPanning: true }}
+                    >
                         <TransformComponent>
                             {this.props.imageLoaded ? (
                                 <div className={styles.photoViewer}>
@@ -163,7 +206,7 @@ class PhotoViewer extends Component {
                                                 boxHeight={imageHeight / this.gridSize}
                                                 boxWidth={imageWidth / this.gridSize}
                                                 point={index + 1}
-                                                current={index + 1 === this.props.site[this.props.currentPhoto]["currentPoint"] ? 1 : 0}
+                                                current={this.props.currentPoints.includes(index + 1) ? 1 : 0}
                                                 clickedPoint={this.clickedPoint}
                                             ></Crosshair>
                                         );

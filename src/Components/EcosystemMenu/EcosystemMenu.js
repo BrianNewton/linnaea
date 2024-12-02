@@ -80,6 +80,13 @@ class EcosystemMenu extends React.Component {
         this.props.confirmSelection();
     };
 
+    handleOther = (event) => {
+        event.preventDefault();
+        this.setState({ searchSpecies: "" });
+        // this.props.changeSelection({ community: "other", species: "other", comments: document.getElementById("comments").value });
+        this.props.confirmSelection(true, document.getElementById("comments").value);
+    };
+
     componentDidMount() {
         window.addEventListener("click", (event) => {
             if (this.state.ecosystemSelectorOpen && event.target.id !== "ecosystemSelector") {
@@ -115,12 +122,7 @@ class EcosystemMenu extends React.Component {
     }
 
     handleCommentKeyPress = (event) => {
-        if (
-            this.props.currentPhoto &&
-            event.key === "Enter" &&
-            !event.shiftKey &&
-            this.props.site[this.props.currentPhoto]["currentPoint"]
-        ) {
+        if (this.props.currentPhoto && event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
             this.setState({ searchSpecies: "" });
             this.props.confirmSelection();
@@ -187,19 +189,27 @@ class EcosystemMenu extends React.Component {
                             value={this.props.currentSelection["comments"]}
                         ></textarea>
                     </div>
-                    <button
-                        className={styles.confirmSpecies}
-                        type="submit"
-                        disabled={
-                            !(
-                                this.props.currentPhoto &&
-                                (this.props.currentSelection["comments"] || this.props.currentSelection["species"]) &&
-                                this.props.site[this.props.currentPhoto]["currentPoint"]
-                            )
-                        }
-                    >
-                        Confirm{" "}
-                    </button>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        <button
+                            className={`${styles.otherSpecies} ${this.props.currentSelection["species"] === "other" ? styles.other : ""}`}
+                            type="button"
+                            onClick={this.handleOther}
+                        >
+                            Other{" "}
+                        </button>
+                        <button
+                            className={styles.confirmSpecies}
+                            type="submit"
+                            disabled={
+                                !(
+                                    this.props.currentPhoto &&
+                                    (this.props.currentSelection["comments"] || this.props.currentSelection["species"])
+                                )
+                            }
+                        >
+                            Confirm{" "}
+                        </button>
+                    </div>
                 </form>
             </div>
         );
