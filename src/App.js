@@ -255,7 +255,7 @@ class App extends React.Component {
     };
 
     // User confirms a selection
-    confirmSelection = () => {
+    confirmSelection = (other = false, comments = null) => {
         const site = { ...this.state.site };
         let highestPoint = 0;
 
@@ -263,21 +263,34 @@ class App extends React.Component {
             if (this.state.currentPoints[i] > highestPoint) {
                 highestPoint = this.state.currentPoints[i];
             }
-            Object.assign(site[this.state.currentPhoto]["points"][this.state.currentPoints[i]], this.state.currentSelection);
+            if (!other) {
+                Object.assign(site[this.state.currentPhoto]["points"][this.state.currentPoints[i]], this.state.currentSelection);
 
-            // Setting empty species and community if the current selection is only comments
-            if (!site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["species"]) {
-                site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["species"] = "None";
-            }
-            if (!site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["community"]) {
-                site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["community"] = "None";
+                // Setting empty species and community if the current selection is only comments
+                if (!site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["species"]) {
+                    site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["species"] = "None";
+                }
+                if (!site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["community"]) {
+                    site[this.state.currentPhoto]["points"][this.state.currentPoints[i]]["community"] = "None";
+                }
+            } else {
+                Object.assign(site[this.state.currentPhoto]["points"][this.state.currentPoints[i]], {
+                    community: "other",
+                    species: "other",
+                    comments: comments,
+                });
             }
         }
 
         // clear current selection and move on to the next point
         const currentSelection = { community: "", species: "", comments: "" };
-        if (highestPoint < 100) {
+
+        while (site[this.state.currentPhoto]["points"][highestPoint]["species"] !== "" && !(highestPoint === 100)) {
             highestPoint++;
+        }
+
+        if (site[this.state.currentPhoto]["points"][highestPoint]["species"]) {
+            Object.assign(currentSelection, site[this.state.currentPhoto]["points"][highestPoint]);
         }
 
         this.setState({ site, currentSelection, unsavedWork: 1, currentPoints: [highestPoint] });

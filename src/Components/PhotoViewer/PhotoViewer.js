@@ -55,7 +55,7 @@ class PhotoViewer extends Component {
                 } else {
                     this.transformWrapperRef.current.setTransform(imageWidth / 2 - x * scale, imageHeight / 2 - y * scale, scale);
                     this.focusPoint = point;
-                    this.props.setCurrentPoint(point);
+                    this.props.setCurrentPoints([point]);
                     this.setState({ scale: 9 });
                     this.props.setScale(9);
                 }
