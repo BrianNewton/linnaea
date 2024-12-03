@@ -91,10 +91,15 @@
     }
 }
 
-.otherSpecies:hover {
+.otherSpecies:hover:not(:disabled) {
     background-color: #a0a0a0;
     border: 2px solid #8a8a8a;
     color: white;
+}
+
+.otherSpecies:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .confirmSpecies {

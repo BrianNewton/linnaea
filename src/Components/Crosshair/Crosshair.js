@@ -45,55 +45,27 @@ class Crosshair extends React.Component {
                     top: `${this.props.y}px`,
                     left: `${this.props.x}px`,
                     backgroundColor: "transparent",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                 }}
                 data-point={this.props.point}
                 onDoubleClick={this.handleDoubleClick}
                 onClick={this.handleClick}
             >
-                <div
+                <svg
                     className={styles.crosshairLine}
-                    style={{
-                        position: "absolute",
-                        width: "1px",
-                        height: `${crosshairSize}px`,
-                        top: `${this.props.boxHeight / 2 - (crosshairSize + 1)}px`,
-                        left: `${this.props.boxWidth / 2}px`,
-                        transform: "translateX(-50%)",
-                    }}
-                ></div>
-                <div
-                    className={styles.crosshairLine}
-                    style={{
-                        position: "absolute",
-                        width: "1px",
-                        height: `${crosshairSize}px`,
-                        top: `${this.props.boxHeight / 2 + 1}px`,
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                    }}
-                ></div>
-                <div
-                    className={styles.crosshairLine}
-                    style={{
-                        position: "absolute",
-                        width: `${crosshairSize}px`,
-                        height: "1px",
-                        top: "50%",
-                        left: `${this.props.boxWidth / 2 + 1}px`,
-                        transform: "translateY(-50%)",
-                    }}
-                ></div>
-                <div
-                    className={styles.crosshairLine}
-                    style={{
-                        position: "absolute",
-                        width: `${crosshairSize}px`,
-                        height: "1px",
-                        top: "50%",
-                        left: `${this.props.boxWidth / 2 - (crosshairSize + 1)}px`,
-                        transform: "translateY(-50%)",
-                    }}
-                ></div>
+                    width="25"
+                    height="25"
+                    viewBox="0 0 66 66"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <line x1="33" y1="66" x2="33" y2="36" stroke-width="2" />
+                    <line x1="33" y1="30" x2="33" stroke-width="2" />
+                    <line x1="36" y1="33" x2="66" y2="33" stroke-width="2" />
+                    <line y1="33" x2="30" y2="33" stroke-width="2" />
+                </svg>
             </div>
         );
     }
