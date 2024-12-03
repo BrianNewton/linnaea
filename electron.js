@@ -28,8 +28,9 @@ function createWindow() {
     mainWindow.setTitle("New site");
 
     mainWindow.loadURL(
-        // process.env.ELECTRON_START_URL || `file://${path.join(__dirname, "/build/index.html")}`
-        "http://localhost:3000"
+        process.env.ISDEV === "true"
+            ? "http://localhost:3000"
+            : process.env.ELECTRON_START_URL || `file://${path.join(__dirname, "/build/index.html")}`
     );
 
     const isMac = process.platform === "darwin";
@@ -211,8 +212,7 @@ function createWindow() {
             submenu: [
                 { role: "minimize" },
                 { role: "togglefullscreen" },
-                { role: "toggleDevTools" },
-                { role: "reload" },
+                ...(process.env.ISDEV === "true" ? [{ role: "toggleDevTools" }, { role: "reload" }] : []),
                 ...(isMac ? [{ type: "separator" }, { role: "front" }, { type: "separator" }, { role: "window" }] : [{ role: "close" }]),
             ],
         },
