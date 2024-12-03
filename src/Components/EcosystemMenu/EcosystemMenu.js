@@ -82,9 +82,11 @@ class EcosystemMenu extends React.Component {
 
     handleOther = (event) => {
         event.preventDefault();
-        this.setState({ searchSpecies: "" });
-        // this.props.changeSelection({ community: "other", species: "other", comments: document.getElementById("comments").value });
-        this.props.confirmSelection(true, document.getElementById("comments").value);
+        if (this.props.currentPhoto) {
+            this.setState({ searchSpecies: "" });
+            // this.props.changeSelection({ community: "other", species: "other", comments: document.getElementById("comments").value });
+            this.props.confirmSelection(true, document.getElementById("comments").value);
+        }
     };
 
     componentDidMount() {
@@ -194,6 +196,7 @@ class EcosystemMenu extends React.Component {
                             className={`${styles.otherSpecies} ${this.props.currentSelection["species"] === "other" ? styles.other : ""}`}
                             type="button"
                             onClick={this.handleOther}
+                            disabled={!this.props.currentPhoto}
                         >
                             Other{" "}
                         </button>
