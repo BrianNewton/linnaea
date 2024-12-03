@@ -1,6 +1,6 @@
 {
     "name": "linnaea",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "private": true,
     "main": "./electron.js",
     "homepage": ".",
@@ -44,8 +44,8 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "electron-dev": "ISDEV=true concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
-        "electron-pack": "ISDEV=false npm run build && electron-builder",
+        "electron-dev": "cross-env ISDEV=true concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
+        "electron-pack": "cross-env ISDEV=false npm run build && electron-builder",
         "package": "electron-forge package",
         "make": "electron-forge make"
     },
@@ -77,6 +77,7 @@
         "@electron-forge/plugin-fuses": "^7.5.0",
         "@electron/fuses": "^1.8.0",
         "concurrently": "^9.0.1",
+        "cross-env": "^7.0.3",
         "css-loader": "^7.1.2",
         "electron": "^32.2.0",
         "electron-builder": "^25.1.8",

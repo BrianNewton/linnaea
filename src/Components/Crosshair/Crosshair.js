@@ -61,10 +61,10 @@ class Crosshair extends React.Component {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                 >
-                    <line x1="33" y1="66" x2="33" y2="36" stroke-width="2" />
-                    <line x1="33" y1="30" x2="33" stroke-width="2" />
-                    <line x1="36" y1="33" x2="66" y2="33" stroke-width="2" />
-                    <line y1="33" x2="30" y2="33" stroke-width="2" />
+                    <line x1="33" y1="66" x2="33" y2="36" stroke-width="1" vector-effect="non-scaling-stroke" />
+                    <line x1="33" y1="30" x2="33" stroke-width="1" vector-effect="non-scaling-stroke" />
+                    <line x1="36" y1="33" x2="66" y2="33" stroke-width="1" vector-effect="non-scaling-stroke" />
+                    <line y1="33" x2="30" y2="33" stroke-width="1" vector-effect="non-scaling-stroke" />
                 </svg>
             </div>
         );

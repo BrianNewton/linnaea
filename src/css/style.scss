@@ -6,6 +6,7 @@ body {
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: $background;
 }
 
 code {
@@ -55,7 +56,7 @@ code {
 
 .meta {
     width: calc((100vh - 176px) / 0.75 + 314px);
-    font-size: small;
+    font-size: 0.6em;
     font-style: italic;
     color: rgb(140, 140, 140);
     background-color: $background;
