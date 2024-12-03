@@ -41,10 +41,11 @@
     },
     "scripts": {
         "start": "react-scripts start",
+        "electron": "electron .",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
-        "electron-dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
+        "electron-dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
         "electron-pack": "npm run build && electron-builder",
         "package": "electron-forge package",
         "make": "electron-forge make"
@@ -77,8 +78,9 @@
         "@electron-forge/plugin-fuses": "^7.5.0",
         "@electron/fuses": "^1.8.0",
         "concurrently": "^9.0.1",
+        "cross-env": "^7.0.3",
         "css-loader": "^7.1.2",
-        "electron": "^32.2.0",
+        "electron": "^32.2.6",
         "electron-builder": "^25.1.8",
         "electron-devtools-installer": "^3.2.0",
         "electron-react-devtools": "^0.5.3",
