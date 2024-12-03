@@ -151,6 +151,14 @@ class PhotoViewer extends Component {
             this.setState({ focusPoint: this.props.lastPoint });
         }
 
+        // confirmed selection
+        if (this.props.currentPhoto && this.props.currentPoints.length === 1 && !this.props.currentPoints.includes(this.props.lastPoint)) {
+            const { x, y } = this.getPointPosition(this.props.currentPoints[0] - 1);
+            this.transformToPoint(x, y, this.state.scale);
+            this.setState({ focusPoint: this.props.currentPoints[0] });
+            this.props.setLastPoint(this.props.currentPoints[0]);
+        }
+
         // change zoom
         if (this.props.currentPhoto && this.state.scale !== this.props.scale) {
             const { x, y } = this.getPointPosition(this.props.lastPoint - 1);
