@@ -38,8 +38,8 @@ class Crosshair extends React.Component {
                 }`}
                 style={{
                     position: "absolute",
-                    left: `${Math.round(this.props.x + this.props.boxWidth / 2 - 22.5)}px`,
-                    top: `${Math.round(this.props.y + this.props.boxHeight / 2 - 22.5)}px`,
+                    left: `${Math.round(this.props.x + this.props.boxWidth / 2 - 32.5)}px`,
+                    top: `${Math.round(this.props.y + this.props.boxHeight / 2 - 32.5)}px`,
                 }}
                 data-point={this.props.point}
                 onDoubleClick={this.handleDoubleClick}

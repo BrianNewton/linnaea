@@ -56,8 +56,8 @@ class PhotoViewer extends Component {
                     this.transformWrapperRef.current.setTransform(imageWidth / 2 - x * scale, imageHeight / 2 - y * scale, scale);
                     this.focusPoint = point;
                     this.props.setCurrentPoints([point]);
-                    this.setState({ scale: 9 });
-                    this.props.setScale(9);
+                    this.setState({ scale: scale });
+                    this.props.setScale(scale);
                 }
             } else {
                 const points = [];
@@ -109,8 +109,8 @@ class PhotoViewer extends Component {
         const { imageWidth, imageHeight } = this.props;
 
         // Calculate the row and column position for the point
-        const row = Math.floor(index / this.gridSize);
-        const col = index % this.gridSize;
+        const col = Math.floor(index / this.gridSize);
+        const row = index % this.gridSize;
 
         // Calculate the x and y position based on evenly distributed points across the image
         const x = (imageWidth / this.gridSize) * col; // +0.5 centers the point in its cell

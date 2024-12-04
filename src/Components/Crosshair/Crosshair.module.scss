@@ -1,6 +1,6 @@
 .crosshairLine {
     stroke: #fe0000;
-    padding: 10px;
+    padding: 20px;
 
     &.confirmed {
         stroke: #0bff01;
@@ -9,6 +9,4 @@
     &.selected {
         stroke: #fdfe02;
     }
-
 }
-

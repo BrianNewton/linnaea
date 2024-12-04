@@ -28,12 +28,12 @@ class PointNavigator extends React.Component {
     };
 
     getPointFromXY = (x, y) => {
-        return x + (y - 1) * 10;
+        return y + (x - 1) * 10;
     };
 
     getXYFromPoint = (point) => {
-        const y = Math.floor((point - 1) / 10) + 1;
-        const x = ((point - 1) % 10) + 1;
+        const x = Math.floor((point - 1) / 10) + 1;
+        const y = ((point - 1) % 10) + 1;
         return { x, y };
     };
 
@@ -42,6 +42,9 @@ class PointNavigator extends React.Component {
             let newXY = this.getXYFromPoint(this.props.lastPoint);
             if (newXY.x > 1) {
                 newXY.x--;
+            } else {
+                newXY.x = 10;
+                newXY.y--;
             }
             console.log(newXY);
             const newPoint = this.getPointFromXY(newXY.x, newXY.y);
@@ -56,6 +59,9 @@ class PointNavigator extends React.Component {
             let newXY = this.getXYFromPoint(this.props.lastPoint);
             if (newXY.x < 10) {
                 newXY.x++;
+            } else {
+                newXY.x = 1;
+                newXY.y++;
             }
             console.log(newXY);
             const newPoint = this.getPointFromXY(newXY.x, newXY.y);
@@ -70,6 +76,9 @@ class PointNavigator extends React.Component {
             let newXY = this.getXYFromPoint(this.props.lastPoint);
             if (newXY.y > 1) {
                 newXY.y--;
+            } else {
+                newXY.y = 10;
+                newXY.x--;
             }
             console.log(newXY);
             const newPoint = this.getPointFromXY(newXY.x, newXY.y);
@@ -84,6 +93,9 @@ class PointNavigator extends React.Component {
             let newXY = this.getXYFromPoint(this.props.lastPoint);
             if (newXY.y < 10) {
                 newXY.y++;
+            } else {
+                newXY.y = 1;
+                newXY.x++;
             }
             console.log(newXY);
             const newPoint = this.getPointFromXY(newXY.x, newXY.y);
@@ -96,8 +108,9 @@ class PointNavigator extends React.Component {
     render() {
         return (
             <div className={styles.imageTools}>
-                <div className={styles.home} onClick={this.handleHome}>
+                <div className={styles.home}>
                     <button className={styles.homeButton} onClick={this.home}></button>
+                    <span style={{ alignContent: "center" }}>Point: {this.props.lastPoint}</span>
                 </div>
                 <div className={styles.pointNavigator}>
                     <div className={styles.subNavigator}>
