@@ -1,17 +1,18 @@
 .crosshairLine {
     stroke: #fe0000;
+    padding: 10px;
+
+    &.confirmed {
+        stroke: #0bff01;
+    }
+
+    &.selected {
+        stroke: #fdfe02;
+    }
 }
 
-.crosshairBox.confirmed .crosshairLine {
-    stroke: #0bff01;
-}
-
-.crosshairBox.selected .crosshairLine {
-    stroke: #fdfe02;
-    // border: 1px solid #fdfe02;
-}
-
-.crosshairBox:hover .crosshairLine {
+.crosshairLine:hover {
     stroke: cyan;
-    // border: 1px solid cyan;
+    cursor: pointer;
+    // stroke-width: 1;
 }
