@@ -41,6 +41,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
+        "electron": "electron .",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
@@ -79,7 +80,7 @@
         "concurrently": "^9.0.1",
         "cross-env": "^7.0.3",
         "css-loader": "^7.1.2",
-        "electron": "^32.2.0",
+        "electron": "^32.2.6",
         "electron-builder": "^25.1.8",
         "electron-devtools-installer": "^3.2.0",
         "electron-react-devtools": "^0.5.3",
