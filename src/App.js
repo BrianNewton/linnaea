@@ -99,13 +99,12 @@ class App extends React.Component {
             // populate image data
             Object.keys(newImages).map((image) => (images[image] = newImages[image]["data"]));
 
+            console.log(site);
+
             // set last photo to current photo and update current selection (if there is one)
             const currentPhoto = Object.keys(site)[Object.keys(site).length - 1];
-            if (
-                site[currentPhoto]["points"][site[currentPhoto][1]]["comments"] ||
-                site[currentPhoto]["points"][site[currentPhoto][1]]["species"]
-            ) {
-                currentSelection = site[currentPhoto]["points"][site[currentPhoto][1]];
+            if (site[currentPhoto]["points"][1]["comments"] || site[currentPhoto]["points"][1]["species"]) {
+                currentSelection = site[currentPhoto]["points"][1];
             } else {
                 currentSelection = { community: "", species: "", comments: "" };
             }
