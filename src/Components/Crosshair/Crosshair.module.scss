@@ -1,15 +1,14 @@
 .crosshairLine {
-    background-color: #fe0000;
+    stroke: #fe0000;
+    padding: 10px;
+
+    &.confirmed {
+        stroke: #0bff01;
+    }
+
+    &.selected {
+        stroke: #fdfe02;
+    }
+
 }
 
-.crosshairBox.confirmed .crosshairLine {
-    background-color: #0bff01;
-}
-
-.crosshairBox.selected .crosshairLine {
-    background-color: #fdfe02;
-}
-
-.crosshairBox:hover .crosshairLine {
-    background-color: cyan;
-}

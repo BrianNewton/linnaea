@@ -377,7 +377,7 @@ class App extends React.Component {
                     ></PhotoInterface>
                 </div>
                 <div className="metaBox">
-                    <span className="meta">Linnaea v1.1.1</span>
+                    <span className="meta">Linnaea v1.2.1</span>
                 </div>
             </div>
         );
