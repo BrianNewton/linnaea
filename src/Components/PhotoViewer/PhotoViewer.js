@@ -187,6 +187,7 @@ class PhotoViewer extends Component {
                         ref={this.transformWrapperRef}
                         onZoomStop={this.zoomChange}
                         panning={{ allowLeftClickPan: false, wheelPanning: true }}
+                        doubleClick={{ disabled: true }}
                     >
                         <TransformComponent>
                             {this.props.imageLoaded ? (
