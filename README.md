@@ -2,7 +2,7 @@
 
 ## Overview
 
-Linnaea was developed to provide researchers an easy-to-use tool to systematically classify vegetation in high-resolution field photos. This tool is funded by Natural Resources Canada and the Canadian Forestry Service.
+Linnaea was developed to provide researchers an easy-to-use tool to systematically classify vegetation in high-resolution field photos.
 
 ## Installation
 
