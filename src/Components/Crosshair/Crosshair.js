@@ -38,22 +38,22 @@ class Crosshair extends React.Component {
                 }`}
                 style={{
                     position: "absolute",
-                    left: `${Math.round(this.props.x + this.props.boxWidth / 2 - 32.5)}px`,
-                    top: `${Math.round(this.props.y + this.props.boxHeight / 2 - 32.5)}px`,
+                    left: `${this.props.x + this.props.boxWidth / 2 - 36}px`,
+                    top: `${this.props.y + this.props.boxHeight / 2 - 36}px`,
                 }}
                 data-point={this.props.point}
                 onDoubleClick={this.handleDoubleClick}
                 onClick={this.handleClick}
-                width="25"
-                height="25"
-                viewBox="0 0 66 66"
-                fill="none"
+                width="32"
+                height="32"
+                viewBox="0 0 93 93"
+                fill="#FE0000"
                 xmlns="http://www.w3.org/2000/svg"
             >
-                <line x1="33" y1="66" x2="33" y2="36" stroke-width="1" vector-effect="non-scaling-stroke" />
-                <line x1="33" y1="30" x2="33" stroke-width="1" vector-effect="non-scaling-stroke" />
-                <line x1="36" y1="33" x2="66" y2="33" stroke-width="1" vector-effect="non-scaling-stroke" />
-                <line y1="33" x2="30" y2="33" stroke-width="1" vector-effect="non-scaling-stroke" />
+                <path d="M45 46.5L0 51.2631L4.16407e-07 41.7369L45 46.5Z" />
+                <path d="M48 46.5L93 41.7369V51.2632L48 46.5Z" />
+                <path d="M46.5 48L51.2631 93H41.7369L46.5 48Z" />
+                <path d="M46.5 45L41.7369 0L51.2631 8.32814e-07L46.5 45Z" />
             </svg>
         );
     }
