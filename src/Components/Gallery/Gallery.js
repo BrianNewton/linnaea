@@ -12,17 +12,16 @@ class Gallery extends Component {
         this.numImages = 0;
     }
 
-    // componentDidUpdate() {
-    //     if (this.numImages < Object.keys(this.props.site).length) {
-    //         requestAnimationFrame(() => {
-    //             this.scrollerRef.current.scrollTo({
-    //                 left: this.scrollerRef.current.scrollWidth,
-    //                 behavior: "smooth",
-    //             });
-    //         });
-    //         this.numImages = Object.keys(this.props.site).length;
-    //     }
-    // }
+    componentDidUpdate() {
+        const index = Object.keys(this.props.site).indexOf(this.props.currentPhoto) + 3;
+
+        if (index * 116 - this.scrollerRef.current.scrollLeft > this.scrollerRef.current.getBoundingClientRect().width) {
+            this.scrollerRef.current.scrollTo({
+                left: (index - 5) * 116,
+                behavior: "smooth",
+            });
+        }
+    }
 
     // Selecting a image in the gallery
     handleClick = (event) => {

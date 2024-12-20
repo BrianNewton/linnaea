@@ -57,7 +57,7 @@ class App extends React.Component {
             const images = {};
             const saveFile = "";
             const currentSelection = { community: "", species: "", comments: "" };
-            const currentPhoto = 0;
+            const currentPhoto = "";
             const imageLoaded = 0;
             const unsavedWork = 0;
 

@@ -128,8 +128,14 @@ class PhotoViewer extends Component {
 
     // Buffer image and show loading animation until finished
     componentDidUpdate() {
+        if (this.props.currentPhoto === "") {
+            this.image = "";
+            this.currentPhoto = "";
+        }
+
         // load new photo with buffer animation
         if (this.props.currentPhoto && this.props.currentPhoto !== this.currentPhoto) {
+            console.log("HERE");
             this.setState({ scale: 1 });
             this.props.setScale(1);
             const { x, y } = this.getPointPosition(this.props.lastPoint - 1);
