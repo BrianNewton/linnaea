@@ -2,6 +2,7 @@ import React from "react";
 import EcosystemMenu from "./Components/EcosystemMenu/EcosystemMenu";
 import defaultEcosystem from "./biome/defaultEcosystem.json";
 import PhotoInterface from "./Components/PhotoInterface/PhotoInterface";
+import quotes from "./quotes.json";
 
 // Don't save images, save image paths and save site info
 
@@ -99,8 +100,6 @@ class App extends React.Component {
             // populate image data
             Object.keys(newImages).map((image) => (images[image] = newImages[image]["data"]));
 
-            console.log(site);
-
             // set last photo to current photo and update current selection (if there is one)
             const currentPhoto = Object.keys(site)[Object.keys(site).length - 1];
             if (site[currentPhoto]["points"][1]["comments"] || site[currentPhoto]["points"][1]["species"]) {
@@ -158,15 +157,16 @@ class App extends React.Component {
 
     // Handles new photo upload
     newPhoto = (newImages) => {
-        const site = { ...this.state.site };
-        const files = { ...this.state.files };
-        const images = { ...this.state.images };
+        const site = {};
+        const files = {};
+        const images = {};
 
         // receives new image data from main process adds each to state
         Object.keys(newImages).forEach((image) => {
             files[image] = newImages[image]["path"];
             images[image] = newImages[image]["data"];
             site[image] = { points: [] };
+            site[image]["completed"] = 0;
             site[image]["ecosystem"] = "";
             for (let i = 1; i <= 100; i++) {
                 site[image]["points"][i] = {
@@ -177,8 +177,12 @@ class App extends React.Component {
             }
         });
 
+        Object.assign(site, this.state.site);
+        Object.assign(files, this.state.files);
+        Object.assign(images, this.state.images);
+
         // sets last uploaded photo to new current photo
-        const currentPhoto = Object.keys(site)[Object.keys(site).length - 1];
+        const currentPhoto = Object.keys(site)[0];
         this.setState({ site, currentPhoto, files, images });
         window.rendererAPI.unsavedWork(1);
     };
@@ -292,10 +296,61 @@ class App extends React.Component {
             Object.assign(currentSelection, site[this.state.currentPhoto]["points"][highestPoint]);
         }
 
-        this.setState({ site, currentSelection, unsavedWork: 1, currentPoints: [highestPoint] });
-
         // now there is unsaved work
         window.rendererAPI.unsavedWork(1);
+
+        // Checks to see if the photo is done, either prompts to move on to the next photo or export data, depending if there are photos remaining
+        let donePhoto = 1;
+        for (let i = 1; i <= 100; i++) {
+            if (this.state.site[this.state.currentPhoto]["points"][i]["species"] === "") {
+                donePhoto = 0;
+            }
+        }
+        if (donePhoto) {
+            site[this.state.currentPhoto]["completed"] = 1;
+        }
+
+        this.setState({ site, currentSelection, unsavedWork: 1, currentPoints: [highestPoint] });
+
+        // If the photo is done, check to see if the entire site is done
+        if (donePhoto) {
+            let doneSite = 1;
+            let nextPhoto = "";
+            Object.keys(site).forEach((image) => {
+                if (!site[image]["completed"]) {
+                    doneSite = 0;
+                }
+            });
+
+            // If the entire site is done, check to see if the user wants to export data
+            if (doneSite) {
+                const randomIndex = Math.floor(Math.random() * quotes.length);
+                if (
+                    window.confirm(
+                        `All photos completed! Export data?\n\n${quotes[randomIndex]["quote"]}\n-${quotes[randomIndex]["author"]}`
+                    )
+                ) {
+                    if (this.state.site) {
+                        this.setState({ siteNameBox: 1 });
+                    }
+                }
+
+                // Otherwise move onto the next photo with unfinished points
+            } else {
+                if (window.confirm(`Photo completed! Move on to the next?`)) {
+                    if (Object.keys(this.state.site).indexOf(this.state.currentPhoto) < Object.keys(this.state.site).length - 1) {
+                        this.changePhoto(Object.keys(this.state.site)[Object.keys(this.state.site).indexOf(this.state.currentPhoto) + 1]);
+                    } else {
+                        Object.keys(site).forEach((image) => {
+                            if (!site[image]["completed"]) {
+                                nextPhoto = image;
+                            }
+                        });
+                        this.changePhoto(nextPhoto);
+                    }
+                }
+            }
+        }
     };
 
     // choose a new photo
