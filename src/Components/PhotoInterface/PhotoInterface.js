@@ -70,6 +70,7 @@ class PhotoInterface extends React.Component {
                     site={this.props.site}
                     images={this.props.images}
                     newPhoto={this.props.newPhoto}
+                    setScale={this.setScale}
                     currentPhoto={this.props.currentPhoto}
                     changePhoto={this.props.changePhoto}
                     removePhoto={this.props.removePhoto}

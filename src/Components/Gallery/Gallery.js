@@ -47,6 +47,7 @@ class Gallery extends Component {
                 behavior: "smooth",
             });
         }
+        this.props.setScale(1);
     };
 
     // handles removal of a photo
