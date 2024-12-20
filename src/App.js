@@ -59,8 +59,10 @@ class App extends React.Component {
             const currentSelection = { community: "", species: "", comments: "" };
             const currentPhoto = 0;
             const imageLoaded = 0;
+            const unsavedWork = 0;
 
-            this.setState({ site, files, images, saveFile, currentSelection, currentPhoto, imageLoaded });
+            this.setState({ site, files, images, saveFile, currentSelection, currentPhoto, imageLoaded, unsavedWork });
+            window.rendererAPI.unsavedWork(0);
         });
 
         // save site as
@@ -327,7 +329,7 @@ class App extends React.Component {
                 const randomIndex = Math.floor(Math.random() * quotes.length);
                 if (
                     window.confirm(
-                        `All photos completed! Export data?\n\n${quotes[randomIndex]["quote"]}\n-${quotes[randomIndex]["author"]}`
+                        `All photos completed! Export data?\n\n"${quotes[randomIndex]["quote"]}"\n-${quotes[randomIndex]["author"]}`
                     )
                 ) {
                     if (this.state.site) {
