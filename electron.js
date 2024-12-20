@@ -9,6 +9,7 @@ const reactDevToolsPath =
 
 let mainWindow;
 let hasUnsavedWork = false;
+let isQuitting = false;
 let savedState = null;
 
 function createWindow() {
@@ -416,7 +417,7 @@ app.on("activate", () => {
 
 // prevents quitting immediately if there's unsaved work
 app.on("before-quit", (event) => {
-    if (hasUnsavedWork) {
+    if (hasUnsavedWork && !isQuitting) {
         const choice = dialog.showMessageBoxSync({
             type: "question",
             buttons: ["Cancel", "Quit"],
@@ -426,6 +427,34 @@ app.on("before-quit", (event) => {
 
         if (choice === 0) {
             event.preventDefault(); // Prevent quitting
+            if (process.platform !== "darwin") {
+                if (mainWindow === null) {
+                    createWindow();
+                }
+            
+                // restore saved state if there is one
+                if (savedState) {
+                    if (savedState["saveFile"]) {
+                        if (hasUnsavedWork) {
+                            mainWindow.setTitle(`${savedState["saveFile"].replace(/^.*[\\/]/, "").replace(/\.site$/, "")} *`);
+                        } else {
+                            mainWindow.setTitle(savedState["saveFile"].replace(/^.*[\\/]/, "").replace(/\.site$/, ""));
+                        }
+                    } else {
+                        if (hasUnsavedWork) {
+                            mainWindow.setTitle("New site *");
+                        } else {
+                            mainWindow.setTitle("New site");
+                        }
+                    }
+                    mainWindow.webContents.once("did-finish-load", () => {
+                        mainWindow.webContents.send("restoreState", savedState);
+                    });
+                }
+            }   
+        } else if (choice === 1){
+            isQuitting = true;
+            app.quit()
         }
     }
 });
